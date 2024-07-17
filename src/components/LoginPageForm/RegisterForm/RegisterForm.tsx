@@ -28,8 +28,8 @@ const RegisterForm = () => {
           .min(6, "Пароль должен состоять минимум из 6 символов")
           .required("Введите пароль"),
         confirmPassword: Yup.string()
-          .oneOf([Yup.ref("password"), null], "Пароли не совпадают")
-          .required("Required"),
+          .oneOf([Yup.ref("password"), undefined], "Пароли не совпадают")
+          .required("Подтвердите ваш пароль"),
       })}
       onSubmit={(values) => console.log(JSON.stringify(values, null, 2))}
     >
@@ -40,30 +40,35 @@ const RegisterForm = () => {
           aria-describedby="outlined-required"
           name="name"
           type="text"
+          autoComplete="given-name"
         />
         <MyTextInput
           label="Фамилия"
           aria-describedby="outlined-required"
           name="surname"
           type="text"
+          autoComplete="family-name"
         />
         <MyTextInput
           label="Email"
           aria-describedby="outlined-required"
           name="email"
           type="email"
+          autoComplete="email"
         />
         <MyTextInput
           label="Пароль"
           aria-describedby="outlined-password-input"
           name="password"
           type="password"
+          autoComplete="new-password"
         />
         <MyTextInput
           label="Подтвердите пароль"
           aria-describedby="outlined-password-input"
           name="confirmPassword"
           type="password"
+          autoComplete="new-password"
         />
         <Button variant="outlined" color="info" type="submit">
           Регистрация

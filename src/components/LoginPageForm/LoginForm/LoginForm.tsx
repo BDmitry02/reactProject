@@ -5,7 +5,11 @@ import { Button } from "@mui/material";
 
 import { StyledForm, StyledH2, StyledSpan } from "../StyledFormComponents";
 
-const LoginForm = ({ setFormType }) => {
+interface LoginFormProps {
+  setFormType: (formType: string) => void;
+}
+
+const LoginForm: React.FC<LoginFormProps> = ({ setFormType }) => {
   return (
     <Formik
       initialValues={{
@@ -26,17 +30,19 @@ const LoginForm = ({ setFormType }) => {
         <StyledH2>Войти</StyledH2>
         <MyTextInput
           label="Email"
-          id="outlined-required"
+          aria-describedby="outlined-required"
           name="email"
           type="email"
+          autoComplete="email"
         />
         <MyTextInput
           label="Пароль"
-          id="outlined-password-input"
+          aria-describedby="outlined-password-input"
           name="password"
           type="password"
+          autoComplete="current-password"
         />
-        <StyledSpan tabIndex="0" onClick={() => setFormType("register")}>
+        <StyledSpan onClick={() => setFormType("register")}>
           Создать аккаунт
         </StyledSpan>
         <Button variant="outlined" color="info" type="submit">

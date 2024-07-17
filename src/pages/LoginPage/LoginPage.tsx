@@ -6,8 +6,8 @@ import {
 
 const LoginPage = () => {
   return (
-    <StyledWrapper className="wrapper">
-      <FormBackgroundLayer className="form-background-layer">
+    <StyledWrapper>
+      <FormBackgroundLayer>
         <MyForm />
       </FormBackgroundLayer>
     </StyledWrapper>

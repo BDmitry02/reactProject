@@ -7,12 +7,9 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import { useState } from "react";
 import BurgerIcon from "../../images/burgerIcon.svg";
-import {
-  StyledHeader,
-  StyledImg,
-  StyledLink,
-  StyledButton,
-} from "./styledHeader";
+import loginIcon from "../../images/loginIcon.svg";
+import { Link } from "react-router-dom";
+import { StyledHeader, StyledImg, StyledButton } from "./styledHeader";
 
 const Header = () => {
   const [open, setOpen] = useState(false);
@@ -44,7 +41,9 @@ const Header = () => {
       <Drawer open={open} onClose={toggleDrawer(false)}>
         {DrawerList}
       </Drawer>
-      <StyledLink to={"/login"}>Login or register</StyledLink>
+      <Link to={"/login"}>
+        <StyledImg src={loginIcon} alt="login or register button" />
+      </Link>
     </StyledHeader>
   );
 };

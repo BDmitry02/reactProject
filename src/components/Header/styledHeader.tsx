@@ -16,13 +16,13 @@ export const StyledHeader = styled.header`
 `;
 
 export const StyledLink = styled(Link)`
-  text-decoration: none;
+  /* text-decoration: none;
   font-size: 20px;
   color: black;
 
   &:hover {
     color: lightgray;
-  }
+  } */
 `;
 
 export const StyledButton = styled.button`

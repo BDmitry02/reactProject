@@ -2,7 +2,15 @@ import { TextField } from "@mui/material";
 import { useField } from "formik";
 import { StyledDiv, ErrorDiv } from "./StyledFormComponents";
 
-const MyTextInput = ({ ...props }) => {
+interface MyTextInputProps {
+  name: string;
+  label: string;
+  type: string;
+  autoComplete?: string;
+  "aria-describedby"?: string;
+}
+
+const MyTextInput = ({ ...props }: MyTextInputProps) => {
   const [field, meta] = useField(props);
   return (
     <StyledDiv>
