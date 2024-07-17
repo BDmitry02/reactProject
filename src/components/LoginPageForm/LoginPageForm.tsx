@@ -2,7 +2,7 @@ import { useState } from "react";
 import LoginForm from "./LoginForm/LoginForm";
 import RegisterForm from "./RegisterForm/RegisterForm";
 
-const MyForm = () => {
+const LoginPageForm = () => {
   const [formType, setFormType] = useState("login");
 
   const getForm = () => {
@@ -16,4 +16,4 @@ const MyForm = () => {
   return getForm();
 };
 
-export default MyForm;
+export default LoginPageForm;

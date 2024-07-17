@@ -1,6 +1,7 @@
 import Header from "../../components/Header/Header";
 import Footer from "../../components/Footer/Footer";
 import styled from "styled-components";
+import { Helmet, HelmetProvider } from "react-helmet-async";
 
 const StyledWrapper = styled.div`
   min-height: 100vh;
@@ -14,11 +15,17 @@ const StyledMain = styled.main`
 
 const MainPage = () => {
   return (
-    <StyledWrapper>
-      <Header />
-      <StyledMain />
-      <Footer />
-    </StyledWrapper>
+    <HelmetProvider>
+      <Helmet>
+        <meta name="MainPage" content="Main page" />
+        <title>Main Page</title>
+      </Helmet>
+      <StyledWrapper>
+        <Header />
+        <StyledMain />
+        <Footer />
+      </StyledWrapper>
+    </HelmetProvider>
   );
 };
 

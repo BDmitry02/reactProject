@@ -1,5 +1,4 @@
 import styled from "styled-components";
-import { Link } from "react-router-dom";
 
 export const StyledImg = styled.img`
   width: 40px;
@@ -13,16 +12,6 @@ export const StyledHeader = styled.header`
   justify-content: space-between;
   padding: 0px 30px;
   align-items: center;
-`;
-
-export const StyledLink = styled(Link)`
-  /* text-decoration: none;
-  font-size: 20px;
-  color: black;
-
-  &:hover {
-    color: lightgray;
-  } */
 `;
 
 export const StyledButton = styled.button`
