@@ -1,6 +1,7 @@
 import { TextField } from "@mui/material";
 import { useField } from "formik";
-import { StyledDiv, ErrorDiv } from "./StyledFormComponents";
+import { StyledDiv } from "./StyledFormComponents";
+import styled from "styled-components";
 
 interface MyTextInputProps {
   name: string;
@@ -10,16 +11,20 @@ interface MyTextInputProps {
   "aria-describedby"?: string;
 }
 
-const MyTextInput = ({ ...props }: MyTextInputProps) => {
+function CommonTextInput({ ...props }: MyTextInputProps) {
   const [field, meta] = useField(props);
   return (
     <StyledDiv>
       <TextField {...props} {...field} />
       {meta.touched && meta.error ? (
-        <ErrorDiv className="error">{meta.error}</ErrorDiv>
+        <ErrorMessage className="error">{meta.error}</ErrorMessage>
       ) : null}
     </StyledDiv>
   );
-};
+}
 
-export default MyTextInput;
+export default CommonTextInput;
+
+const ErrorMessage = styled.div`
+  color: #9d0f0fe6;
+`;

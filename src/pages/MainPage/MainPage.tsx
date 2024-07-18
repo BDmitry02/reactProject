@@ -1,7 +1,45 @@
+import styled from "styled-components";
+import { useCallback } from "react";
+import { Helmet, HelmetProvider } from "react-helmet-async";
+import { useSelector } from "react-redux";
+import { RootState } from "../../store/store";
+import LoginPageForm from "../../components/LoginPageForm/LoginPageForm";
 import Header from "../../components/Header/Header";
 import Footer from "../../components/Footer/Footer";
-import styled from "styled-components";
-import { Helmet, HelmetProvider } from "react-helmet-async";
+
+const ProductCards = () => {
+  return <h1>Some Product Cards</h1>;
+};
+
+function MainPage() {
+  const isLogged = useSelector((state: RootState) => state.login.isLogged);
+
+  const MainContent = useCallback(() => {
+    if (isLogged) {
+      return <ProductCards />;
+    } else {
+      return <LoginPageForm />;
+    }
+  }, [isLogged]);
+
+  return (
+    <HelmetProvider>
+      <Helmet>
+        <meta name="MainPage" content="Main page" />
+        <title>Main Page</title>
+      </Helmet>
+      <StyledWrapper>
+        <Header />
+        <StyledMain>
+            <MainContent />
+        </StyledMain>
+        <Footer />
+      </StyledWrapper>
+    </HelmetProvider>
+  );
+}
+
+export default MainPage;
 
 const StyledWrapper = styled.div`
   min-height: 100vh;
@@ -11,22 +49,8 @@ const StyledWrapper = styled.div`
 `;
 const StyledMain = styled.main`
   flex: 1 1 auto;
+  justify-content: center;
+  align-items: center;
 `;
 
-const MainPage = () => {
-  return (
-    <HelmetProvider>
-      <Helmet>
-        <meta name="MainPage" content="Main page" />
-        <title>Main Page</title>
-      </Helmet>
-      <StyledWrapper>
-        <Header />
-        <StyledMain />
-        <Footer />
-      </StyledWrapper>
-    </HelmetProvider>
-  );
-};
 
-export default MainPage;

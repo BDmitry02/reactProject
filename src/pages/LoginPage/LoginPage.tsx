@@ -3,9 +3,9 @@ import {
   StyledWrapper,
   FormBackgroundLayer,
 } from "../../components/LoginPageForm/StyledFormComponents";
-import { Helmet, HelmetProvider } from 'react-helmet-async';
+import { Helmet, HelmetProvider } from "react-helmet-async";
 
-const LoginPage = () => {
+function LoginPage() {
   return (
     <HelmetProvider>
       <Helmet>
@@ -19,6 +19,6 @@ const LoginPage = () => {
       </StyledWrapper>
     </HelmetProvider>
   );
-};
+}
 
 export default LoginPage;

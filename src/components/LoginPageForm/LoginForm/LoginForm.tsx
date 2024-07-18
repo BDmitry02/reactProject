@@ -1,56 +1,84 @@
-import * as Yup from "yup";
-import { Formik } from "formik";
-import MyTextInput from "../MyTextInput";
+import { Formik, Form } from "formik";
+import CommonTextInput from "../CommonTextInput";
 import { Button } from "@mui/material";
-
-import { StyledForm, StyledH2, StyledSpan } from "../StyledFormComponents";
+import styled from "styled-components";
+import { LoginFormValidationSchema } from "../../../utils/validationSchemas/LoginFormValidationSchema";
 
 interface LoginFormProps {
   setFormType: (formType: string) => void;
 }
 
-const LoginForm: React.FC<LoginFormProps> = ({ setFormType }) => {
+function LoginForm({ setFormType }: LoginFormProps) {
   return (
     <Formik
       initialValues={{
         email: "",
         password: "",
       }}
-      validationSchema={Yup.object({
-        email: Yup.string()
-          .email("Неверный email адрес")
-          .required("Введите email адрес"),
-        password: Yup.string()
-          .min(6, "Пароль должен состоять минимум из 6 символов")
-          .required("Введите пароль"),
-      })}
+      validationSchema={LoginFormValidationSchema}
       onSubmit={(values) => console.log(JSON.stringify(values, null, 2))}
     >
       <StyledForm>
-        <StyledH2>Войти</StyledH2>
-        <MyTextInput
+        <StyledFormHeader>Войти</StyledFormHeader>
+        <CommonTextInput
           label="Email"
           aria-describedby="outlined-required"
           name="email"
           type="email"
           autoComplete="email"
         />
-        <MyTextInput
+        <CommonTextInput
           label="Пароль"
           aria-describedby="outlined-password-input"
           name="password"
           type="password"
           autoComplete="current-password"
         />
-        <StyledSpan onClick={() => setFormType("register")}>
+        <StyledRegisterButton onClick={() => setFormType("register")}>
           Создать аккаунт
-        </StyledSpan>
+        </StyledRegisterButton>
         <Button variant="outlined" color="info" type="submit">
           Войти
         </Button>
       </StyledForm>
     </Formik>
   );
-};
+}
 
 export default LoginForm;
+
+const StyledForm = styled(Form)`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 30px;
+`;
+
+const StyledRegisterButton = styled.span`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 7vw;
+  height: 3.5vh;
+  border-radius: 25px;
+  cursor: pointer;
+  color: ${(props) => props.theme.createAccountText};
+
+  &:hover {
+    background-color: ${(props) => props.theme.createAccountHoverColor};
+  }
+`;
+
+const StyledFormHeader = styled.h2`
+  margin: 0;
+`;
+
+// const ThemedButton = styled(Button)`
+//   border: 2px solid ${(props) => props.theme.submitFormButtonBorder};
+//   color: ${(props) => props.theme.textColor};
+
+//   &:hover {
+//     color: ${(props) => props.theme.textColor};
+//     border: 1px solid ${(props) => props.theme.submitFormButtonBorder};
+//   }
+// `;
