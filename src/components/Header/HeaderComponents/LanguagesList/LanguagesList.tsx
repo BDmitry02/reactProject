@@ -43,22 +43,18 @@ interface CreateOptionProps {
 }
 
 const CreateOption = ({ value, label }: CreateOptionProps) => {
-  return <StyledLanguageOption value={value}>{label}</StyledLanguageOption>;
+  return <option value={value}>{label}</option>;
 };
-
-const StyledLanguageOption = styled.option`
-  color: ${(props) => props.theme.textColor};
-
-  &:hover {
-    background-color: ${(props) => props.theme.backgroundColor};
-  }
-`;
 
 const StyledNativeSelect = styled(NativeSelect)`
   & .MuiNativeSelect-icon {
     color: ${(props) => props.theme.textColor};
   }
   & .MuiNativeSelect-select {
+    color: ${(props) => props.theme.textColor};
+  }
+  & .MuiInputBase-input:not([multiple]) option {
+    background-color: ${(props) => props.theme.backgroundColor};
     color: ${(props) => props.theme.textColor};
   }
 `;
