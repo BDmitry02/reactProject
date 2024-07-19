@@ -2,9 +2,10 @@
 //   headerAndFooterColor: string;
 //   backgroundColor: string;
 //   textColor: string;
+
 //   createAccountText: string;
 //   createAccountHoverColor: string;
-//   submitFormButtonBackground: string;
+
 //   submitFormButtonBorder: string;
 // }
 
@@ -16,8 +17,7 @@ export const lightTheme = {
   createAccountText: "#000000",
   createAccountHoverColor: "#edd5e8",
 
-  // submitFormButtonBackground: "#edd5e8",
-  // submitFormButtonBorder: "#edd5e8",
+  submitFormButtonBorder: "#7D70BA",
 };
 
 export const darkTheme = {
@@ -28,6 +28,5 @@ export const darkTheme = {
   createAccountText: "",
   createAccountHoverColor: "#5e435b",
 
-  // submitFormButtonBackground: "#5e435b", // Пример значения
-  // submitFormButtonBorder: "#edd5e8", // Пример значения
+  submitFormButtonBorder: "#6E1F6F",
 };

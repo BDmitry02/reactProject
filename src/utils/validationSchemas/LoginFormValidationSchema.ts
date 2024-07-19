@@ -1,10 +1,11 @@
 import * as Yup from "yup";
+import { TFunction } from "i18next";
 
-export const LoginFormValidationSchema = Yup.object({
-  email: Yup.string()
-    .email("Неверный email адрес")
-    .required("Введите email адрес"),
-  password: Yup.string()
-    .min(6, "Пароль должен состоять минимум из 6 символов")
-    .required("Введите пароль"),
-});
+export const LoginFormValidationSchema = (t: TFunction) => {
+  return Yup.object({
+    email: Yup.string().email(t("emailInvalid")).required(t("emailRequired")),
+    password: Yup.string()
+      .min(6, t("passwordMin"))
+      .required(t("passwordRequired")),
+  });
+};

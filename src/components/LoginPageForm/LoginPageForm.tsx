@@ -10,7 +10,7 @@ function LoginPageForm() {
     if (formType === "login") {
       return <LoginForm setFormType={setFormType} />;
     } else {
-      return <RegisterForm />;
+      return <RegisterForm setFormType={setFormType} />;
     }
   };
 
@@ -22,7 +22,8 @@ export default LoginPageForm;
 const StyledFormContainer = styled.div`
   display: flex;
   justify-content: center;
-  align-items: center;
+  /* align-items: center; */
+  flex-direction: column;
   height: calc(100vh - 90px - 70px);
   width: 100vw;
 `;

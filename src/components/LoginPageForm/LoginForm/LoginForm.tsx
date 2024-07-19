@@ -1,25 +1,33 @@
 import { Formik, Form } from "formik";
 import CommonTextInput from "../CommonTextInput";
-import { Button } from "@mui/material";
 import styled from "styled-components";
+import { useDispatch } from "react-redux";
+import { useTranslation } from "react-i18next";
 import { LoginFormValidationSchema } from "../../../utils/validationSchemas/LoginFormValidationSchema";
-
+import { logIn } from "../../../store/slices/LoginSlice";
 interface LoginFormProps {
   setFormType: (formType: string) => void;
 }
 
 function LoginForm({ setFormType }: LoginFormProps) {
+  const dispatch = useDispatch();
+  const { t } = useTranslation();
+  const FormValidationSchema = LoginFormValidationSchema(t);
+
   return (
     <Formik
       initialValues={{
         email: "",
         password: "",
       }}
-      validationSchema={LoginFormValidationSchema}
-      onSubmit={(values) => console.log(JSON.stringify(values, null, 2))}
+      validationSchema={FormValidationSchema}
+      onSubmit={(values) => {
+        console.log(JSON.stringify(values, null, 2));
+        dispatch(logIn());
+      }}
     >
       <StyledForm>
-        <StyledFormHeader>Войти</StyledFormHeader>
+        <StyledFormHeader>{t("loginFormHeader")}</StyledFormHeader>
         <CommonTextInput
           label="Email"
           aria-describedby="outlined-required"
@@ -28,18 +36,18 @@ function LoginForm({ setFormType }: LoginFormProps) {
           autoComplete="email"
         />
         <CommonTextInput
-          label="Пароль"
+          label={t("passwordLabel")}
           aria-describedby="outlined-password-input"
           name="password"
           type="password"
           autoComplete="current-password"
         />
         <StyledRegisterButton onClick={() => setFormType("register")}>
-          Создать аккаунт
+          {t("createAccountButton")}
         </StyledRegisterButton>
-        <Button variant="outlined" color="info" type="submit">
-          Войти
-        </Button>
+        <SubmitButton color="info" type="submit">
+          {t("loginFormHeader")}
+        </SubmitButton>
       </StyledForm>
     </Formik>
   );
@@ -73,12 +81,17 @@ const StyledFormHeader = styled.h2`
   margin: 0;
 `;
 
-// const ThemedButton = styled(Button)`
-//   border: 2px solid ${(props) => props.theme.submitFormButtonBorder};
-//   color: ${(props) => props.theme.textColor};
+const SubmitButton = styled.button`
+  border: 2px solid ${(props) => props.theme.submitFormButtonBorder};
+  color: ${(props) => props.theme.textColor};
+  background-color: transparent;
+  width: 9vw;
+  height: 4vh;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
 
-//   &:hover {
-//     color: ${(props) => props.theme.textColor};
-//     border: 1px solid ${(props) => props.theme.submitFormButtonBorder};
-//   }
-// `;
+  &:hover {
+    box-shadow: 2px 2px 2px 1px ${(props) => props.theme.submitFormButtonBorder};
+  }
+`;

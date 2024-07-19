@@ -14,6 +14,7 @@ import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
 import Theme from "../MainPageComponents/Theme/Theme";
 import { lightTheme } from "../MainPageComponents/Theme/ThemeStyle";
 import { RootState } from "../../store/store";
+import LanguagesList from "./HeaderComponents/LanguagesList/LanguagesList";
 
 function Header() {
   const [open, setOpen] = useState(false);
@@ -64,6 +65,7 @@ function Header() {
         {/* <Link to={"/login"}>
           <StyledAccountCircleOutlinedIcon fontSize="large" />
         </Link> */}
+        <LanguagesList />
       </StyledRightSideDiv>
     </StyledHeader>
   );
