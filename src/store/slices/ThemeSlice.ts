@@ -1,8 +1,10 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, createEntityAdapter } from "@reduxjs/toolkit";
 
-const initialState = {
+const themeAdapter = createEntityAdapter();
+
+const initialState = themeAdapter.getInitialState({
   theme: localStorage.getItem("theme") || "light",
-};
+});
 
 const themeSlice = createSlice({
   name: "theme",

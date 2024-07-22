@@ -3,16 +3,44 @@ import CommonTextInput from "../CommonTextInput";
 import styled from "styled-components";
 import { useDispatch } from "react-redux";
 import { useTranslation } from "react-i18next";
+import { useSnackbar } from "notistack";
 import { LoginFormValidationSchema } from "../../../utils/validationSchemas/LoginFormValidationSchema";
-import { logIn } from "../../../store/slices/LoginSlice";
+import { logIn, setUserId } from "../../../store/slices/LoginSlice";
+import useHttp from "../../../utils/useHttp/useHttp";
 interface LoginFormProps {
   setFormType: (formType: string) => void;
 }
 
+type onSubmitProps = {
+  email: string;
+  password: string;
+};
+
 function LoginForm({ setFormType }: LoginFormProps) {
   const dispatch = useDispatch();
   const { t } = useTranslation();
+  const { enqueueSnackbar } = useSnackbar();
   const FormValidationSchema = LoginFormValidationSchema(t);
+  const { request } = useHttp();
+
+  const onSubmit = async (values: onSubmitProps) => {
+    try {
+      const res = await request({
+        body: JSON.stringify(values),
+        url: "http://localhost:3000/login",
+        method: "POST",
+      });
+
+      dispatch(setUserId(res.userId));
+      dispatch(logIn());
+    } catch (error) {
+      if (error.status === 400) {
+        enqueueSnackbar(t("loginFailed400"), { variant: "error" });
+      } else {
+        enqueueSnackbar(t("registrationFailed"), { variant: "error" });
+      }
+    }
+  };
 
   return (
     <Formik
@@ -21,10 +49,7 @@ function LoginForm({ setFormType }: LoginFormProps) {
         password: "",
       }}
       validationSchema={FormValidationSchema}
-      onSubmit={(values) => {
-        console.log(JSON.stringify(values, null, 2));
-        dispatch(logIn());
-      }}
+      onSubmit={onSubmit}
     >
       <StyledForm>
         <StyledFormHeader>{t("loginFormHeader")}</StyledFormHeader>

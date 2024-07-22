@@ -6,7 +6,6 @@ i18next
   .use(initReactI18next)
   // .use(LanguageDetector)
   .init({
-    debug: true,
     fallbackLng: localStorage.getItem("i18nextLng") || "ru",
     resources: {
       ru: {
@@ -31,6 +30,11 @@ i18next
           nameRequired: "Введите ваше имя",
           surnameValidation: "В фамилии не должно быть цифр",
           surnameRequired: "Введите вашу фамилию",
+
+          registrationFailed400: "Этот email адрес уже зарегистрирован",
+          registrationFailed:
+            "К сожалению, произошла ошибка, пожалуйста попробуйте позже",
+          loginFailed400: "Неверный email или пароль",
         },
       },
       en: {
@@ -55,6 +59,11 @@ i18next
           nameRequired: "Enter your name",
           surnameValidation: "Last name should not contain numbers",
           surnameRequired: "Enter your last name",
+
+          registrationFailed400: "This email address is already registered",
+          registrationFailed:
+            "Sorry, an error occurred, please try again later",
+          loginFailed400: "Invalid email or password",
         },
       },
       ua: {
@@ -79,6 +88,11 @@ i18next
           nameRequired: "Введіть ваше ім'я",
           surnameValidation: "Прізвище не має містити цифр",
           surnameRequired: "Введіть ваше прізвище",
+
+          registrationFailed400: "Ця електронна адреса вже зареєстрована",
+          registrationFailed:
+            "На жаль, сталася помилка, будь ласка спробуйте пізніше",
+          loginFailed400: "Невірний email або пароль",
         },
       },
     },

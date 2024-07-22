@@ -7,7 +7,7 @@ import { RootState } from "./store/store.ts";
 import {
   lightTheme,
   darkTheme,
-} from "./components/MainPageComponents/Theme/ThemeStyle.ts";
+} from "./components/HeaderComponents/Theme/ThemeStyle.ts";
 
 const GlobalStyle = createGlobalStyle`
   body {

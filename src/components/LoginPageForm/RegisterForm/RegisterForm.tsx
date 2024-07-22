@@ -1,19 +1,52 @@
 import { Formik, Form } from "formik";
 import styled from "styled-components";
 import { useTranslation } from "react-i18next";
+import { useSnackbar } from "notistack";
 import { RegisterValidationSchema } from "../../../utils/validationSchemas/RegisterFormValidationSchema";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import CommonTextInput from "../CommonTextInput";
 import { useDispatch } from "react-redux";
-import { logIn } from "../../../store/slices/LoginSlice";
+import { logIn, setUserId } from "../../../store/slices/LoginSlice";
+import useHttp from "../../../utils/useHttp/useHttp";
+
 interface LoginFormProps {
   setFormType: (formType: string) => void;
 }
 
+type onSubmitProps = {
+  name: string;
+  surname: string;
+  email: string;
+  password: string;
+  confirmPassword: string;
+};
+
 function RegisterForm({ setFormType }: LoginFormProps) {
   const dispatch = useDispatch();
   const { t } = useTranslation();
+  const { request } = useHttp();
   const FormValidationSchema = RegisterValidationSchema(t);
+
+  const { enqueueSnackbar } = useSnackbar();
+
+  const onSubmit = async (values: onSubmitProps) => {
+    try {
+      const res = await request({
+        body: JSON.stringify(values),
+        url: "http://localhost:3000/users",
+        method: "POST",
+      });
+
+      dispatch(setUserId(res.userId));
+      dispatch(logIn());
+    } catch (error) {
+      if (error.status === 400) {
+        enqueueSnackbar(t("registrationFailed400"), { variant: "error" });
+      } else {
+        enqueueSnackbar(t("registrationFailed"), { variant: "error" });
+      }
+    }
+  };
 
   return (
     <>
@@ -30,10 +63,7 @@ function RegisterForm({ setFormType }: LoginFormProps) {
             confirmPassword: "",
           }}
           validationSchema={FormValidationSchema}
-          onSubmit={(values) => {
-            console.log(JSON.stringify(values, null, 2));
-            dispatch(logIn());
-          }}
+          onSubmit={onSubmit}
         >
           <StyledForm className="form">
             <StyledFormHeader>{t("registerFormHeader")}</StyledFormHeader>

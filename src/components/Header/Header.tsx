@@ -5,14 +5,16 @@ import ListItem from "@mui/material/ListItem";
 import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
+import InboxIcon from "@mui/icons-material/MoveToInbox";
+import MailIcon from "@mui/icons-material/Mail";
 import { useState } from "react";
 // import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { useSelector } from "react-redux";
 // import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
-import Theme from "../MainPageComponents/Theme/Theme";
-import { lightTheme } from "../MainPageComponents/Theme/ThemeStyle";
+import Theme from "../HeaderComponents/Theme/Theme";
+import { lightTheme } from "../HeaderComponents/Theme/ThemeStyle";
 import { RootState } from "../../store/store";
 import LanguagesList from "./HeaderComponents/LanguagesList/LanguagesList";
 
@@ -28,10 +30,12 @@ function Header() {
   const DrawerList = (
     <Box sx={{ width: 250 }} role="presentation" onClick={toggleDrawer(false)}>
       <List>
-        {["Inbox", "Starred", "Send email", "Drafts"].map((text) => (
+        {["Inbox", "Starred", "Send email", "Drafts"].map((text, index) => (
           <ListItem key={text} disablePadding>
             <ListItemButton>
-              <ListItemIcon></ListItemIcon>
+              <ListItemIcon>
+                {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+              </ListItemIcon>
               <ListItemText primary={text} />
             </ListItemButton>
           </ListItem>
@@ -47,9 +51,9 @@ function Header() {
           <StyledBurgerButton onClick={toggleDrawer(true)}>
             <StyledMenuOutlinedIcon fontSize="large" />
           </StyledBurgerButton>
-          <Drawer open={open} onClose={toggleDrawer(false)}>
+          <StyledMenuContainer open={open} onClose={toggleDrawer(false)}>
             {DrawerList}
-          </Drawer>
+          </StyledMenuContainer>
         </>
       );
     } else {
@@ -96,6 +100,21 @@ const StyledBurgerButton = styled.button`
 
   &:hover {
     cursor: pointer;
+  }
+`;
+
+const StyledMenuContainer = styled(Drawer)`
+  & .MuiPaper-root {
+    color: ${(props) => props.theme.textColor};
+    background-color: ${(props) => props.theme.backgroundColor};
+  }
+  &
+    .MuiBox-root
+    .MuiList-root
+    .MuiListItem-root
+    .MuiButtonBase-root
+    .MuiListItemIcon-root {
+    color: ${(props) => props.theme.textColor};
   }
 `;
 

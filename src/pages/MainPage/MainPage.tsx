@@ -6,17 +6,14 @@ import { RootState } from "../../store/store";
 import LoginPageForm from "../../components/LoginPageForm/LoginPageForm";
 import Header from "../../components/Header/Header";
 import Footer from "../../components/Footer/Footer";
-
-const ProductCards = () => {
-  return <h1>Some Product Cards</h1>;
-};
+import ItemCards from "../../components/MainContentComponents/ItemCards/ItemCards";
 
 function MainPage() {
   const isLogged = useSelector((state: RootState) => state.login.isLogged);
 
   const MainContent = useCallback(() => {
     if (isLogged) {
-      return <ProductCards />;
+      return <ItemCards />;
     } else {
       return <LoginPageForm />;
     }
@@ -31,7 +28,7 @@ function MainPage() {
       <StyledWrapper>
         <Header />
         <StyledMain>
-            <MainContent />
+          <MainContent />
         </StyledMain>
         <Footer />
       </StyledWrapper>
@@ -52,5 +49,3 @@ const StyledMain = styled.main`
   justify-content: center;
   align-items: center;
 `;
-
-
