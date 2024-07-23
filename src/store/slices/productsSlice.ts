@@ -12,6 +12,9 @@ const productsAdapter = createEntityAdapter({
 
 const initialState = productsAdapter.getInitialState({
   productsLoadingStatus: "idle",
+  visibleItems: [],
+  itemsToShow: 20,
+  lastIndex: 0,
 });
 
 export const fetchProducts = createAsyncThunk("products/fetchProducts", () => {
@@ -26,7 +29,15 @@ export const fetchProducts = createAsyncThunk("products/fetchProducts", () => {
 const productsSlice = createSlice({
   name: "products",
   initialState,
-  reducers: {},
+  reducers: {
+    loadMore: (state) => {
+      const itemsArray = Object.values(state.entities);
+      const newLastIndex = state.lastIndex + state.itemsToShow;
+      const nextItems = itemsArray.slice(state.lastIndex, newLastIndex);
+      state.visibleItems = [...state.visibleItems, ...nextItems];
+      state.lastIndex = newLastIndex;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(fetchProducts.pending, (state) => {
@@ -35,6 +46,7 @@ const productsSlice = createSlice({
       .addCase(fetchProducts.fulfilled, (state, action) => {
         state.productsLoadingStatus = "idle";
         productsAdapter.setAll(state, action.payload);
+        state.visibleItems = action.payload.slice(0, 20);
       })
       .addCase(fetchProducts.rejected, (state, action) => {
         state.productsLoadingStatus = "error";
@@ -50,5 +62,4 @@ export const { selectAll } = productsAdapter.getSelectors<RootState>(
 );
 
 export default reducer;
-export const { productsFetching, productsFetched, productsFetchingError } =
-  actions;
+export const { loadMore } = actions;

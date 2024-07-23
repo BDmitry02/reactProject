@@ -18,6 +18,8 @@ export const lightTheme = {
   createAccountHoverColor: "#edd5e8",
 
   submitFormButtonBorder: "#7D70BA",
+
+  itemCardBgColor: "#c7bad1",
 };
 
 export const darkTheme = {
@@ -29,4 +31,6 @@ export const darkTheme = {
   createAccountHoverColor: "#5e435b",
 
   submitFormButtonBorder: "#6E1F6F",
+
+  itemCardBgColor: "#897799",
 };
