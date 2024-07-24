@@ -34,7 +34,8 @@ function LoginForm({ setFormType }: LoginFormProps) {
       dispatch(setUserId(res.userId));
       dispatch(logIn());
     } catch (error) {
-      if (error.status === 400) {
+      const typedError = error as { status?: number };
+      if (typedError.status === 400) {
         enqueueSnackbar(t("loginFailed400"), { variant: "error" });
       } else {
         enqueueSnackbar(t("registrationFailed"), { variant: "error" });

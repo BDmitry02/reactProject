@@ -1,8 +1,19 @@
 import styled from "styled-components";
 import { Link } from "react-router-dom";
 
-function ItemSingleCard({ props }) {
-  const { title, price, previewImage } = props;
+type ItemSingleCardProps = {
+  product: {
+    title: string;
+    price: string;
+    description: string;
+    previewImage: string;
+    bigImage: string;
+    category: string;
+  };
+};
+
+function ItemSingleCard({ product }: ItemSingleCardProps) {
+  const { title, price, previewImage } = product;
   return (
     <StyledLink to={"/"}>
       <StyledItemCard>

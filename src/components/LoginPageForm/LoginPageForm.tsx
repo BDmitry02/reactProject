@@ -27,7 +27,6 @@ export default LoginPageForm;
 const StyledFormContainer = styled.div`
   display: flex;
   justify-content: center;
-  /* align-items: center; */
   flex-direction: column;
   height: calc(100vh - 90px - 70px);
   width: 100vw;

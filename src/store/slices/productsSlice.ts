@@ -6,25 +6,32 @@ import {
 import useHttp from "../../utils/useHttp/useHttp";
 import { RootState } from "../store";
 
-const productsAdapter = createEntityAdapter({
+interface Product {
+  _id: string;
+}
+
+const productsAdapter = createEntityAdapter<Product>({
   selectId: (product) => product._id,
 });
 
 const initialState = productsAdapter.getInitialState({
   productsLoadingStatus: "idle",
-  visibleItems: [],
+  visibleItems: [] as Product[],
   itemsToShow: 20,
   lastIndex: 0,
 });
 
-export const fetchProducts = createAsyncThunk("products/fetchProducts", () => {
-  const { request } = useHttp();
-  return request({
-    url: "http://localhost:4000/products",
-    method: "GET",
-    body: null,
-  });
-});
+export const fetchProducts = createAsyncThunk<Product[], void>(
+  "products/fetchProducts",
+  () => {
+    const { request } = useHttp();
+    return request({
+      url: "http://localhost:4000/products",
+      method: "GET",
+      body: null,
+    });
+  }
+);
 
 const productsSlice = createSlice({
   name: "products",
@@ -36,6 +43,14 @@ const productsSlice = createSlice({
       const nextItems = itemsArray.slice(state.lastIndex, newLastIndex);
       state.visibleItems = [...state.visibleItems, ...nextItems];
       state.lastIndex = newLastIndex;
+    },
+    getPagedItems: (state, action) => {
+      const itemsArray = Object.values(state.entities);
+      const firstIndex = action.payload * 20;
+      const LastIndex = firstIndex + 20;
+      const nextItems = itemsArray.slice(firstIndex, LastIndex);
+      state.visibleItems = [...nextItems];
+      console.log(action.payload);
     },
   },
   extraReducers: (builder) => {
@@ -62,4 +77,4 @@ export const { selectAll } = productsAdapter.getSelectors<RootState>(
 );
 
 export default reducer;
-export const { loadMore } = actions;
+export const { loadMore, getPagedItems } = actions;

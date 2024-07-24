@@ -2,24 +2,21 @@ import { useEffect } from "react";
 import styled from "styled-components";
 import { useDispatch, useSelector } from "react-redux";
 import { fetchProducts } from "../../../store/slices/productsSlice";
-import useHttp from "../../../utils/useHttp/useHttp";
+
 import ItemSingleCard from "../ItemSingleCard/ItemSingleCard";
 import SkeletonLoader from "../Skeleton/Skeleton";
+import { RootState } from "../../../store/store";
 
 const ItemCards = () => {
   const { productsLoadingStatus, visibleItems } = useSelector(
-    (state) => state.products
+    (state: RootState) => state.products
   );
   const dispatch = useDispatch();
-  const { request } = useHttp();
 
   useEffect(() => {
-    dispatch(fetchProducts(request));
-
+    dispatch(fetchProducts());
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  console.log(productsLoadingStatus);
 
   const SetContent = () => {
     if (productsLoadingStatus === "loading") {
@@ -34,7 +31,7 @@ const ItemCards = () => {
       return (
         <>
           {visibleItems.map((product) => (
-            <ItemSingleCard key={product._id} props={product} />
+            <ItemSingleCard key={product._id} product={product} />
           ))}
         </>
       );

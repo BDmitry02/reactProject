@@ -7,13 +7,19 @@ import LoginPageForm from "../../components/LoginPageForm/LoginPageForm";
 import Header from "../../components/Header/Header";
 import Footer from "../../components/Footer/Footer";
 import ItemCards from "../../components/MainContentComponents/ItemCards/ItemCards";
+import PageList from "../../components/MainContentComponents/PageList/PageList";
 
 function MainPage() {
   const isLogged = useSelector((state: RootState) => state.login.isLogged);
 
   const MainContent = useCallback(() => {
     if (isLogged) {
-      return <ItemCards />;
+      return (
+        <>
+          <ItemCards />
+          <PageList />
+        </>
+      );
     } else {
       return <LoginPageForm />;
     }

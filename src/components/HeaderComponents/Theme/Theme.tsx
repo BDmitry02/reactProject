@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from "react-redux";
-import ThemeSwitch from "../ThemeSwitch";
+import ThemeSwitch from "./ThemeSwitch";
 import { activeThemeChanged } from "../../../store/slices/ThemeSlice";
 import { RootState } from "../../../store/store";
 
