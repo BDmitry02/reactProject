@@ -1,24 +1,48 @@
 import styled from "styled-components";
 import { useSelector, useDispatch } from "react-redux";
 import { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
 import { selectAll, getPagedItems } from "../../../store/slices/productsSlice";
+import { Link } from "react-router-dom";
+import { RootState } from "../../../store/store";
+import { useNavigate } from "react-router-dom";
 
 function PageList() {
-  const [page, setPage] = useState(1);
+  const navigate = useNavigate();
+  const { productsLoadingStatus } = useSelector(
+    (state: RootState) => state.products
+  );
+  const { pageNumber } = useParams<{ pageNumber?: string }>();
   const dispatch = useDispatch();
   const products = useSelector(selectAll);
 
-  const itemsPerPage = 20;
-  const pageCount = Math.floor(products.length / itemsPerPage);
+  const pageNum = pageNumber ? parseInt(pageNumber, 10) : 1;
+  const [page, setPage] = useState(pageNum);
+  const pageCount = Math.ceil(products.length / 20);
+  useEffect(() => {
+    if (pageNum === 1) {
+      navigate("/page/1");
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  useEffect(() => {
+    if (pageNumber) {
+      const pageNum = parseInt(pageNumber, 10);
+      setPage(pageNum);
+    }
+  }, [pageNumber]);
+
+  useEffect(() => {
+    if (productsLoadingStatus === "success") {
+      dispatch(getPagedItems(page));
+    }
+  }, [page, dispatch, productsLoadingStatus]);
 
   const changePage = (pageNum: number) => {
     setPage(pageNum);
-    dispatch(getPagedItems(pageNum));
-  };
-
-  useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
-  }, [page]);
+  };
 
   const getPageCount = () => {
     let pages = [];
@@ -52,6 +76,7 @@ function PageList() {
       if (p === "prev-dots") {
         return (
           <StyledPageButton
+            to={`/page/${page - 1 - sidePagesToShow}`}
             key={index}
             onClick={() => changePage(page - 1 - sidePagesToShow)}
           >
@@ -61,6 +86,7 @@ function PageList() {
       } else if (p === "next-dots") {
         return (
           <StyledPageButton
+            to={`/page/${page + sidePagesToShow}`}
             key={index}
             onClick={() => changePage(page + 1 + sidePagesToShow)}
           >
@@ -70,9 +96,10 @@ function PageList() {
       } else {
         return (
           <StyledPageButton
+            to={`/page/${p}`}
             key={index}
-            onClick={() => changePage(+p)}
-            disabled={p === page}
+            className={p === page ? "disabled" : undefined}
+            onClick={p === page ? undefined : () => changePage(+p)}
           >
             {p}
           </StyledPageButton>
@@ -86,20 +113,24 @@ function PageList() {
 
 export default PageList;
 
-const StyledPageButton = styled.button`
+const StyledPageButton = styled(Link)`
+  display: flex;
+  justify-content: center;
+  align-items: center;
   border: 1px solid ${(props) => props.theme.textColor};
   background-color: transparent;
   color: ${(props) => props.theme.textColor};
   width: 60px;
   height: 30px;
   cursor: pointer;
-  font-size: 16px;
+  font-size: 18px;
+  text-decoration: none;
 
   &:hover {
     color: red;
   }
 
-  &:disabled {
+  &.disabled {
     border: 2px solid ${(props) => props.theme.textColor};
   }
 `;

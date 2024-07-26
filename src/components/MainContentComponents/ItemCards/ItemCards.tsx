@@ -6,17 +6,22 @@ import { fetchProducts } from "../../../store/slices/productsSlice";
 import ItemSingleCard from "../ItemSingleCard/ItemSingleCard";
 import SkeletonLoader from "../Skeleton/Skeleton";
 import { RootState } from "../../../store/store";
+import { fetchFav } from "../../../store/slices/LoginSlice";
 
-const ItemCards = () => {
+function ItemCards() {
   const { productsLoadingStatus, visibleItems } = useSelector(
     (state: RootState) => state.products
   );
+  const { userId } = useSelector((state: RootState) => state.login);
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(fetchProducts());
+    if (userId) {
+      dispatch(fetchFav(userId));
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [dispatch, userId]); // добавляем зависимости
 
   const SetContent = () => {
     if (productsLoadingStatus === "loading") {
@@ -44,7 +49,7 @@ const ItemCards = () => {
       <StyledItemCardsContainer>{SetContent()}</StyledItemCardsContainer>
     </div>
   );
-};
+}
 
 export default ItemCards;
 

@@ -7,6 +7,7 @@ import { useSnackbar } from "notistack";
 import { LoginFormValidationSchema } from "../../../utils/validationSchemas/LoginFormValidationSchema";
 import { logIn, setUserId } from "../../../store/slices/LoginSlice";
 import useHttp from "../../../utils/useHttp/useHttp";
+import { useNavigate } from "react-router-dom";
 interface LoginFormProps {
   setFormType: (formType: string) => void;
 }
@@ -17,6 +18,7 @@ type onSubmitProps = {
 };
 
 function LoginForm({ setFormType }: LoginFormProps) {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const { t } = useTranslation();
   const { enqueueSnackbar } = useSnackbar();
@@ -33,6 +35,7 @@ function LoginForm({ setFormType }: LoginFormProps) {
 
       dispatch(setUserId(res.userId));
       dispatch(logIn());
+      navigate("/page/1");
     } catch (error) {
       const typedError = error as { status?: number };
       if (typedError.status === 400) {

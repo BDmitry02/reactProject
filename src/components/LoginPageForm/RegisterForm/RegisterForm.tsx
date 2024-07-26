@@ -2,6 +2,7 @@ import { Formik, Form } from "formik";
 import styled from "styled-components";
 import { useTranslation } from "react-i18next";
 import { useSnackbar } from "notistack";
+import { useNavigate } from "react-router-dom";
 import { RegisterValidationSchema } from "../../../utils/validationSchemas/RegisterFormValidationSchema";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import CommonTextInput from "../CommonTextInput";
@@ -22,6 +23,7 @@ type onSubmitProps = {
 };
 
 function RegisterForm({ setFormType }: LoginFormProps) {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const { t } = useTranslation();
   const { request } = useHttp();
@@ -39,6 +41,7 @@ function RegisterForm({ setFormType }: LoginFormProps) {
 
       dispatch(setUserId(res.userId));
       dispatch(logIn());
+      navigate("/page/1");
     } catch (error) {
       const typedError = error as { status?: number };
       if (typedError.status === 400) {

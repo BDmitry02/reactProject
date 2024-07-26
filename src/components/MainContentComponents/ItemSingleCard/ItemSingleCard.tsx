@@ -1,8 +1,10 @@
 import styled from "styled-components";
 import { Link } from "react-router-dom";
-
+import Favorite from "../FavoriteIcon/FavoriteIcon";
+import React from "react";
 type ItemSingleCardProps = {
   product: {
+    _id: string;
     title: string;
     price: string;
     description: string;
@@ -12,8 +14,8 @@ type ItemSingleCardProps = {
   };
 };
 
-function ItemSingleCard({ product }: ItemSingleCardProps) {
-  const { title, price, previewImage } = product;
+const ItemSingleCard = React.memo(({ product }: ItemSingleCardProps) => {
+  const { _id, title, price, previewImage } = product;
   return (
     <StyledLink to={"/"}>
       <StyledItemCard>
@@ -21,13 +23,16 @@ function ItemSingleCard({ product }: ItemSingleCardProps) {
           <StyledPreviewImage src={previewImage} alt="" />
           <StyledDescriptionText>
             <StyledItemTitle>{title}</StyledItemTitle>
-            <StyledPrice>${price}</StyledPrice>
+            <StyledPriceAndFav>
+              <StyledPrice>${price}</StyledPrice>
+              <Favorite id={_id} />
+            </StyledPriceAndFav>
           </StyledDescriptionText>
         </StyledImageCardContainer>
       </StyledItemCard>
     </StyledLink>
   );
-}
+});
 
 export default ItemSingleCard;
 
@@ -77,4 +82,10 @@ const StyledDescriptionText = styled.div`
   flex-direction: column;
   gap: 20px;
   height: 80px;
+`;
+
+const StyledPriceAndFav = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
 `;

@@ -8,6 +8,12 @@ import { RootState } from "../store";
 
 interface Product {
   _id: string;
+  title: string;
+  price: string;
+  description: string;
+  previewImage: string;
+  bigImage: string;
+  category: string;
 }
 
 const productsAdapter = createEntityAdapter<Product>({
@@ -19,6 +25,7 @@ const initialState = productsAdapter.getInitialState({
   visibleItems: [] as Product[],
   itemsToShow: 20,
   lastIndex: 0,
+  currentPage: 1,
 });
 
 export const fetchProducts = createAsyncThunk<Product[], void>(
@@ -45,12 +52,12 @@ const productsSlice = createSlice({
       state.lastIndex = newLastIndex;
     },
     getPagedItems: (state, action) => {
+      const page = action.payload;
+      state.currentPage = page;
       const itemsArray = Object.values(state.entities);
-      const firstIndex = action.payload * 20;
-      const LastIndex = firstIndex + 20;
-      const nextItems = itemsArray.slice(firstIndex, LastIndex);
-      state.visibleItems = [...nextItems];
-      console.log(action.payload);
+      const firstIndex = (page - 1) * state.itemsToShow;
+      const lastIndex = firstIndex + state.itemsToShow;
+      state.visibleItems = itemsArray.slice(firstIndex, lastIndex);
     },
   },
   extraReducers: (builder) => {
@@ -59,7 +66,7 @@ const productsSlice = createSlice({
         state.productsLoadingStatus = "loading";
       })
       .addCase(fetchProducts.fulfilled, (state, action) => {
-        state.productsLoadingStatus = "idle";
+        state.productsLoadingStatus = "success";
         productsAdapter.setAll(state, action.payload);
         state.visibleItems = action.payload.slice(0, 20);
       })

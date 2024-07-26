@@ -1,5 +1,3 @@
-import { useCallback } from "react";
-
 type registerProps = {
   url: string;
   method: string;
@@ -7,7 +5,11 @@ type registerProps = {
 };
 
 const useHttp = () => {
-  const request = async ({ body = null, url, method = "GET" }: registerProps) => {
+  const request = async ({
+    body = null,
+    url,
+    method = "GET",
+  }: registerProps) => {
     try {
       const response = await fetch(url, {
         method,

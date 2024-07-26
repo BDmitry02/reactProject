@@ -6,7 +6,6 @@ import {
   lightTheme,
   darkTheme,
 } from "./components/HeaderComponents/Theme/ThemeStyle.ts";
-import PageList from "./components/MainContentComponents/PageList/PageList.tsx";
 import LoginPage from "./pages/LoginPage/LoginPage";
 import MainPage from "./pages/MainPage/MainPage";
 
@@ -29,7 +28,7 @@ function App() {
         <Routes>
           <Route path="/" element={<MainPage />} />
           <Route path="/login" element={<LoginPage />} />
-          <Route path="/page/:pageNumber" element={<PageList />} />
+          <Route path="/page/:pageNumber" element={<MainPage />} />
         </Routes>
       </Router>
     </ThemeProvider>
