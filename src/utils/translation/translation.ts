@@ -35,6 +35,10 @@ i18next
           registrationFailed:
             "К сожалению, произошла ошибка, пожалуйста попробуйте позже",
           loginFailed400: "Неверный email или пароль",
+
+          favItems: "Избранное",
+          homePage: "Каталог товаров",
+          logOut: "Выйти из аккаунта",
         },
       },
       en: {
@@ -64,6 +68,10 @@ i18next
           registrationFailed:
             "Sorry, an error occurred, please try again later",
           loginFailed400: "Invalid email or password",
+
+          favItems: "Favorite items",
+          homePage: "Catalog",
+          logOut: "Log out",
         },
       },
       ua: {
@@ -93,6 +101,10 @@ i18next
           registrationFailed:
             "На жаль, сталася помилка, будь ласка спробуйте пізніше",
           loginFailed400: "Невірний email або пароль",
+
+          favItems: "Список бажань",
+          homePage: "Каталог товарів",
+          logOut: "Вийти з облікового запису",
         },
       },
     },

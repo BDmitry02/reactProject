@@ -2,7 +2,6 @@ import { useState } from "react";
 import styled from "styled-components";
 import LoginForm from "./LoginForm/LoginForm";
 import RegisterForm from "./RegisterForm/RegisterForm";
-import { SnackbarProvider } from "notistack";
 
 function LoginPageForm() {
   const [formType, setFormType] = useState("login");
@@ -15,11 +14,7 @@ function LoginPageForm() {
     }
   };
 
-  return (
-    <StyledFormContainer>
-      <SnackbarProvider maxSnack={3}>{getForm()}</SnackbarProvider>
-    </StyledFormContainer>
-  );
+  return <StyledFormContainer>{getForm()}</StyledFormContainer>;
 }
 
 export default LoginPageForm;

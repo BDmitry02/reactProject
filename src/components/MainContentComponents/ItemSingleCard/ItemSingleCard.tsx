@@ -15,6 +15,7 @@ type ItemSingleCardProps = {
 };
 
 const ItemSingleCard = React.memo(({ product }: ItemSingleCardProps) => {
+  console.log("render");
   const { _id, title, price, previewImage } = product;
   return (
     <StyledLink to={"/"}>
@@ -22,7 +23,9 @@ const ItemSingleCard = React.memo(({ product }: ItemSingleCardProps) => {
         <StyledImageCardContainer>
           <StyledPreviewImage src={previewImage} alt="" />
           <StyledDescriptionText>
-            <StyledItemTitle>{title}</StyledItemTitle>
+            <StyledItemTitle>
+              {title.length < 45 ? title : title.slice(0, 45) + "..."}
+            </StyledItemTitle>
             <StyledPriceAndFav>
               <StyledPrice>${price}</StyledPrice>
               <Favorite id={_id} />
@@ -73,6 +76,7 @@ const StyledPrice = styled.p`
 const StyledItemTitle = styled.p`
   font-size: 16px;
   margin: 0;
+  height: 70px;
 `;
 
 const StyledDescriptionText = styled.div`

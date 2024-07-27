@@ -2,12 +2,14 @@ import { Route, Routes, BrowserRouter as Router } from "react-router-dom";
 import { createGlobalStyle, ThemeProvider } from "styled-components";
 import { useSelector } from "react-redux";
 import { RootState } from "./store/store.ts";
+import { SnackbarProvider } from "notistack";
 import {
   lightTheme,
   darkTheme,
 } from "./components/HeaderComponents/Theme/ThemeStyle.ts";
 import LoginPage from "./pages/LoginPage/LoginPage";
 import MainPage from "./pages/MainPage/MainPage";
+import FavoritePage from "./pages/FavoritePage/FavoritePage.tsx";
 
 const GlobalStyle = createGlobalStyle`
   body {
@@ -23,14 +25,17 @@ function App() {
 
   return (
     <ThemeProvider theme={theme === "light" ? lightTheme : darkTheme}>
-      <GlobalStyle />
-      <Router>
-        <Routes>
-          <Route path="/" element={<MainPage />} />
-          <Route path="/login" element={<LoginPage />} />
-          <Route path="/page/:pageNumber" element={<MainPage />} />
-        </Routes>
-      </Router>
+      <SnackbarProvider>
+        <GlobalStyle />
+        <Router>
+          <Routes>
+            <Route path="/" element={<MainPage />} />
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/page/:pageNumber" element={<MainPage />} />
+            <Route path="/favoriteItems" element={<FavoritePage />} />
+          </Routes>
+        </Router>
+      </SnackbarProvider>
     </ThemeProvider>
   );
 }

@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import styled from "styled-components";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchProducts } from "../../../store/slices/productsSlice";
+import { fetchProducts, selectAll } from "../../../store/slices/productsSlice";
 
 import ItemSingleCard from "../ItemSingleCard/ItemSingleCard";
 import SkeletonLoader from "../Skeleton/Skeleton";
@@ -16,12 +16,15 @@ function ItemCards() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(fetchProducts());
-    if (userId) {
-      dispatch(fetchFav(userId));
+    if (visibleItems.length === 0) {
+      dispatch(fetchProducts());
+      if (userId) {
+        dispatch(fetchFav(userId));
+      }
     }
+
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dispatch, userId]); // добавляем зависимости
+  }, [dispatch, userId]);
 
   const SetContent = () => {
     if (productsLoadingStatus === "loading") {
@@ -45,7 +48,6 @@ function ItemCards() {
 
   return (
     <div>
-      <h1 style={{ textAlign: "center" }}>Products</h1>
       <StyledItemCardsContainer>{SetContent()}</StyledItemCardsContainer>
     </div>
   );

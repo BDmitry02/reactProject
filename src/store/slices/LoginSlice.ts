@@ -11,18 +11,36 @@ const loginAdapter = createEntityAdapter({
 });
 
 const initialState = loginAdapter.getInitialState({
+  favLoadingStatus: "idle",
+  favProdLoadingStatus: "idle",
   isLogged: localStorage.getItem("isLogged") === "true" || false,
   userId: localStorage.getItem("userId") || "",
+  favoriteItems: [],
 });
 
-export const addToFav = createAsyncThunk("login/addToFav", (userId, prodId) => {
-  const { request } = useHttp();
-  return request({
-    url: "http://localhost:4000/favorite",
-    method: "POST",
-    body: { userId, prodId },
-  });
-});
+export const addToFav = createAsyncThunk(
+  "login/addToFav",
+  async ({ userId, prodId }) => {
+    const { request } = useHttp();
+    return request({
+      url: "http://localhost:3000/favorite",
+      method: "POST",
+      body: JSON.stringify({ userId, prodId }),
+    });
+  }
+);
+
+export const removeFromFav = createAsyncThunk(
+  "login/removeFromFav",
+  async ({ userId, prodId }: { userId: string; prodId: string }) => {
+    const { request } = useHttp();
+    return request({
+      url: "http://localhost:3000/favorite",
+      method: "DELETE",
+      body: JSON.stringify({ userId, prodId }),
+    });
+  }
+);
 
 export const fetchFav = createAsyncThunk(
   "login/fetchFav",
@@ -38,8 +56,19 @@ export const fetchFav = createAsyncThunk(
   }
 );
 
+export const fetchFavoriteItems = createAsyncThunk(
+  "login/fetchFavoriteItems",
+  async (itemIds: string) => {
+    const { request } = useHttp();
+    return request({
+      url: `http://localhost:4000/favoriteItems`,
+      method: "POST",
+      body: JSON.stringify({ itemIds }),
+    });
+  }
+);
+
 const loginSlice = createSlice({
-  favLoadingStatus: "idle",
   name: "login",
   initialState,
   reducers: {
@@ -77,6 +106,19 @@ const loginSlice = createSlice({
       })
       .addCase(fetchFav.rejected, (state, action) => {
         state.favLoadingStatus = "error";
+        console.error("Error fetching products:", action.payload);
+      })
+
+      .addCase(fetchFavoriteItems.pending, (state) => {
+        state.favProdLoadingStatus = "loading";
+      })
+      .addCase(fetchFavoriteItems.fulfilled, (state, action) => {
+        state.favoriteItems = [];
+        state.favProdLoadingStatus = "success";
+        state.favoriteItems.push(...action.payload);
+      })
+      .addCase(fetchFavoriteItems.rejected, (state, action) => {
+        state.favProdLoadingStatus = "error";
         console.error("Error fetching products:", action.payload);
       });
   },
