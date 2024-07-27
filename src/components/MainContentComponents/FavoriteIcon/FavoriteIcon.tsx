@@ -37,18 +37,16 @@ const Favorite = ({ id }: FavoriteProps) => {
     e.preventDefault();
     try {
       if (isFavorite) {
-        // Удаление из избранного
         await dispatch(
           removeFromFav({ userId: localStorage.getItem("userId"), prodId: id })
         ).unwrap();
-        await dispatch(removeFav(id)); // Убедитесь, что removeFav возвращает промис
+        await dispatch(removeFav(id));
         enqueueSnackbar("Removed from favorites!", { variant: "success" });
       } else {
-        // Добавление в избранное
         await dispatch(
           addToFav({ userId: localStorage.getItem("userId"), prodId: id })
         ).unwrap();
-        await dispatch(addNewFav(id)); // Убедитесь, что addNewFav возвращает промис
+        await dispatch(addNewFav(id));
         enqueueSnackbar("Added to favorites!", { variant: "success" });
       }
     } catch (error) {

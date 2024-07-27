@@ -5,51 +5,60 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import ItemSingleCard from "../../components/MainContentComponents/ItemSingleCard/ItemSingleCard";
-import {
-  fetchFav,
-  fetchFavoriteItems,
-  selectAll,
-} from "../../store/slices/LoginSlice";
+import { fetchFav, selectAll } from "../../store/slices/LoginSlice";
 import Header from "../../components/Header/Header";
 import Footer from "../../components/Footer/Footer";
 import SkeletonLoader from "../../components/MainContentComponents/Skeleton/Skeleton";
+import { RootState } from "../../store/store";
+import { getFavoriteItems } from "../../store/slices/productsSlice";
+import { fetchProducts } from "../../store/slices/productsSlice";
 
 const FavoritePage = React.memo(() => {
   console.log("render");
 
   const { t } = useTranslation();
   const dispatch = useDispatch();
-  const { userId, favLoadingStatus, favProdLoadingStatus, favoriteItems } =
-    useSelector((state) => state.login);
-  const favItems = useSelector((state) => selectAll(state));
+  const { userId, favLoadingStatus } = useSelector(
+    (state: RootState) => state.login
+  );
+  const prodIds = useSelector((state: RootState) => selectAll(state));
+
+  const { visibleItems, productsLoadingStatus } = useSelector(
+    (state: RootState) => state.products
+  );
+
+  console.log(visibleItems);
+  useEffect(() => {
+    if (productsLoadingStatus != "loading") {
+      if (productsLoadingStatus === "success") {
+        if (userId) {
+          dispatch(fetchFav(userId));
+        }
+      } else {
+        dispatch(fetchProducts());
+        console.log("product fetching");
+      }
+    }
+  }, [userId, dispatch, productsLoadingStatus]);
 
   useEffect(() => {
-    if (userId) {
-      dispatch(fetchFav(userId));
+    if (favLoadingStatus === "success") {
+      dispatch(getFavoriteItems(prodIds));
     }
-  }, [userId, dispatch]);
-
-  useEffect(() => {
-    if (favLoadingStatus === "success" && favItems.length > 0) {
-      dispatch(fetchFavoriteItems(favItems));
-    }
-  }, [favLoadingStatus, favItems, dispatch]);
+  }, [favLoadingStatus, prodIds, dispatch]);
 
   const SetContent = useCallback(() => {
-    if (favProdLoadingStatus === "loading") {
+    if (favLoadingStatus === "loading" || productsLoadingStatus === "loading") {
       return <SkeletonLoader />;
-    } else if (favProdLoadingStatus === "error") {
+    } else if (favLoadingStatus === "error") {
       return (
         <div>
           <h2>Loading error</h2>
         </div>
       );
-    } else if (
-      favLoadingStatus === "success" &&
-      favProdLoadingStatus === "success"
-    ) {
-      return favoriteItems.length > 0 ? (
-        favoriteItems.map((product) => (
+    } else if (favLoadingStatus === "success") {
+      return visibleItems.length > 0 ? (
+        visibleItems.map((product) => (
           <ItemSingleCard key={product._id} product={product} />
         ))
       ) : (
@@ -58,7 +67,7 @@ const FavoritePage = React.memo(() => {
         </div>
       );
     }
-  }, [favoriteItems, favLoadingStatus, favProdLoadingStatus]);
+  }, [favLoadingStatus, productsLoadingStatus, visibleItems]);
 
   return (
     <StyledWrapper>

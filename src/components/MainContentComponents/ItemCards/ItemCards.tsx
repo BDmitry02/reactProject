@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import styled from "styled-components";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchProducts, selectAll } from "../../../store/slices/productsSlice";
+import { fetchProducts } from "../../../store/slices/productsSlice";
 
 import ItemSingleCard from "../ItemSingleCard/ItemSingleCard";
 import SkeletonLoader from "../Skeleton/Skeleton";

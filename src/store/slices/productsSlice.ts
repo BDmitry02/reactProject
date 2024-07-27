@@ -59,6 +59,11 @@ const productsSlice = createSlice({
       const lastIndex = firstIndex + state.itemsToShow;
       state.visibleItems = itemsArray.slice(firstIndex, lastIndex);
     },
+    getFavoriteItems: (state, action) => {
+      const ids = action.payload;
+      const itemsArray = Object.values(state.entities);
+      state.visibleItems = itemsArray.filter((item) => ids.includes(item._id));
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -68,7 +73,6 @@ const productsSlice = createSlice({
       .addCase(fetchProducts.fulfilled, (state, action) => {
         state.productsLoadingStatus = "success";
         productsAdapter.setAll(state, action.payload);
-        state.visibleItems = action.payload.slice(0, 20);
       })
       .addCase(fetchProducts.rejected, (state, action) => {
         state.productsLoadingStatus = "error";
@@ -84,4 +88,4 @@ export const { selectAll } = productsAdapter.getSelectors<RootState>(
 );
 
 export default reducer;
-export const { loadMore, getPagedItems } = actions;
+export const { loadMore, getPagedItems, getFavoriteItems } = actions;

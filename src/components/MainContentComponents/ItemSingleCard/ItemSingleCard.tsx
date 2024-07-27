@@ -15,7 +15,6 @@ type ItemSingleCardProps = {
 };
 
 const ItemSingleCard = React.memo(({ product }: ItemSingleCardProps) => {
-  console.log("render");
   const { _id, title, price, previewImage } = product;
   return (
     <StyledLink to={"/"}>
