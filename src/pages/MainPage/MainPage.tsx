@@ -9,6 +9,7 @@ import Header from "../../components/Header/Header";
 import Footer from "../../components/Footer/Footer";
 import ItemCards from "../../components/MainContentComponents/ItemCards/ItemCards";
 import PageList from "../../components/MainContentComponents/PageList/PageList";
+import Filters from "../../components/MainContentComponents/FiltersComponents/Filters/Filters";
 
 function MainPage() {
   const isLogged = useSelector((state: RootState) => state.login.isLogged);
@@ -17,8 +18,15 @@ function MainPage() {
     if (isLogged) {
       return (
         <>
-          <ItemCards />
-          <PageList />
+          <StyledMainWrapper>
+            <div>
+              <Filters />
+            </div>
+            <StyledMainContentContainer>
+              <ItemCards />
+              <PageList />
+            </StyledMainContentContainer>
+          </StyledMainWrapper>
         </>
       );
     } else {
@@ -55,4 +63,14 @@ const StyledMain = styled.main`
   flex: 1 1 auto;
   justify-content: center;
   align-items: center;
+`;
+
+const StyledMainContentContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
+
+const StyledMainWrapper = styled.div`
+  display: grid;
+  grid-template-columns: 1fr 9fr;
 `;

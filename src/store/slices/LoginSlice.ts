@@ -56,18 +56,6 @@ export const fetchFav = createAsyncThunk(
   }
 );
 
-export const fetchFavoriteItems = createAsyncThunk(
-  "login/fetchFavoriteItems",
-  async (itemIds: string) => {
-    const { request } = useHttp();
-    return request({
-      url: `http://localhost:4000/favoriteItems`,
-      method: "POST",
-      body: JSON.stringify({ itemIds }),
-    });
-  }
-);
-
 const loginSlice = createSlice({
   name: "login",
   initialState,
@@ -106,19 +94,6 @@ const loginSlice = createSlice({
       })
       .addCase(fetchFav.rejected, (state, action) => {
         state.favLoadingStatus = "error";
-        console.error("Error fetching products:", action.payload);
-      })
-
-      .addCase(fetchFavoriteItems.pending, (state) => {
-        state.favProdLoadingStatus = "loading";
-      })
-      .addCase(fetchFavoriteItems.fulfilled, (state, action) => {
-        state.favoriteItems = [];
-        state.favProdLoadingStatus = "success";
-        state.favoriteItems.push(...action.payload);
-      })
-      .addCase(fetchFavoriteItems.rejected, (state, action) => {
-        state.favProdLoadingStatus = "error";
         console.error("Error fetching products:", action.payload);
       });
   },

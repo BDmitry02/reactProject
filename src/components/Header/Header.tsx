@@ -57,7 +57,8 @@ const StyledRightSideDiv = styled.div`
 `;
 
 const StyledHeader = styled.header`
-  height: 90px;
+  height: 70px;
+  /* width: 96vw; */
   background-color: ${(props) => props.theme.headerAndFooterColor};
   color: ${(props) => props.theme.textColor};
   display: flex;
@@ -65,6 +66,7 @@ const StyledHeader = styled.header`
   justify-content: space-between;
   padding: 0px 30px;
   align-items: center;
+  /* position: fixed; */
 `;
 
 const StyledBurgerButton = styled.button`

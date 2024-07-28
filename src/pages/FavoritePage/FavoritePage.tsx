@@ -14,8 +14,6 @@ import { getFavoriteItems } from "../../store/slices/productsSlice";
 import { fetchProducts } from "../../store/slices/productsSlice";
 
 const FavoritePage = React.memo(() => {
-  console.log("render");
-
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const { userId, favLoadingStatus } = useSelector(
@@ -26,8 +24,6 @@ const FavoritePage = React.memo(() => {
   const { visibleItems, productsLoadingStatus } = useSelector(
     (state: RootState) => state.products
   );
-
-  console.log(visibleItems);
   useEffect(() => {
     if (productsLoadingStatus != "loading") {
       if (productsLoadingStatus === "success") {
@@ -36,7 +32,6 @@ const FavoritePage = React.memo(() => {
         }
       } else {
         dispatch(fetchProducts());
-        console.log("product fetching");
       }
     }
   }, [userId, dispatch, productsLoadingStatus]);

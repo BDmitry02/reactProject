@@ -25,7 +25,7 @@ function DrawerList({ toggleDrawer }: DrawerListProps) {
     <StyledMenuContainer
       sx={{ width: 250 }}
       role="presentation"
-      onClick={toggleDrawer(false)}
+      onClick={() => toggleDrawer(false)}
     >
       <List>
         <ListItem disablePadding>

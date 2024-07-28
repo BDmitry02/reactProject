@@ -16,7 +16,7 @@ function ItemCards() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (visibleItems.length === 0) {
+    if (productsLoadingStatus === "idle") {
       dispatch(fetchProducts());
       if (userId) {
         dispatch(fetchFav(userId));

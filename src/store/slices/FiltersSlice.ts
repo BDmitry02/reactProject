@@ -15,11 +15,13 @@ const filtersAdapter = createEntityAdapter<Filter>({
 });
 
 const initialState = filtersAdapter.getInitialState({
-  filtersLoadingStatus: "idle",
+  filtersCategoriesLoadingStatus: "idle",
+  filtersPriceLoadingStatus: "idle",
   activeFilter: "all",
+  priceFilter: {},
 });
 
-export const fetchFilters = createAsyncThunk("filters/fetchFilters", () => {
+export const fetchCategories = createAsyncThunk("filters/fetchFilters", () => {
   const { request } = useHttp();
   return request({
     url: "http://localhost:4000/categories",
@@ -27,6 +29,18 @@ export const fetchFilters = createAsyncThunk("filters/fetchFilters", () => {
     body: null,
   });
 });
+
+export const fetchPriceFilter = createAsyncThunk(
+  "filters/fetchPriceFilters",
+  () => {
+    const { request } = useHttp();
+    return request({
+      url: "http://localhost:4000/price",
+      method: "GET",
+      body: null,
+    });
+  }
+);
 
 const filtersSlice = createSlice({
   name: "filters",
@@ -38,15 +52,27 @@ const filtersSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      .addCase(fetchFilters.pending, (state) => {
-        state.filtersLoadingStatus = "loading";
+      .addCase(fetchCategories.pending, (state) => {
+        state.filtersCategoriesLoadingStatus = "loading";
       })
-      .addCase(fetchFilters.fulfilled, (state, action) => {
-        state.filtersLoadingStatus = "idle";
+      .addCase(fetchCategories.fulfilled, (state, action) => {
+        state.filtersCategoriesLoadingStatus = "success";
         filtersAdapter.setAll(state, action.payload);
       })
-      .addCase(fetchFilters.rejected, (state, action) => {
-        state.filtersLoadingStatus = "error";
+      .addCase(fetchCategories.rejected, (state, action) => {
+        state.filtersCategoriesLoadingStatus = "error";
+        console.error("Error fetching products:", action.payload);
+      })
+
+      .addCase(fetchPriceFilter.pending, (state) => {
+        state.filtersPriceLoadingStatus = "loading";
+      })
+      .addCase(fetchPriceFilter.fulfilled, (state, action) => {
+        state.filtersPriceLoadingStatus = "success";
+        state.priceFilter = action.payload;
+      })
+      .addCase(fetchPriceFilter.rejected, (state, action) => {
+        state.filtersPriceLoadingStatus = "error";
         console.error("Error fetching products:", action.payload);
       });
   },
