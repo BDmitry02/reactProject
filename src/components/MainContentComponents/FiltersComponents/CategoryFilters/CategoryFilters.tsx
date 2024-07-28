@@ -1,7 +1,8 @@
 import styled from "styled-components";
 import { useSelector } from "react-redux";
-import { RootState } from "../../../../store/store";
-import { selectAll } from "../../../../store/slices/FiltersSlice";
+import { RootState } from "../../../../utils/store/store";
+import { selectAll } from "../../../../utils/store/slices/FiltersSlice";
+import { useTranslation } from "react-i18next";
 
 type CategoryFilterProps = {
   filterCategory: string;
@@ -9,7 +10,7 @@ type CategoryFilterProps = {
 };
 
 function CategoryFilter(props: CategoryFilterProps) {
-  console.log("CategoryFilter render");
+  const { t } = useTranslation();
   const { filterCategory, setFilterCategory } = props;
   const categories = useSelector((state: RootState) => selectAll(state));
 
@@ -20,6 +21,7 @@ function CategoryFilter(props: CategoryFilterProps) {
   if (filtersCategoriesLoadingStatus === "success") {
     return (
       <>
+        <StyledCategoryHeader>{t("filterCategory")}</StyledCategoryHeader>
         {categories.map((category) => {
           return (
             <StyledCategoryButton
@@ -47,7 +49,18 @@ const StyledCategoryButton = styled.button`
   color: ${(props) => props.theme.textColor};
   cursor: pointer;
 
-  &:disabled {
-    border: 2px solid ${(props) => props.theme.textColor};
+  &:hover {
+    background-color: ${(props) => props.theme.textColor};
+    color: ${(props) =>
+      props.theme.textColor === "#FFFFFF" ? "#000" : "#fff"};
   }
+
+  &:disabled {
+    border: 3px solid ${(props) => props.theme.textColor};
+  }
+`;
+
+const StyledCategoryHeader = styled.p`
+  font-size: 20px;
+  margin: 0;
 `;

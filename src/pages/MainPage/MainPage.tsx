@@ -3,7 +3,7 @@ import { useCallback } from "react";
 import { Helmet, HelmetProvider } from "react-helmet-async";
 import { useSelector } from "react-redux";
 
-import { RootState } from "../../store/store";
+import { RootState } from "../../utils/store/store";
 import LoginPageForm from "../../components/LoginPageForm/LoginPageForm";
 import Header from "../../components/Header/Header";
 import Footer from "../../components/Footer/Footer";

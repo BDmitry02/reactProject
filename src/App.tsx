@@ -1,7 +1,7 @@
 import { Route, Routes, BrowserRouter as Router } from "react-router-dom";
 import { createGlobalStyle, ThemeProvider } from "styled-components";
 import { useSelector } from "react-redux";
-import { RootState } from "./store/store.ts";
+import { RootState } from "./utils/store/store.ts";
 import { SnackbarProvider } from "notistack";
 import {
   lightTheme,

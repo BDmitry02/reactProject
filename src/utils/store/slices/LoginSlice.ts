@@ -3,7 +3,7 @@ import {
   createEntityAdapter,
   createAsyncThunk,
 } from "@reduxjs/toolkit";
-import useHttp from "../../utils/useHttp/useHttp";
+import useHttp from "../../useHttp/useHttp";
 import { RootState } from "../store";
 
 const loginAdapter = createEntityAdapter({

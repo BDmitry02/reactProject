@@ -6,14 +6,17 @@ import { useSnackbar } from "notistack";
 
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import FavoriteIcon from "@mui/icons-material/Favorite";
-import { addToFav, removeFromFav } from "../../../store/slices/LoginSlice";
+import {
+  addToFav,
+  removeFromFav,
+} from "../../../utils/store/slices/LoginSlice";
 
 import {
   selectAll,
   addNewFav,
   removeFav,
-} from "../../../store/slices/LoginSlice";
-import { RootState } from "../../../store/store";
+} from "../../../utils/store/slices/LoginSlice";
+import { RootState } from "../../../utils/store/store";
 
 type FavoriteProps = {
   id: string;

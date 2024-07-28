@@ -5,13 +5,13 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 
 import ItemSingleCard from "../../components/MainContentComponents/ItemSingleCard/ItemSingleCard";
-import { fetchFav, selectAll } from "../../store/slices/LoginSlice";
+import { fetchFav, selectAll } from "../../utils/store/slices/LoginSlice";
 import Header from "../../components/Header/Header";
 import Footer from "../../components/Footer/Footer";
 import SkeletonLoader from "../../components/MainContentComponents/Skeleton/Skeleton";
-import { RootState } from "../../store/store";
-import { getFavoriteItems } from "../../store/slices/productsSlice";
-import { fetchProducts } from "../../store/slices/productsSlice";
+import { RootState } from "../../utils/store/store";
+import { getFavoriteItems } from "../../utils/store/slices/productsSlice";
+import { fetchProducts } from "../../utils/store/slices/productsSlice";
 
 const FavoritePage = React.memo(() => {
   const { t } = useTranslation();

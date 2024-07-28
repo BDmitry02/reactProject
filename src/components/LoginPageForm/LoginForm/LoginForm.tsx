@@ -5,7 +5,7 @@ import { useDispatch } from "react-redux";
 import { useTranslation } from "react-i18next";
 import { useSnackbar } from "notistack";
 import { LoginFormValidationSchema } from "../../../utils/validationSchemas/LoginFormValidationSchema";
-import { logIn, setUserId } from "../../../store/slices/LoginSlice";
+import { logIn, setUserId } from "../../../utils/store/slices/LoginSlice";
 import useHttp from "../../../utils/useHttp/useHttp";
 import { useNavigate } from "react-router-dom";
 interface LoginFormProps {

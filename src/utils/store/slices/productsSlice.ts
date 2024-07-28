@@ -3,13 +3,13 @@ import {
   createEntityAdapter,
   createAsyncThunk,
 } from "@reduxjs/toolkit";
-import useHttp from "../../utils/useHttp/useHttp";
+import useHttp from "../../useHttp/useHttp";
 import { RootState } from "../store";
 
 interface Product {
   _id: string;
   title: string;
-  price: string;
+  price: string | number;
   description: string;
   previewImage: string;
   bigImage: string;
@@ -23,6 +23,7 @@ const productsAdapter = createEntityAdapter<Product>({
 const initialState = productsAdapter.getInitialState({
   productsLoadingStatus: "idle",
   visibleItems: [] as Product[],
+  filteredItems: [] as Product[],
   itemsToShow: 20,
   lastIndex: 0,
   currentPage: 1,
@@ -44,17 +45,11 @@ const productsSlice = createSlice({
   name: "products",
   initialState,
   reducers: {
-    loadMore: (state) => {
-      const itemsArray = Object.values(state.entities);
-      const newLastIndex = state.lastIndex + state.itemsToShow;
-      const nextItems = itemsArray.slice(state.lastIndex, newLastIndex);
-      state.visibleItems = [...state.visibleItems, ...nextItems];
-      state.lastIndex = newLastIndex;
-    },
     getPagedItems: (state, action) => {
       const page = action.payload;
       state.currentPage = page;
-      const itemsArray = Object.values(state.entities);
+      const itemsArray = state.filteredItems;
+
       const firstIndex = (page - 1) * state.itemsToShow;
       const lastIndex = firstIndex + state.itemsToShow;
       state.visibleItems = itemsArray.slice(firstIndex, lastIndex);
@@ -64,6 +59,29 @@ const productsSlice = createSlice({
       const itemsArray = Object.values(state.entities);
       state.visibleItems = itemsArray.filter((item) => ids.includes(item._id));
     },
+    getFilteredItems: (state, action) => {
+      const { category, min, max } = action.payload;
+      const itemsArray = Object.values(state.entities);
+
+      const normalizedItemsArray = itemsArray.map((item) => ({
+        ...item,
+        price: parseFloat(item.price),
+      }));
+
+      if (category === "all") {
+        state.filteredItems = normalizedItemsArray.filter(
+          (item) => item.price >= min && item.price <= max
+        );
+      } else {
+        state.filteredItems = normalizedItemsArray.filter(
+          (item) =>
+            item.category === category && item.price >= min && item.price <= max
+        );
+      }
+    },
+    resetFilters: (state) => {
+      state.filteredItems = Object.values(state.entities);
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -72,6 +90,7 @@ const productsSlice = createSlice({
       })
       .addCase(fetchProducts.fulfilled, (state, action) => {
         state.productsLoadingStatus = "success";
+        state.filteredItems.push(...action.payload);
         productsAdapter.setAll(state, action.payload);
       })
       .addCase(fetchProducts.rejected, (state, action) => {
@@ -88,4 +107,9 @@ export const { selectAll } = productsAdapter.getSelectors<RootState>(
 );
 
 export default reducer;
-export const { loadMore, getPagedItems, getFavoriteItems } = actions;
+export const {
+  getFilteredItems,
+  getPagedItems,
+  getFavoriteItems,
+  resetFilters,
+} = actions;

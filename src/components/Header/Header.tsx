@@ -7,7 +7,7 @@ import { useSelector } from "react-redux";
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
 import Theme from "../HeaderComponents/Theme/Theme";
 import { lightTheme } from "../HeaderComponents/Theme/ThemeStyle";
-import { RootState } from "../../store/store";
+import { RootState } from "../../utils/store/store";
 import LanguagesList from "../HeaderComponents/LanguagesList/LanguagesList";
 import DrawerList from "../HeaderComponents/DrawerList/DrawerList";
 

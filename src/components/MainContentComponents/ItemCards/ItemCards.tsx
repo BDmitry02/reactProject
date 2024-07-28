@@ -1,12 +1,12 @@
 import { useEffect } from "react";
 import styled from "styled-components";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchProducts } from "../../../store/slices/productsSlice";
+import { fetchProducts } from "../../../utils/store/slices/productsSlice";
 
 import ItemSingleCard from "../ItemSingleCard/ItemSingleCard";
 import SkeletonLoader from "../Skeleton/Skeleton";
-import { RootState } from "../../../store/store";
-import { fetchFav } from "../../../store/slices/LoginSlice";
+import { RootState } from "../../../utils/store/store";
+import { fetchFav } from "../../../utils/store/slices/LoginSlice";
 
 function ItemCards() {
   const { productsLoadingStatus, visibleItems } = useSelector(

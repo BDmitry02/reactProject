@@ -2,23 +2,22 @@ import styled from "styled-components";
 import { useSelector, useDispatch } from "react-redux";
 import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { selectAll, getPagedItems } from "../../../store/slices/productsSlice";
+import { getPagedItems } from "../../../utils/store/slices/productsSlice";
 import { Link } from "react-router-dom";
-import { RootState } from "../../../store/store";
+import { RootState } from "../../../utils/store/store";
 import { useNavigate } from "react-router-dom";
 
 function PageList() {
   const navigate = useNavigate();
-  const { productsLoadingStatus } = useSelector(
+  const { filteredItems, productsLoadingStatus } = useSelector(
     (state: RootState) => state.products
   );
   const { pageNumber } = useParams<{ pageNumber?: string }>();
   const dispatch = useDispatch();
-  const products = useSelector(selectAll);
 
   const pageNum = pageNumber ? parseInt(pageNumber, 10) : 1;
   const [page, setPage] = useState(pageNum);
-  const pageCount = Math.ceil(products.length / 20);
+  const pageCount = Math.ceil(filteredItems.length / 20);
   useEffect(() => {
     if (pageNum === 1) {
       navigate("/page/1");
@@ -38,6 +37,14 @@ function PageList() {
       dispatch(getPagedItems(page));
     }
   }, [page, dispatch, productsLoadingStatus]);
+
+  useEffect(() => {
+    if (productsLoadingStatus === "success") {
+      navigate("/page/1");
+      dispatch(getPagedItems(1));
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [filteredItems]);
 
   const changePage = (pageNum: number) => {
     setPage(pageNum);

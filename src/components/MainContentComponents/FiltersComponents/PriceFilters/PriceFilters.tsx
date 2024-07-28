@@ -1,7 +1,8 @@
 import styled from "styled-components";
 import { useSelector } from "react-redux";
+import { useTranslation } from "react-i18next";
 
-import { RootState } from "../../../../store/store";
+import { RootState } from "../../../../utils/store/store";
 
 type PriceFilterProps = {
   filterPrice: {
@@ -14,8 +15,7 @@ type PriceFilterProps = {
 };
 
 function PriceFilter(props: PriceFilterProps) {
-  console.log("PriceFilter render");
-
+  const { t } = useTranslation();
   const { setFilterPrice, filterPrice, isPriceValid, setIsValidPrice } = props;
 
   const { filtersPriceLoadingStatus, priceFilter } = useSelector(
@@ -28,7 +28,7 @@ function PriceFilter(props: PriceFilterProps) {
       return;
     }
 
-    const numericValue = value === "" ? 0 : parseInt(value); // Обработка пустой строки
+    const numericValue = value === "" ? 0 : parseInt(value);
     const updatedFilterPrice = {
       ...filterPrice,
       [name]: numericValue,
@@ -46,25 +46,28 @@ function PriceFilter(props: PriceFilterProps) {
 
   if (filtersPriceLoadingStatus === "success") {
     return (
-      <StyledPriceFilterContainer>
-        <StyledPriceFilterInput
-          type="text"
-          name="min"
-          onChange={PriceFilterChanged}
-          value={filterPrice.min}
-          $isInvalid={!isPriceValid}
-          autoComplete="off"
-        />
-        <p>-</p>
-        <StyledPriceFilterInput
-          type="text"
-          name="max"
-          onChange={PriceFilterChanged}
-          value={filterPrice.max}
-          $isInvalid={!isPriceValid}
-          autoComplete="off"
-        />
-      </StyledPriceFilterContainer>
+      <>
+        <StyledCategoryHeader>{t("filterPrice")}</StyledCategoryHeader>
+        <StyledPriceFilterContainer>
+          <StyledPriceFilterInput
+            type="text"
+            name="min"
+            onChange={PriceFilterChanged}
+            value={filterPrice.min}
+            $isInvalid={!isPriceValid}
+            autoComplete="off"
+          />
+          <p>-</p>
+          <StyledPriceFilterInput
+            type="text"
+            name="max"
+            onChange={PriceFilterChanged}
+            value={filterPrice.max}
+            $isInvalid={!isPriceValid}
+            autoComplete="off"
+          />
+        </StyledPriceFilterContainer>
+      </>
     );
   } else {
     return null;
@@ -94,4 +97,8 @@ const StyledPriceFilterInput = styled.input<{ $isInvalid: boolean }>`
       ${({ $isInvalid }) => ($isInvalid ? "darkred" : "#007bff")};
     outline: none;
   }
+`;
+const StyledCategoryHeader = styled.p`
+  font-size: 20px;
+  margin: 0;
 `;

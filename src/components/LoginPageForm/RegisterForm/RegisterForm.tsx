@@ -7,7 +7,7 @@ import { RegisterValidationSchema } from "../../../utils/validationSchemas/Regis
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import CommonTextInput from "../CommonTextInput";
 import { useDispatch } from "react-redux";
-import { logIn, setUserId } from "../../../store/slices/LoginSlice";
+import { logIn, setUserId } from "../../../utils/store/slices/LoginSlice";
 import useHttp from "../../../utils/useHttp/useHttp";
 
 interface LoginFormProps {

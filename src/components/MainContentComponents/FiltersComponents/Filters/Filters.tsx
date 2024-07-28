@@ -3,19 +3,23 @@ import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useTranslation } from "react-i18next";
 
+import {
+  getFilteredItems,
+  resetFilters,
+} from "../../../../utils/store/slices/productsSlice";
 import PriceFilter from "../PriceFilters/PriceFilters";
 import CategoryFilter from "../CategoryFilters/CategoryFilters";
 
 import {
   fetchCategories,
   fetchPriceFilter,
-} from "../../../../store/slices/FiltersSlice";
+} from "../../../../utils/store/slices/FiltersSlice";
 
 function Filters() {
   const dispatch = useDispatch();
   const { t } = useTranslation();
 
-  const [filterCategory, setFilterCategory] = useState("");
+  const [filterCategory, setFilterCategory] = useState("all");
   const [filterPrice, setFilterPrice] = useState({
     min: 0,
     max: 0,
@@ -32,6 +36,14 @@ function Filters() {
     );
   }, [dispatch]);
 
+  const getFiltered = () => {
+    dispatch(getFilteredItems({ category: filterCategory, ...filterPrice }));
+  };
+
+  const resFilters = () => {
+    dispatch(resetFilters());
+  };
+
   return (
     <StyledFilterContainer>
       <StyledCategoriesContainer>
@@ -45,6 +57,13 @@ function Filters() {
           isPriceValid={isPriceValid}
           setIsValidPrice={setIsValidPrice}
         />
+        <StyledFilterButton onClick={getFiltered} disabled={!isPriceValid}>
+          {t("getFiltered")}
+        </StyledFilterButton>
+        <StyledFilterButton onClick={resFilters}>
+          {" "}
+          {t("resetFilters")}
+        </StyledFilterButton>
       </StyledCategoriesContainer>
     </StyledFilterContainer>
   );
@@ -63,4 +82,18 @@ const StyledCategoriesContainer = styled.div`
   display: flex;
   flex-direction: column;
   gap: 30px;
+`;
+
+const StyledFilterButton = styled.button`
+  height: 30px;
+  color: ${(props) => props.theme.textColor};
+  border: 1px solid ${(props) => props.theme.textColor};
+  background-color: transparent;
+  cursor: pointer;
+
+  &:hover {
+    background-color: ${(props) => props.theme.textColor};
+    color: ${(props) =>
+      props.theme.textColor === "#FFFFFF" ? "#000" : "#fff"};
+  }
 `;

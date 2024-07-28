@@ -39,6 +39,11 @@ i18next
           favItems: "Избранное",
           homePage: "Каталог товаров",
           logOut: "Выйти из аккаунта",
+
+          filterCategory: "Категория",
+          filterPrice: "Цена",
+          getFiltered: "Применить",
+          resetFilters: "Сбросить",
         },
       },
       en: {
@@ -72,6 +77,11 @@ i18next
           favItems: "Favorite items",
           homePage: "Catalog",
           logOut: "Log out",
+
+          filterCategory: "Category",
+          filterPrice: "Price",
+          getFiltered: "Apply",
+          resetFilters: "Reset",
         },
       },
       ua: {
@@ -105,6 +115,11 @@ i18next
           favItems: "Список бажань",
           homePage: "Каталог товарів",
           logOut: "Вийти з облікового запису",
+
+          filterCategory: "Категорія",
+          filterPrice: "Ціна",
+          getFiltered: "Застосувати",
+          resetFilters: "Скинути",
         },
       },
     },

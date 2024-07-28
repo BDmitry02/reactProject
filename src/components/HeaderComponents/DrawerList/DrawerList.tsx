@@ -11,7 +11,7 @@ import ListItemText from "@mui/material/ListItemText";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import HomeIcon from "@mui/icons-material/Home";
 import LogoutIcon from "@mui/icons-material/Logout";
-import { logOut } from "../../../store/slices/LoginSlice";
+import { logOut } from "../../../utils/store/slices/LoginSlice";
 
 type DrawerListProps = {
   toggleDrawer: (arg0: boolean) => void;
