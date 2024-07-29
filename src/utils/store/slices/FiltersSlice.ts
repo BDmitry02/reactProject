@@ -17,7 +17,6 @@ const filtersAdapter = createEntityAdapter<Filter>({
 const initialState = filtersAdapter.getInitialState({
   filtersCategoriesLoadingStatus: "idle",
   filtersPriceLoadingStatus: "idle",
-  activeFilter: "all",
   priceFilter: {},
 });
 
@@ -45,11 +44,7 @@ export const fetchPriceFilter = createAsyncThunk(
 const filtersSlice = createSlice({
   name: "filters",
   initialState,
-  reducers: {
-    activeFilterChanged: (state, action) => {
-      state.activeFilter = action.payload;
-    },
-  },
+  reducers: {},
   extraReducers: (builder) => {
     builder
       .addCase(fetchCategories.pending, (state) => {

@@ -22,6 +22,7 @@ const productsAdapter = createEntityAdapter<Product>({
 
 const initialState = productsAdapter.getInitialState({
   productsLoadingStatus: "idle",
+  singleProductLoadingStatus: "idle",
   visibleItems: [] as Product[],
   filteredItems: [] as Product[],
   itemsToShow: 20,
@@ -35,6 +36,20 @@ export const fetchProducts = createAsyncThunk<Product[], void>(
     const { request } = useHttp();
     return request({
       url: "http://localhost:4000/products",
+      method: "GET",
+      body: null,
+    });
+  }
+);
+
+export const fetchSingleProduct = createAsyncThunk(
+  "product/fetchSingleProduct",
+  async (prodId: string) => {
+    const { request } = useHttp();
+    return request({
+      url: `http://localhost:4000/singleProduct?prodId=${encodeURIComponent(
+        prodId
+      )}`,
       method: "GET",
       body: null,
     });
@@ -65,22 +80,23 @@ const productsSlice = createSlice({
 
       const normalizedItemsArray = itemsArray.map((item) => ({
         ...item,
-        price: parseFloat(item.price),
+        price: parseFloat(item.price as string),
       }));
 
-      if (category === "all") {
-        state.filteredItems = normalizedItemsArray.filter(
-          (item) => item.price >= min && item.price <= max
-        );
-      } else {
-        state.filteredItems = normalizedItemsArray.filter(
-          (item) =>
-            item.category === category && item.price >= min && item.price <= max
-        );
-      }
+      state.filteredItems = normalizedItemsArray.filter((item) => {
+        const isInPriceRange = item.price >= min && item.price <= max;
+        const isInCategory = category === "all" || item.category === category;
+        return isInPriceRange && isInCategory;
+      });
     },
     resetFilters: (state) => {
       state.filteredItems = Object.values(state.entities);
+    },
+    getSingleItem: (state, action) => {
+      const itemsArray = Object.values(state.entities);
+      state.visibleItems = itemsArray.filter(
+        (item) => item._id === action.payload
+      );
     },
   },
   extraReducers: (builder) => {
@@ -95,6 +111,18 @@ const productsSlice = createSlice({
       })
       .addCase(fetchProducts.rejected, (state, action) => {
         state.productsLoadingStatus = "error";
+        console.error("Error fetching products:", action.payload);
+      })
+      .addCase(fetchSingleProduct.pending, (state) => {
+        state.singleProductLoadingStatus = "loading";
+      })
+      .addCase(fetchSingleProduct.fulfilled, (state, action) => {
+        state.singleProductLoadingStatus = "success";
+        state.visibleItems = [];
+        state.visibleItems.push(action.payload.product);
+      })
+      .addCase(fetchSingleProduct.rejected, (state, action) => {
+        state.singleProductLoadingStatus = "error";
         console.error("Error fetching products:", action.payload);
       });
   },
@@ -112,4 +140,5 @@ export const {
   getPagedItems,
   getFavoriteItems,
   resetFilters,
+  getSingleItem,
 } = actions;

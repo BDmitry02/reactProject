@@ -34,17 +34,14 @@ function PageList() {
 
   useEffect(() => {
     if (productsLoadingStatus === "success") {
-      dispatch(getPagedItems(page));
+      if (page == 1) {
+        navigate("/page/1");
+        dispatch(getPagedItems(1));
+      } else {
+        dispatch(getPagedItems(page));
+      }
     }
-  }, [page, dispatch, productsLoadingStatus]);
-
-  useEffect(() => {
-    if (productsLoadingStatus === "success") {
-      navigate("/page/1");
-      dispatch(getPagedItems(1));
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [filteredItems]);
+  }, [page, dispatch, productsLoadingStatus, navigate]);
 
   const changePage = (pageNum: number) => {
     setPage(pageNum);

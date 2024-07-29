@@ -1,8 +1,9 @@
 import styled from "styled-components";
 import { useSelector } from "react-redux";
+import { useTranslation } from "react-i18next";
+
 import { RootState } from "../../../../utils/store/store";
 import { selectAll } from "../../../../utils/store/slices/FiltersSlice";
-import { useTranslation } from "react-i18next";
 
 type CategoryFilterProps = {
   filterCategory: string;

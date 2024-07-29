@@ -44,6 +44,9 @@ i18next
           filterPrice: "Цена",
           getFiltered: "Применить",
           resetFilters: "Сбросить",
+
+          itemPagePrice: "Цена",
+          itemPageDescription: "Описание",
         },
       },
       en: {
@@ -82,6 +85,9 @@ i18next
           filterPrice: "Price",
           getFiltered: "Apply",
           resetFilters: "Reset",
+
+          itemPagePrice: "Price",
+          itemPageDescription: "Description",
         },
       },
       ua: {
@@ -120,6 +126,9 @@ i18next
           filterPrice: "Ціна",
           getFiltered: "Застосувати",
           resetFilters: "Скинути",
+
+          itemPagePrice: "Ціна",
+          itemPageDescription: "Опис",
         },
       },
     },

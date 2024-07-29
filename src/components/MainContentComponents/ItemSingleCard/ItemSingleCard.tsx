@@ -6,7 +6,7 @@ type ItemSingleCardProps = {
   product: {
     _id: string;
     title: string;
-    price: string;
+    price: string | number;
     description: string;
     previewImage: string;
     bigImage: string;
@@ -17,7 +17,7 @@ type ItemSingleCardProps = {
 const ItemSingleCard = React.memo(({ product }: ItemSingleCardProps) => {
   const { _id, title, price, previewImage } = product;
   return (
-    <StyledLink to={"/"}>
+    <StyledLink to={`/item/${_id}`}>
       <StyledItemCard>
         <StyledImageCardContainer>
           <StyledPreviewImage src={previewImage} alt="" />
@@ -26,7 +26,9 @@ const ItemSingleCard = React.memo(({ product }: ItemSingleCardProps) => {
               {title.length < 45 ? title : title.slice(0, 45) + "..."}
             </StyledItemTitle>
             <StyledPriceAndFav>
-              <StyledPrice>${price}</StyledPrice>
+              <StyledPrice>
+                ${typeof price === "number" ? price.toFixed(2) : price}
+              </StyledPrice>
               <Favorite id={_id} />
             </StyledPriceAndFav>
           </StyledDescriptionText>

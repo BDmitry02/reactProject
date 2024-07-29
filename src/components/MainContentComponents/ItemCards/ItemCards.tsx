@@ -1,10 +1,10 @@
 import { useEffect } from "react";
 import styled from "styled-components";
 import { useDispatch, useSelector } from "react-redux";
-import { fetchProducts } from "../../../utils/store/slices/productsSlice";
 
+import { fetchProducts } from "../../../utils/store/slices/productsSlice";
 import ItemSingleCard from "../ItemSingleCard/ItemSingleCard";
-import SkeletonLoader from "../Skeleton/Skeleton";
+import { SkeletonLoader } from "../Skeleton/Skeleton";
 import { RootState } from "../../../utils/store/store";
 import { fetchFav } from "../../../utils/store/slices/LoginSlice";
 
@@ -22,7 +22,6 @@ function ItemCards() {
         dispatch(fetchFav(userId));
       }
     }
-
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dispatch, userId]);
 

@@ -8,7 +8,7 @@ import ItemSingleCard from "../../components/MainContentComponents/ItemSingleCar
 import { fetchFav, selectAll } from "../../utils/store/slices/LoginSlice";
 import Header from "../../components/Header/Header";
 import Footer from "../../components/Footer/Footer";
-import SkeletonLoader from "../../components/MainContentComponents/Skeleton/Skeleton";
+import { SkeletonLoader } from "../../components/MainContentComponents/Skeleton/Skeleton";
 import { RootState } from "../../utils/store/store";
 import { getFavoriteItems } from "../../utils/store/slices/productsSlice";
 import { fetchProducts } from "../../utils/store/slices/productsSlice";

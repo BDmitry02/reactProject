@@ -1,11 +1,14 @@
 import styled from "styled-components";
 import { useEffect, useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useTranslation } from "react-i18next";
+
+import { SkeletonFilters } from "../../Skeleton/Skeleton";
 
 import {
   getFilteredItems,
   resetFilters,
+  getPagedItems,
 } from "../../../../utils/store/slices/productsSlice";
 import PriceFilter from "../PriceFilters/PriceFilters";
 import CategoryFilter from "../CategoryFilters/CategoryFilters";
@@ -14,8 +17,11 @@ import {
   fetchCategories,
   fetchPriceFilter,
 } from "../../../../utils/store/slices/FiltersSlice";
+import { RootState } from "../../../../utils/store/store";
+import { useNavigate } from "react-router-dom";
 
 function Filters() {
+  const navigate = useNavigate();
   const dispatch = useDispatch();
   const { t } = useTranslation();
 
@@ -25,6 +31,10 @@ function Filters() {
     max: 0,
   });
   const [isPriceValid, setIsValidPrice] = useState(true);
+
+  const { filtersPriceLoadingStatus, priceFilter } = useSelector(
+    (state: RootState) => state.filters
+  );
 
   useEffect(() => {
     dispatch(fetchCategories());
@@ -37,36 +47,71 @@ function Filters() {
   }, [dispatch]);
 
   const getFiltered = () => {
-    dispatch(getFilteredItems({ category: filterCategory, ...filterPrice }));
+    if (
+      !(
+        filterPrice.min === parseInt(priceFilter.min) &&
+        filterPrice.max === parseInt(priceFilter.max) &&
+        filterCategory == "all"
+      )
+    ) {
+      dispatch(getFilteredItems({ category: filterCategory, ...filterPrice }));
+      dispatch(getPagedItems(1));
+      navigate("/page/1");
+    }
   };
 
   const resFilters = () => {
-    dispatch(resetFilters());
+    if (
+      !(
+        filterPrice.min === parseInt(priceFilter.min) &&
+        filterPrice.max === parseInt(priceFilter.max) &&
+        filterCategory == "all"
+      )
+    ) {
+      dispatch(resetFilters());
+      dispatch(fetchPriceFilter()).then((action) =>
+        setFilterPrice({
+          min: parseInt(action.payload.min),
+          max: parseInt(action.payload.max),
+        })
+      );
+      setFilterCategory("all");
+      dispatch(getPagedItems(1));
+      navigate("/page/1");
+    }
   };
 
-  return (
-    <StyledFilterContainer>
-      <StyledCategoriesContainer>
-        <CategoryFilter
-          filterCategory={filterCategory}
-          setFilterCategory={setFilterCategory}
-        />
-        <PriceFilter
-          setFilterPrice={setFilterPrice}
-          filterPrice={filterPrice}
-          isPriceValid={isPriceValid}
-          setIsValidPrice={setIsValidPrice}
-        />
-        <StyledFilterButton onClick={getFiltered} disabled={!isPriceValid}>
-          {t("getFiltered")}
-        </StyledFilterButton>
-        <StyledFilterButton onClick={resFilters}>
-          {" "}
-          {t("resetFilters")}
-        </StyledFilterButton>
-      </StyledCategoriesContainer>
-    </StyledFilterContainer>
-  );
+  if (filtersPriceLoadingStatus != "success") {
+    return (
+      <>
+        <SkeletonFilters />
+      </>
+    );
+  } else {
+    return (
+      <StyledFilterContainer>
+        <StyledCategoriesContainer>
+          <CategoryFilter
+            filterCategory={filterCategory}
+            setFilterCategory={setFilterCategory}
+          />
+          <PriceFilter
+            setFilterPrice={setFilterPrice}
+            filterPrice={filterPrice}
+            isPriceValid={isPriceValid}
+            setIsValidPrice={setIsValidPrice}
+          />
+          <StyledFilterButton onClick={getFiltered} disabled={!isPriceValid}>
+            {t("getFiltered")}
+          </StyledFilterButton>
+          <StyledFilterButton onClick={resFilters}>
+            {" "}
+            {t("resetFilters")}
+          </StyledFilterButton>
+        </StyledCategoriesContainer>
+      </StyledFilterContainer>
+    );
+  }
 }
 
 export default Filters;
