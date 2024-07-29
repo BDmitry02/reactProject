@@ -47,6 +47,8 @@ i18next
 
           itemPagePrice: "Цена",
           itemPageDescription: "Описание",
+
+          searchPanelPlaceholder: "Я ищу...",
         },
       },
       en: {
@@ -88,6 +90,7 @@ i18next
 
           itemPagePrice: "Price",
           itemPageDescription: "Description",
+          searchPanelPlaceholder: "I'm looking for...",
         },
       },
       ua: {
@@ -129,6 +132,8 @@ i18next
 
           itemPagePrice: "Ціна",
           itemPageDescription: "Опис",
+
+          searchPanelPlaceholder: "Я шукаю...",
         },
       },
     },

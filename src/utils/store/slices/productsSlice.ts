@@ -25,6 +25,7 @@ const initialState = productsAdapter.getInitialState({
   singleProductLoadingStatus: "idle",
   visibleItems: [] as Product[],
   filteredItems: [] as Product[],
+  searchedProducts: [] as Product[],
   itemsToShow: 20,
   lastIndex: 0,
   currentPage: 1,
@@ -98,6 +99,14 @@ const productsSlice = createSlice({
         (item) => item._id === action.payload
       );
     },
+    getSearchedItem: (state, action) => {
+      const itemsArray = Object.values(state.entities);
+      state.searchedProducts = itemsArray.filter((item) =>
+        item.title
+          .toLocaleLowerCase()
+          .includes(action.payload.toLocaleLowerCase())
+      );
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -141,4 +150,5 @@ export const {
   getFavoriteItems,
   resetFilters,
   getSingleItem,
+  getSearchedItem,
 } = actions;

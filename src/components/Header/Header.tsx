@@ -3,13 +3,14 @@ import { useState } from "react";
 
 import styled from "styled-components";
 import { useSelector } from "react-redux";
-// import AccountCircleOutlinedIcon from "@mui/icons-material/AccountCircleOutlined";
+
 import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
 import Theme from "../HeaderComponents/Theme/Theme";
 import { lightTheme } from "../HeaderComponents/Theme/ThemeStyle";
 import { RootState } from "../../utils/store/store";
 import LanguagesList from "../HeaderComponents/LanguagesList/LanguagesList";
 import DrawerList from "../HeaderComponents/DrawerList/DrawerList";
+import SearchPanel from "../HeaderComponents/SearchPanel/SearchPanel";
 
 function Header() {
   const [open, setOpen] = useState(false);
@@ -40,6 +41,7 @@ function Header() {
   return (
     <StyledHeader>
       <HeaderMenu />
+      <SearchPanel />
       <StyledRightSideDiv>
         <Theme />
         <LanguagesList />
