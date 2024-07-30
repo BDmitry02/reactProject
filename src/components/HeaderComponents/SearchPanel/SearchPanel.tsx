@@ -20,7 +20,6 @@ function SearchPanel() {
   const { searchedProducts } = useSelector(
     (state: RootState) => state.products
   );
-  console.log(searchedProducts);
 
   const handleChange = (e: { target: { value: string } }) => {
     if (!isSearchActive) {

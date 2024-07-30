@@ -7,7 +7,6 @@ import {
   lightTheme,
   darkTheme,
 } from './components/HeaderComponents/Theme/ThemeStyle.ts';
-import LoginPage from './pages/LoginPage/LoginPage';
 import MainPage from './pages/MainPage/MainPage';
 import FavoritePage from './pages/FavoritePage/FavoritePage.tsx';
 import ItemPage from './pages/ItemPage/ItemPage.tsx';
@@ -31,7 +30,6 @@ function App() {
         <Router>
           <Routes>
             <Route path="/" element={<MainPage />} />
-            <Route path="/login" element={<LoginPage />} />
             <Route path="/page/:pageNumber" element={<MainPage />} />
             <Route path="/favoriteItems" element={<FavoritePage />} />
             <Route path="/item/:_id" element={<ItemPage />} />

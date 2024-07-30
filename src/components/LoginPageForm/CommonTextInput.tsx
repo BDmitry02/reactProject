@@ -1,6 +1,5 @@
 import { TextField } from '@mui/material';
 import { useField } from 'formik';
-import { StyledDiv } from './StyledFormComponents';
 import styled from 'styled-components';
 
 interface MyTextInputProps {
@@ -14,12 +13,12 @@ interface MyTextInputProps {
 function CommonTextInput({ ...props }: MyTextInputProps) {
   const [field, meta] = useField(props);
   return (
-    <StyledDiv>
+    <StyledInputContainer>
       <StyledTextField {...props} {...field} />
       {meta.touched && meta.error ? (
         <ErrorMessage className="error">{meta.error}</ErrorMessage>
       ) : null}
-    </StyledDiv>
+    </StyledInputContainer>
   );
 }
 
@@ -49,4 +48,11 @@ const StyledTextField = styled(TextField)`
       color: ${(props) => props.theme.textColor};
     }
   }
+`;
+
+const StyledInputContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
 `;
