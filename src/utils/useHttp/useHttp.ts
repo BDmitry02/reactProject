@@ -4,17 +4,27 @@ type registerProps = {
   body: string | null;
 };
 
+class HttpError extends Error {
+  status: number;
+
+  constructor(message: string, status: number) {
+    super(message);
+    this.status = status;
+    this.name = 'HttpError';
+  }
+}
+
 const useHttp = () => {
   const request = async ({
     body = null,
     url,
-    method = "GET",
+    method = 'GET',
   }: registerProps) => {
     try {
       const response = await fetch(url, {
         method,
         headers: {
-          "Content-Type": "application/json",
+          'Content-Type': 'application/json',
         },
         body,
       });
@@ -22,16 +32,17 @@ const useHttp = () => {
       const data = await response.json();
 
       if (!response.ok) {
-        const error = new Error("Request failed");
-        error.status = response.status;
-        error.message = data.message || "Unknown error";
-        throw error;
+        throw new HttpError(data.message || 'Unknown error', response.status);
       }
 
       return data;
-    } catch (e) {
-      console.error("HTTP Request Error:", e);
-      throw new Error(e.message || e);
+    } catch (e: any) {
+      if (e instanceof HttpError) {
+        console.error(`HTTP Request Error: ${e.message} (Status: ${e.status})`);
+      } else {
+        console.error(`HTTP Request Error: ${e.message || e}`);
+      }
+      throw e;
     }
   };
 

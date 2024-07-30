@@ -1,15 +1,20 @@
-import { useState } from "react";
-import { useTranslation } from "react-i18next";
-import { useSelector, useDispatch } from "react-redux";
-import styled from "styled-components";
-import { RootState } from "../../../utils/store/store";
-import { getSearchedItem } from "../../../utils/store/slices/productsSlice";
+import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
+import { useSelector, useDispatch } from 'react-redux';
+import styled from 'styled-components';
+import { RootState } from '../../../utils/store/store';
+import { getSearchedItem } from '../../../utils/store/slices/productsSlice';
+import SearchItemCard from '../SearchItemCard/SearchItemCard';
+import {
+  displaySearchResults,
+  getPagedItems,
+} from '../../../utils/store/slices/productsSlice';
 
 function SearchPanel() {
   const { t } = useTranslation();
   const dispatch = useDispatch();
 
-  const [search, setSearch] = useState("");
+  const [search, setSearch] = useState('');
   const [isSearchActive, setIsSearchActive] = useState(false);
 
   const { searchedProducts } = useSelector(
@@ -30,21 +35,27 @@ function SearchPanel() {
     setIsSearchActive(false);
   };
 
-  const clickedSearch = (e: { target: { value: string } }) => {
-    if (e.target.value != "") {
+  const clickedSearch = () => {
+    if (search != '') {
       setIsSearchActive(true);
     }
+  };
+
+  const getSearched = () => {
+    dispatch(displaySearchResults());
+    dispatch(getPagedItems(1));
+    setIsSearchActive(false);
   };
 
   const WorkingSearchPanel = () => {
     const searchingResults = () => {
       if (searchedProducts.length === 0) {
         return <StyledSearchedItem>No items found</StyledSearchedItem>;
-      } else {
+      } else if (search.length > 0) {
         return searchedProducts
-          .slice(0, 5)
+          .slice(0, 8)
           .map((product, index) => (
-            <StyledSearchedItem key={index}>{product.title}</StyledSearchedItem>
+            <SearchItemCard key={index} product={product} />
           ));
       }
     };
@@ -68,12 +79,14 @@ function SearchPanel() {
       <StyledSearchInput
         type="text"
         autoComplete="off"
-        placeholder={t("searchPanelPlaceholder")}
+        placeholder={t('searchPanelPlaceholder')}
         value={search}
         onChange={handleChange}
         onClick={clickedSearch}
       />
-
+      <StyledFindButton onClick={getSearched}>
+        {t('findButton')}
+      </StyledFindButton>
       {WorkingSearchPanel()}
     </StyledSearchContainer>
   );
@@ -98,9 +111,9 @@ const StyledOverlay = styled.div`
 const StyledSearchInput = styled.input`
   width: 600px;
   height: 35px;
-  background-image: url("data:image/svg+xml;utf8,${encodeURIComponent(
+  background-image: url('data:image/svg+xml;utf8,${encodeURIComponent(
     searchIconSVG
-  )}");
+  )}');
 
   background-repeat: no-repeat;
   background-position: left center;
@@ -108,19 +121,47 @@ const StyledSearchInput = styled.input`
   border: 0;
   position: relative;
   z-index: 5;
+
+  &:focus {
+    border: none;
+    outline: none;
+  }
+  @media (max-width: 768px) {
+    width: 250px;
+  }
+
+  @media (max-width: 480px) {
+    display: none;
+  }
 `;
+
 const StyledSearchContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
   position: relative;
   width: 632px;
+
+  @media (max-width: 768px) {
+    width: 250px;
+  }
 `;
 
 const StyledSearchedItemsContainer = styled.div`
   position: absolute;
-  top: calc(100% + 2px);
-  width: 100%;
-  background-color: black;
+  top: 100%;
+  left: 0%;
+  width: calc(100% - 64px);
+  background-color: #ffffff;
   z-index: 5;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  color: black;
+
+  @media (max-width: 768px) {
+    width: calc(100% - 49px);
+    left: -0.5%;
+  }
 `;
 
 const StyledSearchedItem = styled.div`
@@ -128,5 +169,18 @@ const StyledSearchedItem = styled.div`
   border-bottom: 1px solid #ddd;
   &:last-child {
     border-bottom: none;
+  }
+`;
+
+const StyledFindButton = styled.button`
+  border: 1px solid black;
+  background-color: white;
+  height: 39px;
+  width: 70px;
+  z-index: 5;
+  cursor: pointer;
+
+  @media (max-width: 480px) {
+    display: none;
   }
 `;

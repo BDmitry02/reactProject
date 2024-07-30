@@ -2,76 +2,76 @@ import {
   createSlice,
   createEntityAdapter,
   createAsyncThunk,
-} from "@reduxjs/toolkit";
-import useHttp from "../../useHttp/useHttp";
-import { RootState } from "../store";
+} from '@reduxjs/toolkit';
+import useHttp from '../../useHttp/useHttp';
+import { RootState } from '../store';
 
 const loginAdapter = createEntityAdapter({
   selectId: (prodId) => prodId,
 });
 
 const initialState = loginAdapter.getInitialState({
-  favLoadingStatus: "idle",
-  favProdLoadingStatus: "idle",
-  isLogged: localStorage.getItem("isLogged") === "true" || false,
-  userId: localStorage.getItem("userId") || "",
+  favLoadingStatus: 'idle',
+  favProdLoadingStatus: 'idle',
+  isLogged: localStorage.getItem('isLogged') === 'true' || false,
+  userId: localStorage.getItem('userId') || '',
   favoriteItems: [],
 });
 
 export const addToFav = createAsyncThunk(
-  "login/addToFav",
+  'login/addToFav',
   async ({ userId, prodId }) => {
     const { request } = useHttp();
     return request({
-      url: "http://localhost:3000/favorite",
-      method: "POST",
+      url: 'http://localhost:3000/favorite',
+      method: 'POST',
       body: JSON.stringify({ userId, prodId }),
     });
   }
 );
 
 export const removeFromFav = createAsyncThunk(
-  "login/removeFromFav",
+  'login/removeFromFav',
   async ({ userId, prodId }: { userId: string; prodId: string }) => {
     const { request } = useHttp();
     return request({
-      url: "http://localhost:3000/favorite",
-      method: "DELETE",
+      url: 'http://localhost:3000/favorite',
+      method: 'DELETE',
       body: JSON.stringify({ userId, prodId }),
     });
   }
 );
 
 export const fetchFav = createAsyncThunk(
-  "login/fetchFav",
+  'login/fetchFav',
   async (userId: string) => {
     const { request } = useHttp();
     return request({
       url: `http://localhost:3000/favorite?userId=${encodeURIComponent(
         userId
       )}`,
-      method: "GET",
+      method: 'GET',
       body: null,
     });
   }
 );
 
 const loginSlice = createSlice({
-  name: "login",
+  name: 'login',
   initialState,
   reducers: {
     logIn: (state) => {
       state.isLogged = true;
-      localStorage.setItem("isLogged", "true");
+      localStorage.setItem('isLogged', 'true');
     },
     logOut: (state) => {
       state.isLogged = false;
-      localStorage.setItem("isLogged", "false");
-      localStorage.setItem("userId", "");
+      localStorage.setItem('isLogged', 'false');
+      localStorage.setItem('userId', '');
     },
     setUserId: (state, action) => {
       state.userId = action.payload;
-      localStorage.setItem("userId", action.payload);
+      localStorage.setItem('userId', action.payload);
     },
     addNewFav: (state, action) => {
       const newFav = action.payload;
@@ -84,17 +84,17 @@ const loginSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(fetchFav.pending, (state) => {
-        state.favLoadingStatus = "loading";
+        state.favLoadingStatus = 'loading';
       })
       .addCase(fetchFav.fulfilled, (state, action) => {
-        state.favLoadingStatus = "success";
+        state.favLoadingStatus = 'success';
         action.payload.favorite.forEach((element) => {
           loginAdapter.addOne(state, element);
         });
       })
       .addCase(fetchFav.rejected, (state, action) => {
-        state.favLoadingStatus = "error";
-        console.error("Error fetching products:", action.payload);
+        state.favLoadingStatus = 'error';
+        console.error('Error fetching products:', action.payload);
       });
   },
 });

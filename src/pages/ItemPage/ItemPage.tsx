@@ -1,13 +1,13 @@
-import styled from "styled-components";
-import { useParams } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { useEffect } from "react";
+import styled from 'styled-components';
+import { useParams } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { useEffect } from 'react';
 
-import Header from "../../components/Header/Header";
-import Footer from "../../components/Footer/Footer";
-import { RootState } from "../../utils/store/store";
-import { fetchSingleProduct } from "../../utils/store/slices/productsSlice";
-import SingleItemContent from "../../components/SingleItemPageComponents/SingleItemContent";
+import Header from '../../components/Header/Header';
+import Footer from '../../components/Footer/Footer';
+import { RootState } from '../../utils/store/store';
+import { fetchSingleProduct } from '../../utils/store/slices/productsSlice';
+import SingleItemContent from '../../components/SingleItemPageComponents/SingleItemContent';
 
 function ItemPage() {
   const { _id } = useParams<{ _id: string }>();
@@ -22,9 +22,9 @@ function ItemPage() {
   }, [dispatch, _id]);
 
   const SetContent = () => {
-    if (singleProductLoadingStatus === "loading") {
+    if (singleProductLoadingStatus === 'loading') {
       return <p>....loading</p>;
-    } else if (singleProductLoadingStatus === "error") {
+    } else if (singleProductLoadingStatus === 'error') {
       return (
         <div>
           <h2>Loading error</h2>

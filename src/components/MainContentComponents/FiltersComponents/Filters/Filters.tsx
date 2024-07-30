@@ -1,31 +1,31 @@
-import styled from "styled-components";
-import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { useTranslation } from "react-i18next";
+import styled from 'styled-components';
+import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useTranslation } from 'react-i18next';
 
-import { SkeletonFilters } from "../../Skeleton/Skeleton";
+import { SkeletonFilters } from '../../Skeleton/Skeleton';
 
 import {
   getFilteredItems,
   resetFilters,
   getPagedItems,
-} from "../../../../utils/store/slices/productsSlice";
-import PriceFilter from "../PriceFilters/PriceFilters";
-import CategoryFilter from "../CategoryFilters/CategoryFilters";
+} from '../../../../utils/store/slices/productsSlice';
+import PriceFilter from '../PriceFilters/PriceFilters';
+import CategoryFilter from '../CategoryFilters/CategoryFilters';
 
 import {
   fetchCategories,
   fetchPriceFilter,
-} from "../../../../utils/store/slices/FiltersSlice";
-import { RootState } from "../../../../utils/store/store";
-import { useNavigate } from "react-router-dom";
+} from '../../../../utils/store/slices/FiltersSlice';
+import { RootState } from '../../../../utils/store/store';
+import { useNavigate } from 'react-router-dom';
 
 function Filters() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { t } = useTranslation();
 
-  const [filterCategory, setFilterCategory] = useState("all");
+  const [filterCategory, setFilterCategory] = useState('all');
   const [filterPrice, setFilterPrice] = useState({
     min: 0,
     max: 0,
@@ -51,12 +51,12 @@ function Filters() {
       !(
         filterPrice.min === parseInt(priceFilter.min) &&
         filterPrice.max === parseInt(priceFilter.max) &&
-        filterCategory == "all"
+        filterCategory == 'all'
       )
     ) {
       dispatch(getFilteredItems({ category: filterCategory, ...filterPrice }));
       dispatch(getPagedItems(1));
-      navigate("/page/1");
+      navigate('/page/1');
     }
   };
 
@@ -65,7 +65,7 @@ function Filters() {
       !(
         filterPrice.min === parseInt(priceFilter.min) &&
         filterPrice.max === parseInt(priceFilter.max) &&
-        filterCategory == "all"
+        filterCategory == 'all'
       )
     ) {
       dispatch(resetFilters());
@@ -75,13 +75,13 @@ function Filters() {
           max: parseInt(action.payload.max),
         })
       );
-      setFilterCategory("all");
+      setFilterCategory('all');
       dispatch(getPagedItems(1));
-      navigate("/page/1");
+      navigate('/page/1');
     }
   };
 
-  if (filtersPriceLoadingStatus != "success") {
+  if (filtersPriceLoadingStatus != 'success') {
     return (
       <>
         <SkeletonFilters />
@@ -102,11 +102,11 @@ function Filters() {
             setIsValidPrice={setIsValidPrice}
           />
           <StyledFilterButton onClick={getFiltered} disabled={!isPriceValid}>
-            {t("getFiltered")}
+            {t('getFiltered')}
           </StyledFilterButton>
           <StyledFilterButton onClick={resFilters}>
-            {" "}
-            {t("resetFilters")}
+            {' '}
+            {t('resetFilters')}
           </StyledFilterButton>
         </StyledCategoriesContainer>
       </StyledFilterContainer>
@@ -139,6 +139,6 @@ const StyledFilterButton = styled.button`
   &:hover {
     background-color: ${(props) => props.theme.textColor};
     color: ${(props) =>
-      props.theme.textColor === "#FFFFFF" ? "#000" : "#fff"};
+      props.theme.textColor === '#FFFFFF' ? '#000' : '#fff'};
   }
 `;

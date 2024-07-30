@@ -1,6 +1,6 @@
-import styled from "styled-components";
-import Favorite from "../MainContentComponents/FavoriteIcon/FavoriteIcon";
-import { useTranslation } from "react-i18next";
+import styled from 'styled-components';
+import Favorite from '../MainContentComponents/FavoriteIcon/FavoriteIcon';
+import { useTranslation } from 'react-i18next';
 
 type SingleItemContentProps = {
   product: [
@@ -12,7 +12,7 @@ type SingleItemContentProps = {
       previewImage: string;
       bigImage: string;
       category: string;
-    }
+    },
   ];
 };
 
@@ -33,11 +33,11 @@ function SingleItemContent({ product }: SingleItemContentProps) {
             <StyledItemHeader>
               {t(`itemPagePrice`)}: ${price}
             </StyledItemHeader>
-            <StyledItemHeader>
-              {t(`itemPageDescription`)}: {description}
-            </StyledItemHeader>
           </StyledRightSideContentContainer>
         </StyledItemContainer>
+        <StyledItemDescription>
+          {t(`itemPageDescription`)}: {description}
+        </StyledItemDescription>
       </StyledItemWrapper>
     );
   }
@@ -60,6 +60,18 @@ const StyledLeftSideContentContainer = styled.div`
   & img {
     width: 25vw;
   }
+
+  @media (max-width: 768px) {
+    & img {
+      width: 45vw;
+    }
+  }
+
+  @media (max-width: 480px) {
+    & img {
+      width: 40vw;
+    }
+  }
 `;
 
 const StyledRightSideContentContainer = styled.div`
@@ -73,6 +85,11 @@ const StyledRightSideContentContainer = styled.div`
 const StyledItemHeader = styled.p`
   font-weight: 400;
   font-size: 24px;
+
+  @media (max-width: 480px) {
+    font-weight: 400;
+    font-size: 16px;
+  }
 `;
 
 const StyledItemWrapper = styled.div`
@@ -80,5 +97,16 @@ const StyledItemWrapper = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  gap: 50px;
+  gap: 20px;
+`;
+
+const StyledItemDescription = styled.div`
+  padding: 20px;
+  font-weight: 400;
+  font-size: 24px;
+
+  @media (max-width: 480px) {
+    font-weight: 400;
+    font-size: 16px;
+  }
 `;

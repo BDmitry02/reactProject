@@ -1,18 +1,18 @@
-import { createSlice, createEntityAdapter } from "@reduxjs/toolkit";
+import { createSlice, createEntityAdapter } from '@reduxjs/toolkit';
 
 const themeAdapter = createEntityAdapter();
 
 const initialState = themeAdapter.getInitialState({
-  theme: localStorage.getItem("theme") || "light",
+  theme: localStorage.getItem('theme') || 'light',
 });
 
 const themeSlice = createSlice({
-  name: "theme",
+  name: 'theme',
   initialState,
   reducers: {
     activeThemeChanged: (state, action) => {
       state.theme = action.payload;
-      localStorage.setItem("theme", action.payload);
+      localStorage.setItem('theme', action.payload);
     },
   },
 });

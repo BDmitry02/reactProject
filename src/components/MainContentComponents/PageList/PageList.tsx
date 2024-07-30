@@ -1,11 +1,11 @@
-import styled from "styled-components";
-import { useSelector, useDispatch } from "react-redux";
-import { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
-import { getPagedItems } from "../../../utils/store/slices/productsSlice";
-import { Link } from "react-router-dom";
-import { RootState } from "../../../utils/store/store";
-import { useNavigate } from "react-router-dom";
+import styled from 'styled-components';
+import { useSelector, useDispatch } from 'react-redux';
+import { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
+import { getPagedItems } from '../../../utils/store/slices/productsSlice';
+import { Link } from 'react-router-dom';
+import { RootState } from '../../../utils/store/store';
+import { useNavigate } from 'react-router-dom';
 
 function PageList() {
   const navigate = useNavigate();
@@ -18,9 +18,10 @@ function PageList() {
   const pageNum = pageNumber ? parseInt(pageNumber, 10) : 1;
   const [page, setPage] = useState(pageNum);
   const pageCount = Math.ceil(filteredItems.length / 20);
+
   useEffect(() => {
     if (pageNum === 1) {
-      navigate("/page/1");
+      navigate('/page/1');
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -33,9 +34,9 @@ function PageList() {
   }, [pageNumber]);
 
   useEffect(() => {
-    if (productsLoadingStatus === "success") {
+    if (productsLoadingStatus === 'success') {
       if (page == 1) {
-        navigate("/page/1");
+        navigate('/page/1');
         dispatch(getPagedItems(1));
       } else {
         dispatch(getPagedItems(page));
@@ -45,7 +46,7 @@ function PageList() {
 
   const changePage = (pageNum: number) => {
     setPage(pageNum);
-    window.scrollTo({ top: 0, behavior: "smooth" });
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const getPageCount = () => {
@@ -59,7 +60,7 @@ function PageList() {
       pages.push(1);
 
       if (page > sidePagesToShow + 1) {
-        pages.push("prev-dots");
+        pages.push('prev-dots');
       }
 
       const start = Math.max(2, page - sidePagesToShow);
@@ -70,14 +71,14 @@ function PageList() {
       }
 
       if (page < pageCount - sidePagesToShow) {
-        pages.push("next-dots");
+        pages.push('next-dots');
       }
 
       pages.push(pageCount);
     }
 
     return pages.map((p, index) => {
-      if (p === "prev-dots") {
+      if (p === 'prev-dots') {
         return (
           <StyledPageButton
             to={`/page/${page - 1 - sidePagesToShow}`}
@@ -87,7 +88,7 @@ function PageList() {
             ...
           </StyledPageButton>
         );
-      } else if (p === "next-dots") {
+      } else if (p === 'next-dots') {
         return (
           <StyledPageButton
             to={`/page/${page + sidePagesToShow}`}
@@ -102,7 +103,7 @@ function PageList() {
           <StyledPageButton
             to={`/page/${p}`}
             key={index}
-            className={p === page ? "disabled" : undefined}
+            className={p === page ? 'disabled' : undefined}
             onClick={p === page ? undefined : () => changePage(+p)}
           >
             {p}

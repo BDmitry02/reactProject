@@ -1,14 +1,14 @@
-import { Formik, Form } from "formik";
-import styled from "styled-components";
-import { useTranslation } from "react-i18next";
-import { useSnackbar } from "notistack";
-import { useNavigate } from "react-router-dom";
-import { RegisterValidationSchema } from "../../../utils/validationSchemas/RegisterFormValidationSchema";
-import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-import CommonTextInput from "../CommonTextInput";
-import { useDispatch } from "react-redux";
-import { logIn, setUserId } from "../../../utils/store/slices/LoginSlice";
-import useHttp from "../../../utils/useHttp/useHttp";
+import { Formik, Form } from 'formik';
+import styled from 'styled-components';
+import { useTranslation } from 'react-i18next';
+import { useSnackbar } from 'notistack';
+import { useNavigate } from 'react-router-dom';
+import { RegisterValidationSchema } from '../../../utils/validationSchemas/RegisterFormValidationSchema';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import CommonTextInput from '../CommonTextInput';
+import { useDispatch } from 'react-redux';
+import { logIn, setUserId } from '../../../utils/store/slices/LoginSlice';
+import useHttp from '../../../utils/useHttp/useHttp';
 
 interface LoginFormProps {
   setFormType: (formType: string) => void;
@@ -35,19 +35,19 @@ function RegisterForm({ setFormType }: LoginFormProps) {
     try {
       const res = await request({
         body: JSON.stringify(values),
-        url: "http://localhost:3000/users",
-        method: "POST",
+        url: 'http://localhost:3000/users',
+        method: 'POST',
       });
 
       dispatch(setUserId(res.userId));
       dispatch(logIn());
-      navigate("/page/1");
+      navigate('/page/1');
     } catch (error) {
       const typedError = error as { status?: number };
       if (typedError.status === 400) {
-        enqueueSnackbar(t("registrationFailed400"), { variant: "error" });
+        enqueueSnackbar(t('registrationFailed400'), { variant: 'error' });
       } else {
-        enqueueSnackbar(t("registrationFailed"), { variant: "error" });
+        enqueueSnackbar(t('registrationFailed'), { variant: 'error' });
       }
     }
   };
@@ -55,31 +55,31 @@ function RegisterForm({ setFormType }: LoginFormProps) {
   return (
     <>
       <StyledArrowContainer>
-        <ArrowBackIcon fontSize="large" onClick={() => setFormType("login")} />
+        <ArrowBackIcon fontSize="large" onClick={() => setFormType('login')} />
       </StyledArrowContainer>
       <StyledRegisterFormContainer>
         <Formik
           initialValues={{
-            name: "",
-            surname: "",
-            email: "",
-            password: "",
-            confirmPassword: "",
+            name: '',
+            surname: '',
+            email: '',
+            password: '',
+            confirmPassword: '',
           }}
           validationSchema={FormValidationSchema}
           onSubmit={onSubmit}
         >
           <StyledForm className="form">
-            <StyledFormHeader>{t("registerFormHeader")}</StyledFormHeader>
+            <StyledFormHeader>{t('registerFormHeader')}</StyledFormHeader>
             <CommonTextInput
-              label={t("nameLabel")}
+              label={t('nameLabel')}
               aria-describedby="outlined-required"
               name="name"
               type="text"
               autoComplete="given-name"
             />
             <CommonTextInput
-              label={t("surnameLabel")}
+              label={t('surnameLabel')}
               aria-describedby="outlined-required"
               name="surname"
               type="text"
@@ -93,20 +93,20 @@ function RegisterForm({ setFormType }: LoginFormProps) {
               autoComplete="email"
             />
             <CommonTextInput
-              label={t("passwordLabel")}
+              label={t('passwordLabel')}
               aria-describedby="outlined-password-input"
               name="password"
               type="password"
               autoComplete="new-password"
             />
             <CommonTextInput
-              label={t("passwordConfirmationLabel")}
+              label={t('passwordConfirmationLabel')}
               aria-describedby="outlined-password-input"
               name="confirmPassword"
               type="password"
               autoComplete="new-password"
             />
-            <SubmitButton type="submit">{t("registerFormHeader")}</SubmitButton>
+            <SubmitButton type="submit">{t('registerFormHeader')}</SubmitButton>
           </StyledForm>
         </Formik>
       </StyledRegisterFormContainer>
@@ -131,8 +131,8 @@ const SubmitButton = styled.button`
   border: 2px solid ${(props) => props.theme.submitFormButtonBorder};
   color: ${(props) => props.theme.textColor};
   background-color: transparent;
-  width: 9vw;
-  height: 4vh;
+  width: 150px;
+  height: 40px;
   font-size: 14px;
   font-weight: 500;
   cursor: pointer;
@@ -153,4 +153,12 @@ const StyledArrowContainer = styled.div`
   margin-left: 50px;
   margin-top: 10px;
   cursor: pointer;
+
+  @media (max-width: 768px) {
+    margin-left: 30px;
+  }
+
+  @media (max-width: 480px) {
+    margin-left: 10px;
+  }
 `;

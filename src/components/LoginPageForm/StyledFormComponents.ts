@@ -1,4 +1,4 @@
-import styled from "styled-components";
+import styled from 'styled-components';
 
 export const StyledWrapper = styled.div`
   min-height: 100vh;
@@ -17,7 +17,6 @@ export const FormBackgroundLayer = styled.div`
   padding: 50px;
   width: 40vw;
 `;
- 
 
 export const StyledDiv = styled.div`
   display: flex;
@@ -25,8 +24,3 @@ export const StyledDiv = styled.div`
   align-items: center;
   gap: 10px;
 `;
-
-
-
-
-

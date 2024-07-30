@@ -1,8 +1,8 @@
-import styled from "styled-components";
-import { useSelector } from "react-redux";
-import { useTranslation } from "react-i18next";
+import styled from 'styled-components';
+import { useSelector } from 'react-redux';
+import { useTranslation } from 'react-i18next';
 
-import { RootState } from "../../../../utils/store/store";
+import { RootState } from '../../../../utils/store/store';
 
 type PriceFilterProps = {
   filterPrice: {
@@ -28,7 +28,7 @@ function PriceFilter(props: PriceFilterProps) {
       return;
     }
 
-    const numericValue = value === "" ? 0 : parseInt(value);
+    const numericValue = value === '' ? 0 : parseInt(value);
     const updatedFilterPrice = {
       ...filterPrice,
       [name]: numericValue,
@@ -44,10 +44,10 @@ function PriceFilter(props: PriceFilterProps) {
     setIsValidPrice(isValidPrice);
   };
 
-  if (filtersPriceLoadingStatus === "success") {
+  if (filtersPriceLoadingStatus === 'success') {
     return (
       <>
-        <StyledCategoryHeader>{t("filterPrice")}</StyledCategoryHeader>
+        <StyledCategoryHeader>{t('filterPrice')}</StyledCategoryHeader>
         <StyledPriceFilterContainer>
           <StyledPriceFilterInput
             type="text"
@@ -87,15 +87,22 @@ const StyledPriceFilterContainer = styled.div`
 const StyledPriceFilterInput = styled.input<{ $isInvalid: boolean }>`
   max-width: 80px;
   height: 30px;
-  border: 1px solid ${({ $isInvalid }) => ($isInvalid ? "red" : "#ccc")};
+  border: 1px solid ${({ $isInvalid }) => ($isInvalid ? 'red' : '#ccc')};
   text-align: center;
   border-radius: 15px;
 
   &:focus {
-    border-color: ${({ $isInvalid }) => ($isInvalid ? "darkred" : "#007bff")};
+    border-color: ${({ $isInvalid }) => ($isInvalid ? 'darkred' : '#007bff')};
     box-shadow: 0 0 5px
-      ${({ $isInvalid }) => ($isInvalid ? "darkred" : "#007bff")};
+      ${({ $isInvalid }) => ($isInvalid ? 'darkred' : '#007bff')};
     outline: none;
+  }
+
+  @media (max-width: 768px) {
+    width: 60px;
+  }
+
+  @media (max-width: 480px) {
   }
 `;
 const StyledCategoryHeader = styled.p`

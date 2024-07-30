@@ -1,22 +1,22 @@
-import { useDispatch, useSelector } from "react-redux";
-import { useMemo } from "react";
-import { createSelector } from "@reduxjs/toolkit";
-import styled from "styled-components";
-import { useSnackbar } from "notistack";
+import { useDispatch, useSelector } from 'react-redux';
+import { useMemo } from 'react';
+import { createSelector } from '@reduxjs/toolkit';
+import styled from 'styled-components';
+import { useSnackbar } from 'notistack';
 
-import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
-import FavoriteIcon from "@mui/icons-material/Favorite";
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
+import FavoriteIcon from '@mui/icons-material/Favorite';
 import {
   addToFav,
   removeFromFav,
-} from "../../../utils/store/slices/LoginSlice";
+} from '../../../utils/store/slices/LoginSlice';
 
 import {
   selectAll,
   addNewFav,
   removeFav,
-} from "../../../utils/store/slices/LoginSlice";
-import { RootState } from "../../../utils/store/store";
+} from '../../../utils/store/slices/LoginSlice';
+import { RootState } from '../../../utils/store/store';
 
 type FavoriteProps = {
   id: string;
@@ -41,20 +41,20 @@ const Favorite = ({ id }: FavoriteProps) => {
     try {
       if (isFavorite) {
         await dispatch(
-          removeFromFav({ userId: localStorage.getItem("userId"), prodId: id })
+          removeFromFav({ userId: localStorage.getItem('userId'), prodId: id })
         ).unwrap();
         await dispatch(removeFav(id));
-        enqueueSnackbar("Removed from favorites!", { variant: "success" });
+        enqueueSnackbar('Removed from favorites!', { variant: 'success' });
       } else {
         await dispatch(
-          addToFav({ userId: localStorage.getItem("userId"), prodId: id })
+          addToFav({ userId: localStorage.getItem('userId'), prodId: id })
         ).unwrap();
         await dispatch(addNewFav(id));
-        enqueueSnackbar("Added to favorites!", { variant: "success" });
+        enqueueSnackbar('Added to favorites!', { variant: 'success' });
       }
     } catch (error) {
-      console.error("Error handling favorite action:", error);
-      enqueueSnackbar("Failed to update favorites", { variant: "error" });
+      console.error('Error handling favorite action:', error);
+      enqueueSnackbar('Failed to update favorites', { variant: 'error' });
     }
   };
 

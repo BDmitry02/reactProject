@@ -1,16 +1,16 @@
-import { Route, Routes, BrowserRouter as Router } from "react-router-dom";
-import { createGlobalStyle, ThemeProvider } from "styled-components";
-import { useSelector } from "react-redux";
-import { RootState } from "./utils/store/store.ts";
-import { SnackbarProvider } from "notistack";
+import { Route, Routes, BrowserRouter as Router } from 'react-router-dom';
+import { createGlobalStyle, ThemeProvider } from 'styled-components';
+import { useSelector } from 'react-redux';
+import { RootState } from './utils/store/store.ts';
+import { SnackbarProvider } from 'notistack';
 import {
   lightTheme,
   darkTheme,
-} from "./components/HeaderComponents/Theme/ThemeStyle.ts";
-import LoginPage from "./pages/LoginPage/LoginPage";
-import MainPage from "./pages/MainPage/MainPage";
-import FavoritePage from "./pages/FavoritePage/FavoritePage.tsx";
-import ItemPage from "./pages/ItemPage/ItemPage.tsx";
+} from './components/HeaderComponents/Theme/ThemeStyle.ts';
+import LoginPage from './pages/LoginPage/LoginPage';
+import MainPage from './pages/MainPage/MainPage';
+import FavoritePage from './pages/FavoritePage/FavoritePage.tsx';
+import ItemPage from './pages/ItemPage/ItemPage.tsx';
 
 const GlobalStyle = createGlobalStyle`
   body {
@@ -25,7 +25,7 @@ function App() {
   const theme = useSelector((state: RootState) => state.theme.theme);
 
   return (
-    <ThemeProvider theme={theme === "light" ? lightTheme : darkTheme}>
+    <ThemeProvider theme={theme === 'light' ? lightTheme : darkTheme}>
       <SnackbarProvider>
         <GlobalStyle />
         <Router>

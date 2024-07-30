@@ -1,13 +1,13 @@
-import { Formik, Form } from "formik";
-import CommonTextInput from "../CommonTextInput";
-import styled from "styled-components";
-import { useDispatch } from "react-redux";
-import { useTranslation } from "react-i18next";
-import { useSnackbar } from "notistack";
-import { LoginFormValidationSchema } from "../../../utils/validationSchemas/LoginFormValidationSchema";
-import { logIn, setUserId } from "../../../utils/store/slices/LoginSlice";
-import useHttp from "../../../utils/useHttp/useHttp";
-import { useNavigate } from "react-router-dom";
+import { Formik, Form } from 'formik';
+import CommonTextInput from '../CommonTextInput';
+import styled from 'styled-components';
+import { useDispatch } from 'react-redux';
+import { useTranslation } from 'react-i18next';
+import { useSnackbar } from 'notistack';
+import { LoginFormValidationSchema } from '../../../utils/validationSchemas/LoginFormValidationSchema';
+import { logIn, setUserId } from '../../../utils/store/slices/LoginSlice';
+import useHttp from '../../../utils/useHttp/useHttp';
+import { useNavigate } from 'react-router-dom';
 interface LoginFormProps {
   setFormType: (formType: string) => void;
 }
@@ -29,19 +29,19 @@ function LoginForm({ setFormType }: LoginFormProps) {
     try {
       const res = await request({
         body: JSON.stringify(values),
-        url: "http://localhost:3000/login",
-        method: "POST",
+        url: 'http://localhost:3000/login',
+        method: 'POST',
       });
 
       dispatch(setUserId(res.userId));
       dispatch(logIn());
-      navigate("/page/1");
+      navigate('/page/1');
     } catch (error) {
       const typedError = error as { status?: number };
       if (typedError.status === 400) {
-        enqueueSnackbar(t("loginFailed400"), { variant: "error" });
+        enqueueSnackbar(t('loginFailed400'), { variant: 'error' });
       } else {
-        enqueueSnackbar(t("registrationFailed"), { variant: "error" });
+        enqueueSnackbar(t('registrationFailed'), { variant: 'error' });
       }
     }
   };
@@ -49,14 +49,14 @@ function LoginForm({ setFormType }: LoginFormProps) {
   return (
     <Formik
       initialValues={{
-        email: "",
-        password: "",
+        email: '',
+        password: '',
       }}
       validationSchema={FormValidationSchema}
       onSubmit={onSubmit}
     >
       <StyledForm>
-        <StyledFormHeader>{t("loginFormHeader")}</StyledFormHeader>
+        <StyledFormHeader>{t('loginFormHeader')}</StyledFormHeader>
         <CommonTextInput
           label="Email"
           aria-describedby="outlined-required"
@@ -65,17 +65,20 @@ function LoginForm({ setFormType }: LoginFormProps) {
           autoComplete="email"
         />
         <CommonTextInput
-          label={t("passwordLabel")}
+          label={t('passwordLabel')}
           aria-describedby="outlined-password-input"
           name="password"
           type="password"
           autoComplete="current-password"
         />
-        <StyledRegisterButton onClick={() => setFormType("register")}>
-          {t("createAccountButton")}
+        <StyledRegisterButton
+          onClick={() => setFormType('register')}
+          tabIndex={0}
+        >
+          {t('createAccountButton')}
         </StyledRegisterButton>
         <SubmitButton color="info" type="submit">
-          {t("loginFormHeader")}
+          {t('loginFormHeader')}
         </SubmitButton>
       </StyledForm>
     </Formik>
@@ -95,8 +98,8 @@ const StyledRegisterButton = styled.span`
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 7vw;
-  height: 3.5vh;
+  width: 150px;
+  height: 35px;
   border-radius: 25px;
   cursor: pointer;
   color: ${(props) => props.theme.createAccountText};
@@ -114,8 +117,8 @@ const SubmitButton = styled.button`
   border: 2px solid ${(props) => props.theme.submitFormButtonBorder};
   color: ${(props) => props.theme.textColor};
   background-color: transparent;
-  width: 9vw;
-  height: 4vh;
+  width: 150px;
+  height: 40px;
   font-size: 14px;
   font-weight: 500;
   cursor: pointer;

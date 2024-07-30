@@ -1,17 +1,17 @@
-import { useTranslation } from "react-i18next";
-import { Link } from "react-router-dom";
-import styled from "styled-components";
-import { useDispatch } from "react-redux";
+import { useTranslation } from 'react-i18next';
+import { Link } from 'react-router-dom';
+import styled from 'styled-components';
+import { useDispatch } from 'react-redux';
 
-import Box from "@mui/material/Box";
-import List from "@mui/material/List";
-import ListItem from "@mui/material/ListItem";
-import ListItemIcon from "@mui/material/ListItemIcon";
-import ListItemText from "@mui/material/ListItemText";
-import FavoriteIcon from "@mui/icons-material/Favorite";
-import HomeIcon from "@mui/icons-material/Home";
-import LogoutIcon from "@mui/icons-material/Logout";
-import { logOut } from "../../../utils/store/slices/LoginSlice";
+import Box from '@mui/material/Box';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
+import FavoriteIcon from '@mui/icons-material/Favorite';
+import HomeIcon from '@mui/icons-material/Home';
+import LogoutIcon from '@mui/icons-material/Logout';
+import { logOut } from '../../../utils/store/slices/LoginSlice';
 
 type DrawerListProps = {
   toggleDrawer: (arg0: boolean) => void;
@@ -29,29 +29,29 @@ function DrawerList({ toggleDrawer }: DrawerListProps) {
     >
       <List>
         <ListItem disablePadding>
-          <StyledMenuItem to={"/page/1"}>
+          <StyledMenuItem to={'/page/1'}>
             <ListItemIcon>
               <HomeIcon />
             </ListItemIcon>
-            <ListItemText primary={t("homePage")} />
+            <ListItemText primary={t('homePage')} />
           </StyledMenuItem>
         </ListItem>
 
         <ListItem disablePadding>
-          <StyledMenuItem to={"/favoriteItems"}>
+          <StyledMenuItem to={'/favoriteItems'}>
             <ListItemIcon>
               <FavoriteIcon />
             </ListItemIcon>
-            <ListItemText primary={t("favItems")} />
+            <ListItemText primary={t('favItems')} />
           </StyledMenuItem>
         </ListItem>
 
         <ListItem disablePadding>
-          <StyledMenuItem to={"/"} onClick={() => dispatch(logOut())}>
+          <StyledMenuItem to={'/'} onClick={() => dispatch(logOut())}>
             <ListItemIcon>
               <LogoutIcon />
             </ListItemIcon>
-            <ListItemText primary={t("logOut")} />
+            <ListItemText primary={t('logOut')} />
           </StyledMenuItem>
         </ListItem>
       </List>

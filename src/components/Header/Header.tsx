@@ -1,16 +1,16 @@
-import Drawer from "@mui/material/Drawer";
-import { useState } from "react";
+import Drawer from '@mui/material/Drawer';
+import { useState } from 'react';
 
-import styled from "styled-components";
-import { useSelector } from "react-redux";
+import styled from 'styled-components';
+import { useSelector } from 'react-redux';
 
-import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
-import Theme from "../HeaderComponents/Theme/Theme";
-import { lightTheme } from "../HeaderComponents/Theme/ThemeStyle";
-import { RootState } from "../../utils/store/store";
-import LanguagesList from "../HeaderComponents/LanguagesList/LanguagesList";
-import DrawerList from "../HeaderComponents/DrawerList/DrawerList";
-import SearchPanel from "../HeaderComponents/SearchPanel/SearchPanel";
+import MenuOutlinedIcon from '@mui/icons-material/MenuOutlined';
+import Theme from '../HeaderComponents/Theme/Theme';
+import { lightTheme } from '../HeaderComponents/Theme/ThemeStyle';
+import { RootState } from '../../utils/store/store';
+import LanguagesList from '../HeaderComponents/LanguagesList/LanguagesList';
+import DrawerList from '../HeaderComponents/DrawerList/DrawerList';
+import SearchPanel from '../HeaderComponents/SearchPanel/SearchPanel';
 
 function Header() {
   const [open, setOpen] = useState(false);
@@ -41,7 +41,7 @@ function Header() {
   return (
     <StyledHeader>
       <HeaderMenu />
-      <SearchPanel />
+      {isLogged ? <SearchPanel /> : null}
       <StyledRightSideDiv>
         <Theme />
         <LanguagesList />
@@ -60,7 +60,6 @@ const StyledRightSideDiv = styled.div`
 
 const StyledHeader = styled.header`
   height: 70px;
-  /* width: 96vw; */
   background-color: ${(props) => props.theme.headerAndFooterColor};
   color: ${(props) => props.theme.textColor};
   display: flex;
@@ -68,7 +67,6 @@ const StyledHeader = styled.header`
   justify-content: space-between;
   padding: 0px 30px;
   align-items: center;
-  /* position: fixed; */
 `;
 
 const StyledBurgerButton = styled.button`
@@ -104,6 +102,6 @@ const StyledMenuContainer = styled(Drawer)`
 const StyledMenuOutlinedIcon = styled(MenuOutlinedIcon)`
   color: ${(props) =>
     props.theme.backgroundColor === lightTheme.backgroundColor
-      ? "#000"
-      : "#fff"};
+      ? '#000'
+      : '#fff'};
 `;

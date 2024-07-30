@@ -2,9 +2,9 @@ import {
   createSlice,
   createEntityAdapter,
   createAsyncThunk,
-} from "@reduxjs/toolkit";
-import useHttp from "../../useHttp/useHttp";
-import { RootState } from "../store";
+} from '@reduxjs/toolkit';
+import useHttp from '../../useHttp/useHttp';
+import { RootState } from '../store';
 
 interface Product {
   _id: string;
@@ -21,8 +21,8 @@ const productsAdapter = createEntityAdapter<Product>({
 });
 
 const initialState = productsAdapter.getInitialState({
-  productsLoadingStatus: "idle",
-  singleProductLoadingStatus: "idle",
+  productsLoadingStatus: 'idle',
+  singleProductLoadingStatus: 'idle',
   visibleItems: [] as Product[],
   filteredItems: [] as Product[],
   searchedProducts: [] as Product[],
@@ -32,33 +32,33 @@ const initialState = productsAdapter.getInitialState({
 });
 
 export const fetchProducts = createAsyncThunk<Product[], void>(
-  "products/fetchProducts",
+  'products/fetchProducts',
   () => {
     const { request } = useHttp();
     return request({
-      url: "http://localhost:4000/products",
-      method: "GET",
+      url: 'http://localhost:4000/products',
+      method: 'GET',
       body: null,
     });
   }
 );
 
 export const fetchSingleProduct = createAsyncThunk(
-  "product/fetchSingleProduct",
+  'product/fetchSingleProduct',
   async (prodId: string) => {
     const { request } = useHttp();
     return request({
       url: `http://localhost:4000/singleProduct?prodId=${encodeURIComponent(
         prodId
       )}`,
-      method: "GET",
+      method: 'GET',
       body: null,
     });
   }
 );
 
 const productsSlice = createSlice({
-  name: "products",
+  name: 'products',
   initialState,
   reducers: {
     getPagedItems: (state, action) => {
@@ -86,7 +86,7 @@ const productsSlice = createSlice({
 
       state.filteredItems = normalizedItemsArray.filter((item) => {
         const isInPriceRange = item.price >= min && item.price <= max;
-        const isInCategory = category === "all" || item.category === category;
+        const isInCategory = category === 'all' || item.category === category;
         return isInPriceRange && isInCategory;
       });
     },
@@ -107,32 +107,35 @@ const productsSlice = createSlice({
           .includes(action.payload.toLocaleLowerCase())
       );
     },
+    displaySearchResults: (state) => {
+      state.filteredItems = state.searchedProducts;
+    },
   },
   extraReducers: (builder) => {
     builder
       .addCase(fetchProducts.pending, (state) => {
-        state.productsLoadingStatus = "loading";
+        state.productsLoadingStatus = 'loading';
       })
       .addCase(fetchProducts.fulfilled, (state, action) => {
-        state.productsLoadingStatus = "success";
+        state.productsLoadingStatus = 'success';
         state.filteredItems.push(...action.payload);
         productsAdapter.setAll(state, action.payload);
       })
       .addCase(fetchProducts.rejected, (state, action) => {
-        state.productsLoadingStatus = "error";
-        console.error("Error fetching products:", action.payload);
+        state.productsLoadingStatus = 'error';
+        console.error('Error fetching products:', action.payload);
       })
       .addCase(fetchSingleProduct.pending, (state) => {
-        state.singleProductLoadingStatus = "loading";
+        state.singleProductLoadingStatus = 'loading';
       })
       .addCase(fetchSingleProduct.fulfilled, (state, action) => {
-        state.singleProductLoadingStatus = "success";
+        state.singleProductLoadingStatus = 'success';
         state.visibleItems = [];
         state.visibleItems.push(action.payload.product);
       })
       .addCase(fetchSingleProduct.rejected, (state, action) => {
-        state.singleProductLoadingStatus = "error";
-        console.error("Error fetching products:", action.payload);
+        state.singleProductLoadingStatus = 'error';
+        console.error('Error fetching products:', action.payload);
       });
   },
 });
@@ -151,4 +154,5 @@ export const {
   resetFilters,
   getSingleItem,
   getSearchedItem,
+  displaySearchResults,
 } = actions;

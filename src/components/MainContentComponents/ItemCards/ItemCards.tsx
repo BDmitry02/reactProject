@@ -1,12 +1,12 @@
-import { useEffect } from "react";
-import styled from "styled-components";
-import { useDispatch, useSelector } from "react-redux";
+import { useEffect } from 'react';
+import styled from 'styled-components';
+import { useDispatch, useSelector } from 'react-redux';
 
-import { fetchProducts } from "../../../utils/store/slices/productsSlice";
-import ItemSingleCard from "../ItemSingleCard/ItemSingleCard";
-import { SkeletonLoader } from "../Skeleton/Skeleton";
-import { RootState } from "../../../utils/store/store";
-import { fetchFav } from "../../../utils/store/slices/LoginSlice";
+import { fetchProducts } from '../../../utils/store/slices/productsSlice';
+import ItemSingleCard from '../ItemSingleCard/ItemSingleCard';
+import { SkeletonLoader } from '../Skeleton/Skeleton';
+import { RootState } from '../../../utils/store/store';
+import { fetchFav } from '../../../utils/store/slices/LoginSlice';
 
 function ItemCards() {
   const { productsLoadingStatus, visibleItems } = useSelector(
@@ -16,7 +16,7 @@ function ItemCards() {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (productsLoadingStatus === "idle") {
+    if (productsLoadingStatus === 'idle') {
       dispatch(fetchProducts());
       if (userId) {
         dispatch(fetchFav(userId));
@@ -26,9 +26,9 @@ function ItemCards() {
   }, [dispatch, userId]);
 
   const SetContent = () => {
-    if (productsLoadingStatus === "loading") {
+    if (productsLoadingStatus === 'loading') {
       return <SkeletonLoader />;
-    } else if (productsLoadingStatus === "error") {
+    } else if (productsLoadingStatus === 'error') {
       return (
         <div>
           <h2>Loading error</h2>
@@ -61,4 +61,13 @@ const StyledItemCardsContainer = styled.div`
   align-items: center;
   gap: 30px;
   margin: 40px;
+
+  @media (max-width: 768px) {
+    margin: 10px;
+    gap: 10px;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  }
+
+  @media (max-width: 480px) {
+  }
 `;

@@ -1,15 +1,15 @@
-import styled from "styled-components";
-import { useCallback } from "react";
-import { Helmet, HelmetProvider } from "react-helmet-async";
-import { useSelector } from "react-redux";
+import styled from 'styled-components';
+import { useCallback } from 'react';
+import { Helmet, HelmetProvider } from 'react-helmet-async';
+import { useSelector } from 'react-redux';
 
-import { RootState } from "../../utils/store/store";
-import LoginPageForm from "../../components/LoginPageForm/LoginPageForm";
-import Header from "../../components/Header/Header";
-import Footer from "../../components/Footer/Footer";
-import ItemCards from "../../components/MainContentComponents/ItemCards/ItemCards";
-import PageList from "../../components/MainContentComponents/PageList/PageList";
-import Filters from "../../components/MainContentComponents/FiltersComponents/Filters/Filters";
+import { RootState } from '../../utils/store/store';
+import LoginPageForm from '../../components/LoginPageForm/LoginPageForm';
+import Header from '../../components/Header/Header';
+import Footer from '../../components/Footer/Footer';
+import ItemCards from '../../components/MainContentComponents/ItemCards/ItemCards';
+import PageList from '../../components/MainContentComponents/PageList/PageList';
+import Filters from '../../components/MainContentComponents/FiltersComponents/Filters/Filters';
 
 function MainPage() {
   const isLogged = useSelector((state: RootState) => state.login.isLogged);
@@ -24,9 +24,9 @@ function MainPage() {
             </div>
             <StyledMainContentContainer>
               <ItemCards />
-              <PageList />
             </StyledMainContentContainer>
           </StyledMainWrapper>
+          <PageList />
         </>
       );
     } else {
@@ -73,4 +73,11 @@ const StyledMainContentContainer = styled.div`
 const StyledMainWrapper = styled.div`
   display: grid;
   grid-template-columns: 1fr 9fr;
+
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr 4fr;
+  }
+
+  @media (max-width: 480px) {
+  }
 `;

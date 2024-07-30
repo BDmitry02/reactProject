@@ -1,9 +1,9 @@
-import LoginPageForm from "../../components/LoginPageForm/LoginPageForm";
+import LoginPageForm from '../../components/LoginPageForm/LoginPageForm';
 import {
   StyledWrapper,
   FormBackgroundLayer,
-} from "../../components/LoginPageForm/StyledFormComponents";
-import { Helmet, HelmetProvider } from "react-helmet-async";
+} from '../../components/LoginPageForm/StyledFormComponents';
+import { Helmet, HelmetProvider } from 'react-helmet-async';
 
 function LoginPage() {
   return (

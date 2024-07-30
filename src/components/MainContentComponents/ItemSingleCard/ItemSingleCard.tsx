@@ -1,7 +1,7 @@
-import styled from "styled-components";
-import { Link } from "react-router-dom";
-import Favorite from "../FavoriteIcon/FavoriteIcon";
-import React from "react";
+import styled from 'styled-components';
+import { Link } from 'react-router-dom';
+import Favorite from '../FavoriteIcon/FavoriteIcon';
+import React from 'react';
 type ItemSingleCardProps = {
   product: {
     _id: string;
@@ -23,11 +23,11 @@ const ItemSingleCard = React.memo(({ product }: ItemSingleCardProps) => {
           <StyledPreviewImage src={previewImage} alt="" />
           <StyledDescriptionText>
             <StyledItemTitle>
-              {title.length < 45 ? title : title.slice(0, 45) + "..."}
+              {title.length < 25 ? title : title.slice(0, 25) + '...'}
             </StyledItemTitle>
             <StyledPriceAndFav>
               <StyledPrice>
-                ${typeof price === "number" ? price.toFixed(2) : price}
+                ${typeof price === 'number' ? price.toFixed(2) : price}
               </StyledPrice>
               <Favorite id={_id} />
             </StyledPriceAndFav>
@@ -43,6 +43,11 @@ export default ItemSingleCard;
 const StyledPreviewImage = styled.img`
   width: 200px;
   height: 200px;
+
+  @media (max-width: 768px) {
+    width: 100px;
+    height: 100px;
+  }
 `;
 
 const StyledItemCard = styled.div`
@@ -51,6 +56,11 @@ const StyledItemCard = styled.div`
   background-color: ${(props) => props.theme.itemCardBgColor};
   padding: 20px;
   border-radius: 25px;
+
+  @media (max-width: 768px) {
+    width: 150px;
+    height: 180px;
+  }
 `;
 
 const StyledImageCardContainer = styled.div`
@@ -87,6 +97,12 @@ const StyledDescriptionText = styled.div`
   flex-direction: column;
   gap: 20px;
   height: 80px;
+
+  @media (max-width: 768px) {
+    width: 150px;
+    height: 60px;
+    gap: 5px;
+  }
 `;
 
 const StyledPriceAndFav = styled.div`

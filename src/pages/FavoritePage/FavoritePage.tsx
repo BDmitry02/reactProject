@@ -1,17 +1,18 @@
-import React, { useCallback } from "react";
-import styled from "styled-components";
-import { useTranslation } from "react-i18next";
-import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import React, { useCallback } from 'react';
+import styled from 'styled-components';
+import { useTranslation } from 'react-i18next';
+import { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { Helmet, HelmetProvider } from 'react-helmet-async';
 
-import ItemSingleCard from "../../components/MainContentComponents/ItemSingleCard/ItemSingleCard";
-import { fetchFav, selectAll } from "../../utils/store/slices/LoginSlice";
-import Header from "../../components/Header/Header";
-import Footer from "../../components/Footer/Footer";
-import { SkeletonLoader } from "../../components/MainContentComponents/Skeleton/Skeleton";
-import { RootState } from "../../utils/store/store";
-import { getFavoriteItems } from "../../utils/store/slices/productsSlice";
-import { fetchProducts } from "../../utils/store/slices/productsSlice";
+import ItemSingleCard from '../../components/MainContentComponents/ItemSingleCard/ItemSingleCard';
+import { fetchFav, selectAll } from '../../utils/store/slices/LoginSlice';
+import Header from '../../components/Header/Header';
+import Footer from '../../components/Footer/Footer';
+import { SkeletonLoader } from '../../components/MainContentComponents/Skeleton/Skeleton';
+import { RootState } from '../../utils/store/store';
+import { getFavoriteItems } from '../../utils/store/slices/productsSlice';
+import { fetchProducts } from '../../utils/store/slices/productsSlice';
 
 const FavoritePage = React.memo(() => {
   const { t } = useTranslation();
@@ -25,8 +26,8 @@ const FavoritePage = React.memo(() => {
     (state: RootState) => state.products
   );
   useEffect(() => {
-    if (productsLoadingStatus != "loading") {
-      if (productsLoadingStatus === "success") {
+    if (productsLoadingStatus != 'loading') {
+      if (productsLoadingStatus === 'success') {
         if (userId) {
           dispatch(fetchFav(userId));
         }
@@ -37,42 +38,48 @@ const FavoritePage = React.memo(() => {
   }, [userId, dispatch, productsLoadingStatus]);
 
   useEffect(() => {
-    if (favLoadingStatus === "success") {
+    if (favLoadingStatus === 'success') {
       dispatch(getFavoriteItems(prodIds));
     }
   }, [favLoadingStatus, prodIds, dispatch]);
 
   const SetContent = useCallback(() => {
-    if (favLoadingStatus === "loading" || productsLoadingStatus === "loading") {
+    if (favLoadingStatus === 'loading' || productsLoadingStatus === 'loading') {
       return <SkeletonLoader />;
-    } else if (favLoadingStatus === "error") {
+    } else if (favLoadingStatus === 'error') {
       return (
         <div>
-          <h2>Loading error</h2>
+          <h2 style={{ textAlign: 'center' }}>Loading error</h2>
         </div>
       );
-    } else if (favLoadingStatus === "success") {
+    } else if (favLoadingStatus === 'success') {
       return visibleItems.length > 0 ? (
         visibleItems.map((product) => (
           <ItemSingleCard key={product._id} product={product} />
         ))
       ) : (
         <div>
-          <h2>No favorite items found</h2>
+          <h2 style={{ textAlign: 'center' }}>No favorite items found</h2>
         </div>
       );
     }
   }, [favLoadingStatus, productsLoadingStatus, visibleItems]);
 
   return (
-    <StyledWrapper>
-      <Header />
-      <StyledMain>
-        <h1 style={{ textAlign: "center" }}>{t("favItems")}</h1>
-        <StyledItemCardsContainer>{SetContent()}</StyledItemCardsContainer>
-      </StyledMain>
-      <Footer />
-    </StyledWrapper>
+    <HelmetProvider>
+      <Helmet>
+        <meta name="FavoriteItems" content="Favorite items" />
+        <title>Favorite items</title>
+      </Helmet>
+      <StyledWrapper>
+        <Header />
+        <StyledMain>
+          <h1 style={{ textAlign: 'center' }}>{t('favItems')}</h1>
+          <StyledItemCardsContainer>{SetContent()}</StyledItemCardsContainer>
+        </StyledMain>
+        <Footer />
+      </StyledWrapper>
+    </HelmetProvider>
   );
 });
 
@@ -98,4 +105,10 @@ const StyledItemCardsContainer = styled.div`
   align-items: center;
   gap: 30px;
   margin: 40px;
+
+  @media (max-width: 768px) {
+    margin: 0px;
+    gap: 20px;
+    margin-bottom: 20px;
+  }
 `;

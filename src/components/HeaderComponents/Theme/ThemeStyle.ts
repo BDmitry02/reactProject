@@ -10,27 +10,27 @@
 // }
 
 export const lightTheme = {
-  headerAndFooterColor: "#edd5e8",
-  backgroundColor: "#CBC0D3",
-  textColor: "#000000",
+  headerAndFooterColor: '#edd5e8',
+  backgroundColor: '#CBC0D3',
+  textColor: '#000000',
 
-  createAccountText: "#000000",
-  createAccountHoverColor: "#edd5e8",
+  createAccountText: '#000000',
+  createAccountHoverColor: '#edd5e8',
 
-  submitFormButtonBorder: "#7D70BA",
+  submitFormButtonBorder: '#7D70BA',
 
-  itemCardBgColor: "#c7bad1",
+  itemCardBgColor: '#c7bad1',
 };
 
 export const darkTheme = {
-  headerAndFooterColor: "#5e435b",
-  backgroundColor: "#776885",
-  textColor: "#FFFFFF",
+  headerAndFooterColor: '#5e435b',
+  backgroundColor: '#776885',
+  textColor: '#FFFFFF',
 
-  createAccountText: "",
-  createAccountHoverColor: "#5e435b",
+  createAccountText: '',
+  createAccountHoverColor: '#5e435b',
 
-  submitFormButtonBorder: "#6E1F6F",
+  submitFormButtonBorder: '#6E1F6F',
 
-  itemCardBgColor: "#897799",
+  itemCardBgColor: '#897799',
 };
