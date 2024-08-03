@@ -33,6 +33,8 @@ function App() {
             <Route path="/page/:pageNumber" element={<MainPage />} />
             <Route path="/favoriteItems" element={<FavoritePage />} />
             <Route path="/item/:_id" element={<ItemPage />} />
+            <Route path="/searchResults" element={<MainPage />} />
+            <Route path="/searchResults/:pageNumber" element={<MainPage />} />
           </Routes>
         </Router>
       </SnackbarProvider>

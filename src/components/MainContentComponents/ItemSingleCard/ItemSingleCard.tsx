@@ -20,7 +20,7 @@ const ItemSingleCard = React.memo(({ product }: ItemSingleCardProps) => {
     <StyledLink to={`/item/${_id}`}>
       <StyledItemCard>
         <StyledImageCardContainer>
-          <StyledPreviewImage src={previewImage} alt="" />
+          <StyledPreviewImage src={previewImage} alt={title} />
           <StyledDescriptionText>
             <StyledItemTitle>
               {title.length < 25 ? title : title.slice(0, 25) + '...'}
@@ -43,6 +43,7 @@ export default ItemSingleCard;
 const StyledPreviewImage = styled.img`
   width: 200px;
   height: 200px;
+  object-fit: contain;
 
   @media (max-width: 768px) {
     width: 100px;

@@ -1,7 +1,46 @@
-type registerProps = {
-  url: string;
-  method: string;
-  body: string | null;
+import axios from 'axios';
+
+const useHttp = () => {
+  const request = async ({
+    body = null,
+    url,
+    method = 'GET',
+  }: {
+    body?: unknown;
+    url: string;
+    method?: 'GET' | 'POST' | 'PUT' | 'DELETE';
+  }) => {
+    try {
+      const config = {
+        method,
+        url,
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+        },
+        ...(body && method !== 'GET' ? { data: body } : {}), // axios использует `data` вместо `body` для POST/PUT/DELETE запросов
+      };
+
+      const response = await axios(config);
+
+      return response.data;
+    } catch (e: unknown) {
+      if (axios.isAxiosError(e)) {
+        const message =
+          e.response?.data?.message || e.message || 'Unknown error';
+        const status = e.response?.status || 500;
+
+        console.error(`HTTP Request Error: ${message} (Status: ${status})`);
+        throw new HttpError(message, status);
+      } else {
+        // Обработка не-axios ошибок
+        console.error(`HTTP Request Error: ${e}`);
+        throw new HttpError('Unknown error', 500);
+      }
+    }
+  };
+
+  return { request };
 };
 
 class HttpError extends Error {
@@ -13,40 +52,5 @@ class HttpError extends Error {
     this.name = 'HttpError';
   }
 }
-
-const useHttp = () => {
-  const request = async ({
-    body = null,
-    url,
-    method = 'GET',
-  }: registerProps) => {
-    try {
-      const response = await fetch(url, {
-        method,
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body,
-      });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new HttpError(data.message || 'Unknown error', response.status);
-      }
-
-      return data;
-    } catch (e: any) {
-      if (e instanceof HttpError) {
-        console.error(`HTTP Request Error: ${e.message} (Status: ${e.status})`);
-      } else {
-        console.error(`HTTP Request Error: ${e.message || e}`);
-      }
-      throw e;
-    }
-  };
-
-  return { request };
-};
 
 export default useHttp;

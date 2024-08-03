@@ -14,7 +14,7 @@ import LogoutIcon from '@mui/icons-material/Logout';
 import { logOut } from '../../../utils/store/slices/LoginSlice';
 
 type DrawerListProps = {
-  toggleDrawer: (arg0: boolean) => void;
+  toggleDrawer: (newOpen: boolean) => void;
 };
 
 function DrawerList({ toggleDrawer }: DrawerListProps) {

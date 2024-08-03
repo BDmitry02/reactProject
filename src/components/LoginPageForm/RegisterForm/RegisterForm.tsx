@@ -33,9 +33,10 @@ function RegisterForm({ setFormType }: LoginFormProps) {
 
   const onSubmit = async (values: onSubmitProps) => {
     try {
+      const { confirmPassword, ...rest } = values;
       const res = await request({
-        body: JSON.stringify(values),
-        url: 'http://localhost:3000/users',
+        body: rest,
+        url: 'http://localhost:3000/users/register',
         method: 'POST',
       });
 
@@ -43,6 +44,7 @@ function RegisterForm({ setFormType }: LoginFormProps) {
       dispatch(logIn());
       navigate('/page/1');
     } catch (error) {
+      console.log(error);
       const typedError = error as { status?: number };
       if (typedError.status === 400) {
         enqueueSnackbar(t('registrationFailed400'), { variant: 'error' });

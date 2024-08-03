@@ -1,16 +1,18 @@
 import styled from 'styled-components';
 import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
-
+import { ChangeEvent } from 'react';
 import { RootState } from '../../../../utils/store/store';
 
+type PriceFilter = {
+  min: number;
+  max: number;
+};
+
 type PriceFilterProps = {
-  filterPrice: {
-    min: number;
-    max: number;
-  };
+  filterPrice: PriceFilter;
   isPriceValid: boolean;
-  setFilterPrice: (arg0: { min: number; max: number }) => void;
+  setFilterPrice: (arg0: PriceFilter) => void;
   setIsValidPrice: (arg0: boolean) => void;
 };
 
@@ -22,7 +24,7 @@ function PriceFilter(props: PriceFilterProps) {
     (state: RootState) => state.filters
   );
 
-  const PriceFilterChanged = (e) => {
+  const PriceFilterChanged = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     if (!/^\d*$/.test(value)) {
       return;

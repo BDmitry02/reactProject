@@ -2,13 +2,17 @@ import styled from 'styled-components';
 import { useSelector, useDispatch } from 'react-redux';
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { getPagedItems } from '../../../utils/store/slices/productsSlice';
+import {
+  getPagedItems,
+  resetFilters,
+} from '../../../utils/store/slices/productsSlice';
 import { Link } from 'react-router-dom';
 import { RootState } from '../../../utils/store/store';
-import { useNavigate } from 'react-router-dom';
+import { useLocation } from 'react-router-dom';
 
 function PageList() {
-  const navigate = useNavigate();
+  const location = useLocation();
+  const [previousPath, setPreviousPath] = useState<string>('');
   const { filteredItems, productsLoadingStatus } = useSelector(
     (state: RootState) => state.products
   );
@@ -20,97 +24,114 @@ function PageList() {
   const pageCount = Math.ceil(filteredItems.length / 20);
 
   useEffect(() => {
-    if (pageNum === 1) {
-      navigate('/page/1');
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  useEffect(() => {
-    if (pageNumber) {
-      const pageNum = parseInt(pageNumber, 10);
-      setPage(pageNum);
-    }
-  }, [pageNumber]);
+    setPreviousPath(location.pathname);
+  }, [location.pathname]);
 
   useEffect(() => {
     if (productsLoadingStatus === 'success') {
-      if (page == 1) {
-        navigate('/page/1');
-        dispatch(getPagedItems(1));
-      } else {
-        dispatch(getPagedItems(page));
+      if (
+        previousPath.startsWith('/searchResults') &&
+        !location.pathname.startsWith('/searchResults')
+      ) {
+        dispatch(resetFilters());
       }
     }
-  }, [page, dispatch, productsLoadingStatus, navigate]);
+  }, [location.pathname, previousPath, productsLoadingStatus, dispatch]);
+
+  useEffect(() => {
+    if (productsLoadingStatus === 'success') {
+      if (pageNumber === undefined) {
+        setPage(1);
+        dispatch(getPagedItems(1));
+      } else {
+        setPage(pageNum);
+        dispatch(getPagedItems(pageNum));
+      }
+    }
+  }, [pageNumber, pageNum, productsLoadingStatus, dispatch]);
 
   const changePage = (pageNum: number) => {
     setPage(pageNum);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
+  const getPath = (basePath: string, page: number) => {
+    return basePath.startsWith('/searchResults') ||
+      basePath === '/searchResults'
+      ? `/searchResults/${page}`
+      : `/page/${page}`;
+  };
+
   const getPageCount = () => {
-    let pages = [];
-    const maxPagesToShow = 7;
-    const sidePagesToShow = 2;
+    if (pageCount > 1) {
+      let pages = [];
+      const maxPagesToShow = 7;
+      const sidePagesToShow = 2;
 
-    if (pageCount <= maxPagesToShow) {
-      pages = Array.from({ length: pageCount }, (_, index) => index + 1);
-    } else {
-      pages.push(1);
-
-      if (page > sidePagesToShow + 1) {
-        pages.push('prev-dots');
-      }
-
-      const start = Math.max(2, page - sidePagesToShow);
-      const end = Math.min(pageCount - 1, page + sidePagesToShow);
-
-      for (let i = start; i <= end; i++) {
-        pages.push(i);
-      }
-
-      if (page < pageCount - sidePagesToShow) {
-        pages.push('next-dots');
-      }
-
-      pages.push(pageCount);
-    }
-
-    return pages.map((p, index) => {
-      if (p === 'prev-dots') {
-        return (
-          <StyledPageButton
-            to={`/page/${page - 1 - sidePagesToShow}`}
-            key={index}
-            onClick={() => changePage(page - 1 - sidePagesToShow)}
-          >
-            ...
-          </StyledPageButton>
-        );
-      } else if (p === 'next-dots') {
-        return (
-          <StyledPageButton
-            to={`/page/${page + sidePagesToShow}`}
-            key={index}
-            onClick={() => changePage(page + 1 + sidePagesToShow)}
-          >
-            ...
-          </StyledPageButton>
-        );
+      if (pageCount <= maxPagesToShow) {
+        pages = Array.from({ length: pageCount }, (_, index) => index + 1);
       } else {
-        return (
-          <StyledPageButton
-            to={`/page/${p}`}
-            key={index}
-            className={p === page ? 'disabled' : undefined}
-            onClick={p === page ? undefined : () => changePage(+p)}
-          >
-            {p}
-          </StyledPageButton>
-        );
+        pages.push(1);
+
+        if (page > sidePagesToShow + 1) {
+          pages.push('prev-dots');
+        }
+
+        const start = Math.max(2, page - sidePagesToShow);
+        const end = Math.min(pageCount - 1, page + sidePagesToShow);
+
+        for (let i = start; i <= end; i++) {
+          pages.push(i);
+        }
+
+        if (page < pageCount - sidePagesToShow) {
+          pages.push('next-dots');
+        }
+
+        pages.push(pageCount);
       }
-    });
+
+      return pages.map((p, index) => {
+        if (p === 'prev-dots') {
+          const prevPath = getPath(
+            location.pathname,
+            page - 1 - sidePagesToShow
+          );
+          return (
+            <StyledPageButton
+              to={prevPath}
+              key={index}
+              onClick={() => changePage(page - 1 - sidePagesToShow)}
+            >
+              ...
+            </StyledPageButton>
+          );
+        } else if (p === 'next-dots') {
+          const nextPath = getPath(location.pathname, page + sidePagesToShow);
+          return (
+            <StyledPageButton
+              to={nextPath}
+              key={index}
+              onClick={() => changePage(page + sidePagesToShow)}
+            >
+              ...
+            </StyledPageButton>
+          );
+        } else {
+          const path = getPath(location.pathname, p);
+          return (
+            <StyledPageButton
+              to={path}
+              key={index}
+              className={p === page ? 'disabled' : undefined}
+              onClick={p === page ? undefined : () => changePage(+p)}
+            >
+              {p}
+            </StyledPageButton>
+          );
+        }
+      });
+    }
   };
 
   return <StyledPagesContainer>{getPageCount()}</StyledPagesContainer>;

@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 
 import { SkeletonFilters } from '../../Skeleton/Skeleton';
+import SortingFilters from '../SortingFilters/SortingFilters';
 
 import {
   getFilteredItems,
@@ -32,6 +33,8 @@ function Filters() {
   });
   const [isPriceValid, setIsValidPrice] = useState(true);
 
+  const [sortBy, setSortBy] = useState('null');
+
   const { filtersPriceLoadingStatus, priceFilter } = useSelector(
     (state: RootState) => state.filters
   );
@@ -57,6 +60,7 @@ function Filters() {
       dispatch(getFilteredItems({ category: filterCategory, ...filterPrice }));
       dispatch(getPagedItems(1));
       navigate('/page/1');
+      setSortBy('null');
     }
   };
 
@@ -75,6 +79,7 @@ function Filters() {
           max: parseInt(action.payload.max),
         })
       );
+      setSortBy('null');
       setFilterCategory('all');
       dispatch(getPagedItems(1));
       navigate('/page/1');
@@ -90,6 +95,7 @@ function Filters() {
   } else {
     return (
       <StyledFilterContainer>
+        <SortingFilters sortBy={sortBy} setSortBy={setSortBy} />
         <StyledCategoriesContainer>
           <CategoryFilter
             filterCategory={filterCategory}

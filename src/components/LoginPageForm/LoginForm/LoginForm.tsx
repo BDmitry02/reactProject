@@ -28,8 +28,8 @@ function LoginForm({ setFormType }: LoginFormProps) {
   const onSubmit = async (values: onSubmitProps) => {
     try {
       const res = await request({
-        body: JSON.stringify(values),
-        url: 'http://localhost:3000/login',
+        body: values,
+        url: 'http://localhost:3000/users/login',
         method: 'POST',
       });
 

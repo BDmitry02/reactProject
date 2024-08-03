@@ -9,10 +9,12 @@ import {
   displaySearchResults,
   getPagedItems,
 } from '../../../utils/store/slices/productsSlice';
+import { useNavigate } from 'react-router-dom';
 
 function SearchPanel() {
   const { t } = useTranslation();
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const [search, setSearch] = useState('');
   const [isSearchActive, setIsSearchActive] = useState(false);
@@ -44,17 +46,18 @@ function SearchPanel() {
     dispatch(displaySearchResults());
     dispatch(getPagedItems(1));
     setIsSearchActive(false);
+    navigate('/searchResults');
   };
 
-  const WorkingSearchPanel = () => {
+  const workingSearchPanel = () => {
     const searchingResults = () => {
       if (searchedProducts.length === 0) {
         return <StyledSearchedItem>No items found</StyledSearchedItem>;
       } else if (search.length > 0) {
         return searchedProducts
           .slice(0, 8)
-          .map((product, index) => (
-            <SearchItemCard key={index} product={product} />
+          .map((product) => (
+            <SearchItemCard key={product._id} product={product} />
           ));
       }
     };
@@ -86,16 +89,12 @@ function SearchPanel() {
       <StyledFindButton onClick={getSearched}>
         {t('findButton')}
       </StyledFindButton>
-      {WorkingSearchPanel()}
+      {workingSearchPanel()}
     </StyledSearchContainer>
   );
 }
 
 export default SearchPanel;
-
-const searchIconSVG = `
-<svg fill='%234E4C4C' height='18' viewBox='0 0 24 24' width='18 ' xmlns='http://www.w3.org/2000/svg'><path clip-rule='evenodd' d='m10 2c-4.41828 0-8 3.58172-8 8 0 4.4183 3.58172 8 8 8 1.8487 0 3.551-.6271 4.9056-1.6801l5.3873 5.3872c.3905.3905 1.0237.3905 1.4142 0s.3905-1.0237 0-1.4142l-5.3872-5.3873c1.053-1.3546 1.6801-3.0569 1.6801-4.9056 0-4.41828-3.5817-8-8-8zm-6 8c0-3.31371 2.68629-6 6-6 3.3137 0 6 2.68629 6 6 0 3.3137-2.6863 6-6 6-3.31371 0-6-2.6863-6-6z' /></svg>
-`;
 
 const StyledOverlay = styled.div`
   position: fixed;
@@ -110,13 +109,10 @@ const StyledOverlay = styled.div`
 const StyledSearchInput = styled.input`
   width: 600px;
   height: 35px;
-  background-image: url('data:image/svg+xml;utf8,${encodeURIComponent(
-    searchIconSVG
-  )}');
 
   background-repeat: no-repeat;
   background-position: left center;
-  padding-left: 30px;
+  padding-left: 10px;
   border: 0;
   position: relative;
   z-index: 5;

@@ -5,6 +5,7 @@ import {
 } from '@reduxjs/toolkit';
 import useHttp from '../../useHttp/useHttp';
 import { RootState } from '../store';
+import { EntityId } from '@reduxjs/toolkit';
 
 interface Product {
   _id: string;
@@ -16,7 +17,7 @@ interface Product {
   category: string;
 }
 
-const productsAdapter = createEntityAdapter<Product>({
+const productsAdapter = createEntityAdapter<Product, EntityId>({
   selectId: (product) => product._id,
 });
 
@@ -31,14 +32,13 @@ const initialState = productsAdapter.getInitialState({
   currentPage: 1,
 });
 
-export const fetchProducts = createAsyncThunk<Product[], void>(
+export const fetchProducts = createAsyncThunk(
   'products/fetchProducts',
-  () => {
+  async () => {
     const { request } = useHttp();
     return request({
-      url: 'http://localhost:4000/products',
+      url: 'http://localhost:3000/products',
       method: 'GET',
-      body: null,
     });
   }
 );
@@ -48,11 +48,10 @@ export const fetchSingleProduct = createAsyncThunk(
   async (prodId: string) => {
     const { request } = useHttp();
     return request({
-      url: `http://localhost:4000/singleProduct?prodId=${encodeURIComponent(
+      url: `http://localhost:3000/products/singleProduct?prodId=${encodeURIComponent(
         prodId
       )}`,
       method: 'GET',
-      body: null,
     });
   }
 );
@@ -110,6 +109,31 @@ const productsSlice = createSlice({
     displaySearchResults: (state) => {
       state.filteredItems = state.searchedProducts;
     },
+    sortProducts: (state, action) => {
+      const sortBy = action.payload;
+      switch (sortBy) {
+        case 'priceAscending':
+          state.filteredItems.sort(
+            (a, b) => parseFloat(String(a.price)) - parseFloat(String(b.price))
+          );
+          break;
+        case 'priceDescending':
+          state.filteredItems.sort(
+            (a, b) => parseFloat(String(b.price)) - parseFloat(String(a.price))
+          );
+          break;
+        case 'fromAtoZ':
+          state.filteredItems.sort((a, b) => a.title.localeCompare(b.title));
+          break;
+
+        case 'fromZtoA':
+          state.filteredItems.sort((a, b) => b.title.localeCompare(a.title));
+          break;
+        default:
+          state.filteredItems = Object.values(state.entities);
+          break;
+      }
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -155,4 +179,5 @@ export const {
   getSingleItem,
   getSearchedItem,
   displaySearchResults,
+  sortProducts,
 } = actions;

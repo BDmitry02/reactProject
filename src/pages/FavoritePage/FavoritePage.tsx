@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useMemo } from 'react';
 import styled from 'styled-components';
 import { useTranslation } from 'react-i18next';
 import { useEffect } from 'react';
@@ -43,13 +43,13 @@ const FavoritePage = React.memo(() => {
     }
   }, [favLoadingStatus, prodIds, dispatch]);
 
-  const SetContent = useCallback(() => {
+  const setContent = useMemo(() => {
     if (favLoadingStatus === 'loading' || productsLoadingStatus === 'loading') {
       return <SkeletonLoader />;
     } else if (favLoadingStatus === 'error') {
       return (
         <div>
-          <h2 style={{ textAlign: 'center' }}>Loading error</h2>
+          <StyledStatusHeader>Loading error</StyledStatusHeader>
         </div>
       );
     } else if (favLoadingStatus === 'success') {
@@ -59,7 +59,7 @@ const FavoritePage = React.memo(() => {
         ))
       ) : (
         <div>
-          <h2 style={{ textAlign: 'center' }}>No favorite items found</h2>
+          <StyledStatusHeader>No favorite items found</StyledStatusHeader>
         </div>
       );
     }
@@ -74,8 +74,8 @@ const FavoritePage = React.memo(() => {
       <StyledWrapper>
         <Header />
         <StyledMain>
-          <h1 style={{ textAlign: 'center' }}>{t('favItems')}</h1>
-          <StyledItemCardsContainer>{SetContent()}</StyledItemCardsContainer>
+          <StyledFavoriteHeader>{t('favItems')}</StyledFavoriteHeader>
+          <StyledItemCardsContainer>{setContent}</StyledItemCardsContainer>
         </StyledMain>
         <Footer />
       </StyledWrapper>
@@ -111,4 +111,12 @@ const StyledItemCardsContainer = styled.div`
     gap: 20px;
     margin-bottom: 20px;
   }
+`;
+
+const StyledStatusHeader = styled.h2`
+  text-align: center;
+`;
+
+const StyledFavoriteHeader = styled.h1`
+  text-align: center;
 `;

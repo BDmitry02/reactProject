@@ -4,12 +4,14 @@ import {
   createAsyncThunk,
 } from '@reduxjs/toolkit';
 import useHttp from '../../useHttp/useHttp';
+import { EntityId } from '@reduxjs/toolkit';
 
 type Filter = {
   id: string;
+  filter: string;
 };
 
-const filtersAdapter = createEntityAdapter<Filter>({
+const filtersAdapter = createEntityAdapter<Filter, EntityId>({
   selectId: (filter) => filter,
 });
 
@@ -22,7 +24,7 @@ const initialState = filtersAdapter.getInitialState({
 export const fetchCategories = createAsyncThunk('filters/fetchFilters', () => {
   const { request } = useHttp();
   return request({
-    url: 'http://localhost:4000/categories',
+    url: 'http://localhost:3000/products/categories',
     method: 'GET',
     body: null,
   });
@@ -33,7 +35,7 @@ export const fetchPriceFilter = createAsyncThunk(
   () => {
     const { request } = useHttp();
     return request({
-      url: 'http://localhost:4000/price',
+      url: 'http://localhost:3000/products/price',
       method: 'GET',
       body: null,
     });

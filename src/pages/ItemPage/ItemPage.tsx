@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 
 import Header from '../../components/Header/Header';
 import Footer from '../../components/Footer/Footer';
@@ -21,7 +21,7 @@ function ItemPage() {
     dispatch(fetchSingleProduct(_id));
   }, [dispatch, _id]);
 
-  const SetContent = () => {
+  const loaderContent = useMemo(() => {
     if (singleProductLoadingStatus === 'loading') {
       return <p>....loading</p>;
     } else if (singleProductLoadingStatus === 'error') {
@@ -37,12 +37,12 @@ function ItemPage() {
         </>
       );
     }
-  };
+  }, [singleProductLoadingStatus, visibleItems]);
 
   return (
     <StyledWrapper>
       <Header />
-      <StyledMain>{SetContent()}</StyledMain>
+      <StyledMain>{loaderContent}</StyledMain>
       <Footer />
     </StyledWrapper>
   );

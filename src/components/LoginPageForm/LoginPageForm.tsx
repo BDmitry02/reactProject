@@ -6,15 +6,15 @@ import RegisterForm from './RegisterForm/RegisterForm';
 function LoginPageForm() {
   const [formType, setFormType] = useState('login');
 
-  const getForm = () => {
-    if (formType === 'login') {
-      return <LoginForm setFormType={setFormType} />;
-    } else {
-      return <RegisterForm setFormType={setFormType} />;
-    }
-  };
-
-  return <StyledFormContainer>{getForm()}</StyledFormContainer>;
+  return (
+    <StyledFormContainer>
+      {formType === 'login' ? (
+        <LoginForm setFormType={setFormType} />
+      ) : (
+        <RegisterForm setFormType={setFormType} />
+      )}
+    </StyledFormContainer>
+  );
 }
 
 export default LoginPageForm;

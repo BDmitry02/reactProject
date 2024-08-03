@@ -5,8 +5,28 @@ import {
 } from '@reduxjs/toolkit';
 import useHttp from '../../useHttp/useHttp';
 import { RootState } from '../store';
+import { EntityId } from '@reduxjs/toolkit';
 
-const loginAdapter = createEntityAdapter({
+type FavoriteItem = {
+  _id: string;
+  title: string;
+  price: string | number;
+  description: string;
+  previewImage: string;
+  bigImage: string;
+  category: string;
+};
+
+type Login = {
+  id: string;
+  favLoadingStatus: string;
+  favProdLoadingStatus: string;
+  isLogged: boolean;
+  userId: string;
+  favoriteItems: FavoriteItem[];
+};
+
+const loginAdapter = createEntityAdapter<FavoriteItem, EntityId>({
   selectId: (prodId) => prodId,
 });
 
@@ -16,17 +36,23 @@ const initialState = loginAdapter.getInitialState({
   isLogged: localStorage.getItem('isLogged') === 'true' || false,
   userId: localStorage.getItem('userId') || '',
   favoriteItems: [],
-});
+} as unknown as Login);
 
 export const addToFav = createAsyncThunk(
   'login/addToFav',
-  async ({ userId, prodId }) => {
+  async ({ userId, prodId }: { userId: string; prodId: string }) => {
     const { request } = useHttp();
-    return request({
-      url: 'http://localhost:3000/favorite',
-      method: 'POST',
-      body: JSON.stringify({ userId, prodId }),
-    });
+    try {
+      const response = await request({
+        url: 'http://localhost:3000/users/favorite',
+        method: 'POST',
+        body: { userId, prodId },
+      });
+      return response;
+    } catch (error) {
+      console.error('Add to favorites error:', error);
+      throw error;
+    }
   }
 );
 
@@ -35,9 +61,9 @@ export const removeFromFav = createAsyncThunk(
   async ({ userId, prodId }: { userId: string; prodId: string }) => {
     const { request } = useHttp();
     return request({
-      url: 'http://localhost:3000/favorite',
+      url: 'http://localhost:3000/users/favorite',
       method: 'DELETE',
-      body: JSON.stringify({ userId, prodId }),
+      body: { userId, prodId },
     });
   }
 );
@@ -47,7 +73,7 @@ export const fetchFav = createAsyncThunk(
   async (userId: string) => {
     const { request } = useHttp();
     return request({
-      url: `http://localhost:3000/favorite?userId=${encodeURIComponent(
+      url: `http://localhost:3000/users/favorite?userId=${encodeURIComponent(
         userId
       )}`,
       method: 'GET',
@@ -88,7 +114,7 @@ const loginSlice = createSlice({
       })
       .addCase(fetchFav.fulfilled, (state, action) => {
         state.favLoadingStatus = 'success';
-        action.payload.favorite.forEach((element) => {
+        action.payload.favorite.forEach((element: FavoriteItem) => {
           loginAdapter.addOne(state, element);
         });
       })
@@ -101,9 +127,7 @@ const loginSlice = createSlice({
 
 const { actions, reducer } = loginSlice;
 
-export const { selectAll } = loginAdapter.getSelectors<RootState>(
-  (state) => state.login
-);
+export const { selectAll } = loginAdapter.getSelectors((state) => state.login);
 
 export default reducer;
 export const { logIn, logOut, setUserId, addNewFav, removeFav } = actions;
