@@ -2,12 +2,13 @@ import {
   createSlice,
   createEntityAdapter,
   createAsyncThunk,
+  PayloadAction,
+  EntityState,
 } from '@reduxjs/toolkit';
 import useHttp from '../../useHttp/useHttp';
 import { RootState } from '../store';
-import { EntityId } from '@reduxjs/toolkit';
 
-interface Product {
+type ProductItem = {
   _id: string;
   title: string;
   price: string | number;
@@ -15,52 +16,65 @@ interface Product {
   previewImage: string;
   bigImage: string;
   category: string;
-}
+};
 
-const productsAdapter = createEntityAdapter<Product, EntityId>({
+type ProductState = EntityState<ProductItem, string> & {
+  productsLoadingStatus: string;
+  singleProductLoadingStatus: string;
+  visibleItems: ProductItem[];
+  filteredItems: ProductItem[];
+  searchedProducts: ProductItem[];
+  itemsToShow: number;
+  lastIndex: number;
+  currentPage: number;
+};
+
+const productsAdapter = createEntityAdapter<ProductItem, string>({
   selectId: (product) => product._id,
 });
 
-const initialState = productsAdapter.getInitialState({
+const initialState: ProductState = productsAdapter.getInitialState({
   productsLoadingStatus: 'idle',
   singleProductLoadingStatus: 'idle',
-  visibleItems: [] as Product[],
-  filteredItems: [] as Product[],
-  searchedProducts: [] as Product[],
+  visibleItems: [],
+  filteredItems: [],
+  searchedProducts: [],
   itemsToShow: 20,
   lastIndex: 0,
   currentPage: 1,
 });
 
-export const fetchProducts = createAsyncThunk(
-  'products/fetchProducts',
-  async () => {
-    const { request } = useHttp();
-    return request({
-      url: 'http://localhost:3000/products',
-      method: 'GET',
-    });
-  }
-);
+export const fetchProducts = createAsyncThunk<
+  ProductItem[],
+  void,
+  { rejectValue: string }
+>('products/fetchProducts', async () => {
+  const { request } = useHttp();
+  return request({
+    url: 'http://localhost:3000/products',
+    method: 'GET',
+  });
+});
 
-export const fetchSingleProduct = createAsyncThunk(
-  'product/fetchSingleProduct',
-  async (prodId: string) => {
-    const { request } = useHttp();
-    return request({
-      url: `http://localhost:3000/products/singleProduct?prodId=${encodeURIComponent(
-        prodId
-      )}`,
-      method: 'GET',
-    });
-  }
-);
+export const fetchSingleProduct = createAsyncThunk<
+  { product: ProductItem },
+  string,
+  { rejectValue: string }
+>('product/fetchSingleProduct', async (prodId: string) => {
+  const { request } = useHttp();
+  return request({
+    url: `http://localhost:3000/products/singleProduct?prodId=${encodeURIComponent(
+      prodId
+    )}`,
+    method: 'GET',
+  });
+});
 
 const productsSlice = createSlice({
   name: 'products',
   initialState,
   reducers: {
-    getPagedItems: (state, action) => {
+    getPagedItems: (state, action: PayloadAction<number>) => {
       const page = action.payload;
       state.currentPage = page;
       const itemsArray = state.filteredItems;
@@ -69,14 +83,17 @@ const productsSlice = createSlice({
       const lastIndex = firstIndex + state.itemsToShow;
       state.visibleItems = itemsArray.slice(firstIndex, lastIndex);
     },
-    getFavoriteItems: (state, action) => {
+    getFavoriteItems: (state, action: PayloadAction<string[]>) => {
       const ids = action.payload;
-      const itemsArray = Object.values(state.entities);
+      const itemsArray = Object.values(state.entities) as ProductItem[];
       state.visibleItems = itemsArray.filter((item) => ids.includes(item._id));
     },
-    getFilteredItems: (state, action) => {
+    getFilteredItems: (
+      state,
+      action: PayloadAction<{ category: string; min: number; max: number }>
+    ) => {
       const { category, min, max } = action.payload;
-      const itemsArray = Object.values(state.entities);
+      const itemsArray = Object.values(state.entities) as ProductItem[];
 
       const normalizedItemsArray = itemsArray.map((item) => ({
         ...item,
@@ -90,16 +107,16 @@ const productsSlice = createSlice({
       });
     },
     resetFilters: (state) => {
-      state.filteredItems = Object.values(state.entities);
+      state.filteredItems = Object.values(state.entities) as ProductItem[];
     },
-    getSingleItem: (state, action) => {
-      const itemsArray = Object.values(state.entities);
+    getSingleItem: (state, action: PayloadAction<string>) => {
+      const itemsArray = Object.values(state.entities) as ProductItem[];
       state.visibleItems = itemsArray.filter(
         (item) => item._id === action.payload
       );
     },
-    getSearchedItem: (state, action) => {
-      const itemsArray = Object.values(state.entities);
+    getSearchedItem: (state, action: PayloadAction<string>) => {
+      const itemsArray = Object.values(state.entities) as ProductItem[];
       state.searchedProducts = itemsArray.filter((item) =>
         item.title
           .toLocaleLowerCase()
@@ -109,7 +126,7 @@ const productsSlice = createSlice({
     displaySearchResults: (state) => {
       state.filteredItems = state.searchedProducts;
     },
-    sortProducts: (state, action) => {
+    sortProducts: (state, action: PayloadAction<string>) => {
       const sortBy = action.payload;
       switch (sortBy) {
         case 'priceAscending':

@@ -1,21 +1,22 @@
 import styled from 'styled-components';
-import { useSelector } from 'react-redux';
+import { useAppSelector } from '../../../../utils/store/hook';
 import { useTranslation } from 'react-i18next';
 
 import { RootState } from '../../../../utils/store/store';
-import { selectAll } from '../../../../utils/store/slices/FiltersSlice';
 
-type CategoryFilterProps = {
+interface CategoryFilterProps {
   filterCategory: string;
-  setFilterCategory: (arg0: string) => void;
-};
+  setFilterCategory: (category: string) => void;
+}
 
 function CategoryFilter(props: CategoryFilterProps) {
   const { t } = useTranslation();
   const { filterCategory, setFilterCategory } = props;
-  const categories = useSelector((state: RootState) => selectAll(state));
+  const { categoryFilter } = useAppSelector(
+    (state: RootState) => state.filters
+  );
 
-  const { filtersCategoriesLoadingStatus } = useSelector(
+  const { filtersCategoriesLoadingStatus } = useAppSelector(
     (state: RootState) => state.filters
   );
 
@@ -23,7 +24,7 @@ function CategoryFilter(props: CategoryFilterProps) {
     return (
       <>
         <StyledCategoryHeader>{t('filterCategory')}</StyledCategoryHeader>
-        {categories.map((category, index) => {
+        {categoryFilter.map((category, index) => {
           return (
             <StyledCategoryButton
               key={index}

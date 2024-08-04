@@ -5,7 +5,7 @@ import {
   sortProducts,
   getPagedItems,
 } from '../../../../utils/store/slices/productsSlice';
-import { useDispatch } from 'react-redux';
+import { useAppDispatch } from '../../../../utils/store/hook';
 
 import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
@@ -18,7 +18,7 @@ type SortingFiltersProps = {
 
 function SortingFilters({ sortBy, setSortBy }: SortingFiltersProps) {
   const { t } = useTranslation();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const changeSorting = (event: SelectChangeEvent) => {
     setSortBy(event.target.value as string);

@@ -1,6 +1,6 @@
 import { Route, Routes, BrowserRouter as Router } from 'react-router-dom';
 import { createGlobalStyle, ThemeProvider } from 'styled-components';
-import { useSelector } from 'react-redux';
+import { useAppSelector } from './utils/store/hook.ts';
 import { RootState } from './utils/store/store.ts';
 import { SnackbarProvider } from 'notistack';
 import {
@@ -21,7 +21,7 @@ const GlobalStyle = createGlobalStyle`
 `;
 
 function App() {
-  const theme = useSelector((state: RootState) => state.theme.theme);
+  const theme = useAppSelector((state: RootState) => state.theme.theme);
 
   return (
     <ThemeProvider theme={theme === 'light' ? lightTheme : darkTheme}>

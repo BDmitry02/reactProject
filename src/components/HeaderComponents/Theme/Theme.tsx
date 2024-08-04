@@ -1,11 +1,11 @@
-import { useDispatch, useSelector } from 'react-redux';
+import { useAppDispatch, useAppSelector } from '../../../utils/store/hook';
 import ThemeSwitch from './ThemeSwitch';
 import { activeThemeChanged } from '../../../utils/store/slices/ThemeSlice';
 import { RootState } from '../../../utils/store/store';
 
 function Theme() {
-  const theme = useSelector((state: RootState) => state.theme.theme);
-  const dispatch = useDispatch();
+  const theme = useAppSelector((state: RootState) => state.theme.theme);
+  const dispatch = useAppDispatch();
 
   const toggleTheme = () => {
     const newTheme = theme === 'light' ? 'dark' : 'light';

@@ -1,6 +1,6 @@
-import { useEffect } from 'react';
+import { useEffect, useMemo } from 'react';
 import styled from 'styled-components';
-import { useDispatch, useSelector } from 'react-redux';
+import { useAppDispatch, useAppSelector } from '../../../utils/store/hook';
 
 import { fetchProducts } from '../../../utils/store/slices/productsSlice';
 import ItemSingleCard from '../ItemSingleCard/ItemSingleCard';
@@ -9,11 +9,11 @@ import { RootState } from '../../../utils/store/store';
 import { fetchFav } from '../../../utils/store/slices/LoginSlice';
 
 function ItemCards() {
-  const { productsLoadingStatus, visibleItems } = useSelector(
+  const { productsLoadingStatus, visibleItems } = useAppSelector(
     (state: RootState) => state.products
   );
-  const { userId } = useSelector((state: RootState) => state.login);
-  const dispatch = useDispatch();
+  const { userId } = useAppSelector((state: RootState) => state.login);
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     if (productsLoadingStatus === 'idle') {
@@ -22,10 +22,9 @@ function ItemCards() {
         dispatch(fetchFav(userId));
       }
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dispatch, userId]);
+  }, [dispatch, productsLoadingStatus, userId]);
 
-  const SetContent = () => {
+  const setContent = useMemo(() => {
     if (productsLoadingStatus === 'loading') {
       return <SkeletonLoader />;
     } else if (productsLoadingStatus === 'error') {
@@ -43,11 +42,11 @@ function ItemCards() {
         </>
       );
     }
-  };
+  }, [productsLoadingStatus, visibleItems]);
 
   return (
     <div>
-      <StyledItemCardsContainer>{SetContent()}</StyledItemCardsContainer>
+      <StyledItemCardsContainer>{setContent}</StyledItemCardsContainer>
     </div>
   );
 }

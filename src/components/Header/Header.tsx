@@ -2,7 +2,7 @@ import Drawer from '@mui/material/Drawer';
 import { useState } from 'react';
 
 import styled from 'styled-components';
-import { useSelector } from 'react-redux';
+import { useAppSelector } from '../../utils/store/hook';
 
 import MenuOutlinedIcon from '@mui/icons-material/MenuOutlined';
 import Theme from '../HeaderComponents/Theme/Theme';
@@ -15,7 +15,7 @@ import SearchPanel from '../HeaderComponents/SearchPanel/SearchPanel';
 function Header() {
   const [open, setOpen] = useState(false);
 
-  const isLogged = useSelector((state: RootState) => state.login.isLogged);
+  const { isLogged } = useAppSelector((state: RootState) => state.login);
 
   const toggleDrawer = (newOpen: boolean) => () => {
     setOpen(newOpen);

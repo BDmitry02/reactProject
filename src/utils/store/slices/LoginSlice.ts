@@ -1,86 +1,68 @@
-import {
-  createSlice,
-  createEntityAdapter,
-  createAsyncThunk,
-} from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 import useHttp from '../../useHttp/useHttp';
-import { RootState } from '../store';
-import { EntityId } from '@reduxjs/toolkit';
 
-type FavoriteItem = {
-  _id: string;
-  title: string;
-  price: string | number;
-  description: string;
-  previewImage: string;
-  bigImage: string;
-  category: string;
-};
-
-type Login = {
-  id: string;
+type LoginState = {
   favLoadingStatus: string;
   favProdLoadingStatus: string;
-  isLogged: boolean;
+  isLogged: string | boolean;
   userId: string;
-  favoriteItems: FavoriteItem[];
+  favorites: string[];
 };
 
-const loginAdapter = createEntityAdapter<FavoriteItem, EntityId>({
-  selectId: (prodId) => prodId,
-});
-
-const initialState = loginAdapter.getInitialState({
+const initialState: LoginState = {
   favLoadingStatus: 'idle',
   favProdLoadingStatus: 'idle',
   isLogged: localStorage.getItem('isLogged') === 'true' || false,
   userId: localStorage.getItem('userId') || '',
-  favoriteItems: [],
-} as unknown as Login);
+  favorites: [],
+};
 
-export const addToFav = createAsyncThunk(
-  'login/addToFav',
-  async ({ userId, prodId }: { userId: string; prodId: string }) => {
-    const { request } = useHttp();
-    try {
-      const response = await request({
-        url: 'http://localhost:3000/users/favorite',
-        method: 'POST',
-        body: { userId, prodId },
-      });
-      return response;
-    } catch (error) {
-      console.error('Add to favorites error:', error);
-      throw error;
-    }
-  }
-);
-
-export const removeFromFav = createAsyncThunk(
-  'login/removeFromFav',
-  async ({ userId, prodId }: { userId: string; prodId: string }) => {
-    const { request } = useHttp();
-    return request({
+export const addToFav = createAsyncThunk<
+  void,
+  { userId: string; prodId: string },
+  { rejectValue: string }
+>('login/addToFav', async ({ userId, prodId }) => {
+  const { request } = useHttp();
+  try {
+    const response = await request({
       url: 'http://localhost:3000/users/favorite',
-      method: 'DELETE',
+      method: 'POST',
       body: { userId, prodId },
     });
+    return response;
+  } catch (error) {
+    console.error('Add to favorites error:', error);
+    throw error;
   }
-);
+});
 
-export const fetchFav = createAsyncThunk(
-  'login/fetchFav',
-  async (userId: string) => {
-    const { request } = useHttp();
-    return request({
-      url: `http://localhost:3000/users/favorite?userId=${encodeURIComponent(
-        userId
-      )}`,
-      method: 'GET',
-      body: null,
-    });
-  }
-);
+export const removeFromFav = createAsyncThunk<
+  void,
+  { userId: string; prodId: string },
+  { rejectValue: string }
+>('login/removeFromFav', async ({ userId, prodId }) => {
+  const { request } = useHttp();
+  return request({
+    url: 'http://localhost:3000/users/favorite',
+    method: 'DELETE',
+    body: { userId, prodId },
+  });
+});
+
+export const fetchFav = createAsyncThunk<
+  { favorite: string[] },
+  string,
+  { rejectValue: string }
+>('login/fetchFav', async (userId) => {
+  const { request } = useHttp();
+  return request({
+    url: `http://localhost:3000/users/favorite?userId=${encodeURIComponent(
+      userId
+    )}`,
+    method: 'GET',
+    body: null,
+  });
+});
 
 const loginSlice = createSlice({
   name: 'login',
@@ -99,12 +81,16 @@ const loginSlice = createSlice({
       state.userId = action.payload;
       localStorage.setItem('userId', action.payload);
     },
-    addNewFav: (state, action) => {
+    addNewFav: (state, action: PayloadAction<string>) => {
       const newFav = action.payload;
-      loginAdapter.addOne(state, newFav);
+      if (!state.favorites.includes(newFav)) {
+        state.favorites.push(newFav);
+      }
     },
-    removeFav: (state, action) => {
-      loginAdapter.removeOne(state, action.payload);
+    removeFav: (state, action: PayloadAction<string>) => {
+      state.favorites = state.favorites.filter(
+        (item) => item != action.payload
+      );
     },
   },
   extraReducers: (builder) => {
@@ -114,9 +100,8 @@ const loginSlice = createSlice({
       })
       .addCase(fetchFav.fulfilled, (state, action) => {
         state.favLoadingStatus = 'success';
-        action.payload.favorite.forEach((element: FavoriteItem) => {
-          loginAdapter.addOne(state, element);
-        });
+        state.favorites = [];
+        state.favorites.push(...action.payload.favorite);
       })
       .addCase(fetchFav.rejected, (state, action) => {
         state.favLoadingStatus = 'error';
@@ -126,8 +111,6 @@ const loginSlice = createSlice({
 });
 
 const { actions, reducer } = loginSlice;
-
-export const { selectAll } = loginAdapter.getSelectors((state) => state.login);
 
 export default reducer;
 export const { logIn, logOut, setUserId, addNewFav, removeFav } = actions;

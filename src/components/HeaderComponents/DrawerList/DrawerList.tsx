@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import styled from 'styled-components';
-import { useDispatch } from 'react-redux';
+import { useAppDispatch } from '../../../utils/store/hook';
 
 import Box from '@mui/material/Box';
 import List from '@mui/material/List';
@@ -19,7 +19,7 @@ type DrawerListProps = {
 
 function DrawerList({ toggleDrawer }: DrawerListProps) {
   const { t } = useTranslation();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   return (
     <StyledMenuContainer

@@ -1,7 +1,7 @@
 import { Formik, Form } from 'formik';
 import CommonTextInput from '../CommonTextInput';
 import styled from 'styled-components';
-import { useDispatch } from 'react-redux';
+import { useAppDispatch } from '../../../utils/store/hook';
 import { useTranslation } from 'react-i18next';
 import { useSnackbar } from 'notistack';
 import { LoginFormValidationSchema } from '../../../utils/validationSchemas/LoginFormValidationSchema';
@@ -19,7 +19,7 @@ type onSubmitProps = {
 
 function LoginForm({ setFormType }: LoginFormProps) {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const { t } = useTranslation();
   const { enqueueSnackbar } = useSnackbar();
   const FormValidationSchema = LoginFormValidationSchema(t);

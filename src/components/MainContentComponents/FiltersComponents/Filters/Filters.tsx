@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useAppDispatch, useAppSelector } from '../../../../utils/store/hook';
 import { useTranslation } from 'react-i18next';
 
 import { SkeletonFilters } from '../../Skeleton/Skeleton';
@@ -23,37 +23,35 @@ import { useNavigate } from 'react-router-dom';
 
 function Filters() {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const { t } = useTranslation();
 
   const [filterCategory, setFilterCategory] = useState('all');
-  const [filterPrice, setFilterPrice] = useState({
-    min: 0,
-    max: 0,
-  });
+
   const [isPriceValid, setIsValidPrice] = useState(true);
 
   const [sortBy, setSortBy] = useState('null');
 
-  const { filtersPriceLoadingStatus, priceFilter } = useSelector(
+  const { filtersPriceLoadingStatus, priceFilter } = useAppSelector(
     (state: RootState) => state.filters
   );
 
+  const [filterPrice, setFilterPrice] = useState(priceFilter);
+
+  useEffect(() => {
+    setFilterPrice(priceFilter);
+  }, [priceFilter]);
+
   useEffect(() => {
     dispatch(fetchCategories());
-    dispatch(fetchPriceFilter()).then((action) =>
-      setFilterPrice({
-        min: parseInt(action.payload.min),
-        max: parseInt(action.payload.max),
-      })
-    );
+    dispatch(fetchPriceFilter());
   }, [dispatch]);
 
   const getFiltered = () => {
     if (
       !(
-        filterPrice.min === parseInt(priceFilter.min) &&
-        filterPrice.max === parseInt(priceFilter.max) &&
+        filterPrice.min === priceFilter.min &&
+        filterPrice.max === priceFilter.max &&
         filterCategory == 'all'
       )
     ) {
@@ -67,18 +65,13 @@ function Filters() {
   const resFilters = () => {
     if (
       !(
-        filterPrice.min === parseInt(priceFilter.min) &&
-        filterPrice.max === parseInt(priceFilter.max) &&
+        filterPrice.min === priceFilter.min &&
+        filterPrice.max === priceFilter.max &&
         filterCategory == 'all'
       )
     ) {
       dispatch(resetFilters());
-      dispatch(fetchPriceFilter()).then((action) =>
-        setFilterPrice({
-          min: parseInt(action.payload.min),
-          max: parseInt(action.payload.max),
-        })
-      );
+      setFilterPrice(priceFilter);
       setSortBy('null');
       setFilterCategory('all');
       dispatch(getPagedItems(1));

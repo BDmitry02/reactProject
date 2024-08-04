@@ -1,6 +1,5 @@
-import { useDispatch, useSelector } from 'react-redux';
-import { useMemo } from 'react';
-import { createSelector } from '@reduxjs/toolkit';
+import { useAppDispatch, useAppSelector } from '../../../utils/store/hook';
+
 import styled from 'styled-components';
 import { useSnackbar } from 'notistack';
 
@@ -11,44 +10,35 @@ import {
   removeFromFav,
 } from '../../../utils/store/slices/LoginSlice';
 
-import {
-  selectAll,
-  addNewFav,
-  removeFav,
-} from '../../../utils/store/slices/LoginSlice';
+import { addNewFav, removeFav } from '../../../utils/store/slices/LoginSlice';
 import { RootState } from '../../../utils/store/store';
 
-type FavoriteProps = {
+interface FavoriteProps {
   id: string;
-};
+}
 
 const Favorite = ({ id }: FavoriteProps) => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const { enqueueSnackbar } = useSnackbar();
 
-  // memorizing the selector to decrease the render
-  const selectIsFavorite = useMemo(() => {
-    return createSelector(
-      (state: RootState) => selectAll(state),
-      (favIds) => favIds.includes(id)
-    );
-  }, [id]);
-
-  const isFavorite = useSelector((state: RootState) => selectIsFavorite(state));
+  const { favorites } = useAppSelector((state: RootState) => state.login);
 
   const toggleFav = async (e: React.MouseEvent) => {
     e.preventDefault();
+
+    const userId = localStorage.getItem('userId');
+    if (!userId) {
+      enqueueSnackbar('User not logged in', { variant: 'error' });
+      return;
+    }
+
     try {
-      if (isFavorite) {
-        await dispatch(
-          removeFromFav({ userId: localStorage.getItem('userId'), prodId: id })
-        ).unwrap();
+      if (favorites.includes(id)) {
+        await dispatch(removeFromFav({ userId, prodId: id })).unwrap();
         await dispatch(removeFav(id));
         enqueueSnackbar('Removed from favorites!', { variant: 'success' });
       } else {
-        await dispatch(
-          addToFav({ userId: localStorage.getItem('userId'), prodId: id })
-        ).unwrap();
+        await dispatch(addToFav({ userId, prodId: id })).unwrap();
         await dispatch(addNewFav(id));
         enqueueSnackbar('Added to favorites!', { variant: 'success' });
       }
@@ -60,7 +50,11 @@ const Favorite = ({ id }: FavoriteProps) => {
 
   return (
     <StyledFavButton onClick={toggleFav}>
-      {isFavorite ? <StyledFavIcon /> : <StyledFavoriteBorderIcon />}
+      {favorites.includes(id) ? (
+        <StyledFavIcon />
+      ) : (
+        <StyledFavoriteBorderIcon />
+      )}
     </StyledFavButton>
   );
 };

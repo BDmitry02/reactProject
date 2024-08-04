@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { useSelector } from 'react-redux';
+import { useAppSelector } from '../../../../utils/store/hook';
 import { useTranslation } from 'react-i18next';
 import { ChangeEvent } from 'react';
 import { RootState } from '../../../../utils/store/store';
@@ -9,18 +9,18 @@ type PriceFilter = {
   max: number;
 };
 
-type PriceFilterProps = {
+interface PriceFilterProps {
   filterPrice: PriceFilter;
   isPriceValid: boolean;
-  setFilterPrice: (arg0: PriceFilter) => void;
-  setIsValidPrice: (arg0: boolean) => void;
-};
+  setFilterPrice: (filter: PriceFilter) => void;
+  setIsValidPrice: (isValid: boolean) => void;
+}
 
 function PriceFilter(props: PriceFilterProps) {
   const { t } = useTranslation();
   const { setFilterPrice, filterPrice, isPriceValid, setIsValidPrice } = props;
 
-  const { filtersPriceLoadingStatus, priceFilter } = useSelector(
+  const { filtersPriceLoadingStatus, priceFilter } = useAppSelector(
     (state: RootState) => state.filters
   );
 

@@ -2,19 +2,19 @@ import styled from 'styled-components';
 import Favorite from '../MainContentComponents/FavoriteIcon/FavoriteIcon';
 import { useTranslation } from 'react-i18next';
 
-type SingleItemContentProps = {
-  product: [
-    {
-      _id: string;
-      title: string;
-      price: string;
-      description: string;
-      previewImage: string;
-      bigImage: string;
-      category: string;
-    },
-  ];
+type Product = {
+  _id: string;
+  title: string;
+  price: string | number;
+  description: string;
+  previewImage: string;
+  bigImage: string;
+  category: string;
 };
+
+interface SingleItemContentProps {
+  product: Product[];
+}
 
 function SingleItemContent({ product }: SingleItemContentProps) {
   const { t } = useTranslation();

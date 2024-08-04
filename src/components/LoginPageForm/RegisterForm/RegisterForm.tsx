@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import { RegisterValidationSchema } from '../../../utils/validationSchemas/RegisterFormValidationSchema';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import CommonTextInput from '../CommonTextInput';
-import { useDispatch } from 'react-redux';
+import { useAppDispatch } from '../../../utils/store/hook';
 import { logIn, setUserId } from '../../../utils/store/slices/LoginSlice';
 import useHttp from '../../../utils/useHttp/useHttp';
 
@@ -24,7 +24,7 @@ type onSubmitProps = {
 
 function RegisterForm({ setFormType }: LoginFormProps) {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const { t } = useTranslation();
   const { request } = useHttp();
   const FormValidationSchema = RegisterValidationSchema(t);
@@ -33,9 +33,8 @@ function RegisterForm({ setFormType }: LoginFormProps) {
 
   const onSubmit = async (values: onSubmitProps) => {
     try {
-      const { confirmPassword, ...rest } = values;
       const res = await request({
-        body: rest,
+        body: values,
         url: 'http://localhost:3000/users/register',
         method: 'POST',
       });

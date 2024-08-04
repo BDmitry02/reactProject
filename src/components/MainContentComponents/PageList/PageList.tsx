@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { useSelector, useDispatch } from 'react-redux';
+import { useAppDispatch, useAppSelector } from '../../../utils/store/hook';
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import {
@@ -13,11 +13,11 @@ import { useLocation } from 'react-router-dom';
 function PageList() {
   const location = useLocation();
   const [previousPath, setPreviousPath] = useState<string>('');
-  const { filteredItems, productsLoadingStatus } = useSelector(
+  const { filteredItems, productsLoadingStatus } = useAppSelector(
     (state: RootState) => state.products
   );
   const { pageNumber } = useParams<{ pageNumber?: string }>();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const pageNum = pageNumber ? parseInt(pageNumber, 10) : 1;
   const [page, setPage] = useState(pageNum);
@@ -118,7 +118,7 @@ function PageList() {
             </StyledPageButton>
           );
         } else {
-          const path = getPath(location.pathname, p);
+          const path = getPath(location.pathname, +p);
           return (
             <StyledPageButton
               to={path}

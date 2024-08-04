@@ -2,11 +2,11 @@ import React, { useMemo } from 'react';
 import styled from 'styled-components';
 import { useTranslation } from 'react-i18next';
 import { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useAppDispatch, useAppSelector } from '../../utils/store/hook';
 import { Helmet, HelmetProvider } from 'react-helmet-async';
 
 import ItemSingleCard from '../../components/MainContentComponents/ItemSingleCard/ItemSingleCard';
-import { fetchFav, selectAll } from '../../utils/store/slices/LoginSlice';
+import { fetchFav } from '../../utils/store/slices/LoginSlice';
 import Header from '../../components/Header/Header';
 import Footer from '../../components/Footer/Footer';
 import { SkeletonLoader } from '../../components/MainContentComponents/Skeleton/Skeleton';
@@ -16,13 +16,13 @@ import { fetchProducts } from '../../utils/store/slices/productsSlice';
 
 const FavoritePage = React.memo(() => {
   const { t } = useTranslation();
-  const dispatch = useDispatch();
-  const { userId, favLoadingStatus } = useSelector(
+  const dispatch = useAppDispatch();
+  const { userId, favLoadingStatus } = useAppSelector(
     (state: RootState) => state.login
   );
-  const prodIds = useSelector((state: RootState) => selectAll(state));
+  const { favorites } = useAppSelector((state: RootState) => state.login);
 
-  const { visibleItems, productsLoadingStatus } = useSelector(
+  const { visibleItems, productsLoadingStatus } = useAppSelector(
     (state: RootState) => state.products
   );
   useEffect(() => {
@@ -39,9 +39,9 @@ const FavoritePage = React.memo(() => {
 
   useEffect(() => {
     if (favLoadingStatus === 'success') {
-      dispatch(getFavoriteItems(prodIds));
+      dispatch(getFavoriteItems(favorites));
     }
-  }, [favLoadingStatus, prodIds, dispatch]);
+  }, [favLoadingStatus, favorites, dispatch]);
 
   const setContent = useMemo(() => {
     if (favLoadingStatus === 'loading' || productsLoadingStatus === 'loading') {

@@ -2,7 +2,8 @@ import styled from 'styled-components';
 import { Link } from 'react-router-dom';
 import Favorite from '../FavoriteIcon/FavoriteIcon';
 import React from 'react';
-type ItemSingleCardProps = {
+
+interface ItemSingleCardProps {
   product: {
     _id: string;
     title: string;
@@ -12,7 +13,7 @@ type ItemSingleCardProps = {
     bigImage: string;
     category: string;
   };
-};
+}
 
 const ItemSingleCard = React.memo(({ product }: ItemSingleCardProps) => {
   const { _id, title, price, previewImage } = product;

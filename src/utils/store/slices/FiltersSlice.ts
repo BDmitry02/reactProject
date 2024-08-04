@@ -1,27 +1,25 @@
-import {
-  createSlice,
-  createEntityAdapter,
-  createAsyncThunk,
-} from '@reduxjs/toolkit';
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import useHttp from '../../useHttp/useHttp';
-import { EntityId } from '@reduxjs/toolkit';
 
-type Filter = {
-  id: string;
-  filter: string;
+type FilterState = {
+  filtersCategoriesLoadingStatus: string;
+  filtersPriceLoadingStatus: string;
+  priceFilter: { min: number; max: number };
+  categoryFilter: string[];
 };
 
-const filtersAdapter = createEntityAdapter<Filter, EntityId>({
-  selectId: (filter) => filter,
-});
-
-const initialState = filtersAdapter.getInitialState({
+const initialState: FilterState = {
   filtersCategoriesLoadingStatus: 'idle',
   filtersPriceLoadingStatus: 'idle',
-  priceFilter: {},
-});
+  priceFilter: { min: 0, max: 0 },
+  categoryFilter: [],
+};
 
-export const fetchCategories = createAsyncThunk('filters/fetchFilters', () => {
+export const fetchCategories = createAsyncThunk<
+  string[],
+  void,
+  { rejectValue: string }
+>('filters/fetchFilters', () => {
   const { request } = useHttp();
   return request({
     url: 'http://localhost:3000/products/categories',
@@ -30,17 +28,18 @@ export const fetchCategories = createAsyncThunk('filters/fetchFilters', () => {
   });
 });
 
-export const fetchPriceFilter = createAsyncThunk(
-  'filters/fetchPriceFilters',
-  () => {
-    const { request } = useHttp();
-    return request({
-      url: 'http://localhost:3000/products/price',
-      method: 'GET',
-      body: null,
-    });
-  }
-);
+export const fetchPriceFilter = createAsyncThunk<
+  { min: number; max: number },
+  void,
+  { rejectValue: string }
+>('filters/fetchPriceFilters', () => {
+  const { request } = useHttp();
+  return request({
+    url: 'http://localhost:3000/products/price',
+    method: 'GET',
+    body: null,
+  });
+});
 
 const filtersSlice = createSlice({
   name: 'filters',
@@ -53,7 +52,8 @@ const filtersSlice = createSlice({
       })
       .addCase(fetchCategories.fulfilled, (state, action) => {
         state.filtersCategoriesLoadingStatus = 'success';
-        filtersAdapter.setAll(state, action.payload);
+        state.categoryFilter = [];
+        state.categoryFilter = action.payload;
       })
       .addCase(fetchCategories.rejected, (state, action) => {
         state.filtersCategoriesLoadingStatus = 'error';
@@ -74,11 +74,6 @@ const filtersSlice = createSlice({
   },
 });
 
-const { actions, reducer } = filtersSlice;
-
-export const { selectAll } = filtersAdapter.getSelectors(
-  (state) => state.filters
-);
+const { reducer } = filtersSlice;
 
 export default reducer;
-export const { activeFilterChanged } = actions;

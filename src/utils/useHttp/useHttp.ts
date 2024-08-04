@@ -18,7 +18,7 @@ const useHttp = () => {
           'Content-Type': 'application/json',
           Accept: 'application/json',
         },
-        ...(body && method !== 'GET' ? { data: body } : {}), // axios использует `data` вместо `body` для POST/PUT/DELETE запросов
+        ...(body && method !== 'GET' ? { data: body } : {}),
       };
 
       const response = await axios(config);
@@ -33,7 +33,6 @@ const useHttp = () => {
         console.error(`HTTP Request Error: ${message} (Status: ${status})`);
         throw new HttpError(message, status);
       } else {
-        // Обработка не-axios ошибок
         console.error(`HTTP Request Error: ${e}`);
         throw new HttpError('Unknown error', 500);
       }

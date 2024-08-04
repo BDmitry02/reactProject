@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import { useParams } from 'react-router-dom';
-import { useDispatch, useSelector } from 'react-redux';
+import { useAppDispatch, useAppSelector } from '../../utils/store/hook';
 import { useEffect, useMemo } from 'react';
 
 import Header from '../../components/Header/Header';
@@ -10,15 +10,17 @@ import { fetchSingleProduct } from '../../utils/store/slices/productsSlice';
 import SingleItemContent from '../../components/SingleItemPageComponents/SingleItemContent';
 
 function ItemPage() {
-  const { _id } = useParams<{ _id: string }>();
-  const dispatch = useDispatch();
+  const { _id } = useParams<string>();
+  const dispatch = useAppDispatch();
 
-  const { visibleItems, singleProductLoadingStatus } = useSelector(
+  const { visibleItems, singleProductLoadingStatus } = useAppSelector(
     (state: RootState) => state.products
   );
 
   useEffect(() => {
-    dispatch(fetchSingleProduct(_id));
+    if (_id) {
+      dispatch(fetchSingleProduct(_id));
+    }
   }, [dispatch, _id]);
 
   const loaderContent = useMemo(() => {

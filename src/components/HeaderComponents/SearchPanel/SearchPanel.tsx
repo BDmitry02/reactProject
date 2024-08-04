@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useSelector, useDispatch } from 'react-redux';
+import { useAppDispatch, useAppSelector } from '../../../utils/store/hook';
 import styled from 'styled-components';
 import { RootState } from '../../../utils/store/store';
 import { getSearchedItem } from '../../../utils/store/slices/productsSlice';
@@ -13,13 +13,13 @@ import { useNavigate } from 'react-router-dom';
 
 function SearchPanel() {
   const { t } = useTranslation();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
   const [search, setSearch] = useState('');
   const [isSearchActive, setIsSearchActive] = useState(false);
 
-  const { searchedProducts } = useSelector(
+  const { searchedProducts } = useAppSelector(
     (state: RootState) => state.products
   );
 
