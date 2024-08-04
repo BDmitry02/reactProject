@@ -18,7 +18,6 @@ import {
   fetchCategories,
   fetchPriceFilter,
 } from '../../../../utils/store/slices/FiltersSlice';
-import { RootState } from '../../../../utils/store/store';
 import { useNavigate } from 'react-router-dom';
 
 function Filters() {
@@ -33,7 +32,7 @@ function Filters() {
   const [sortBy, setSortBy] = useState('null');
 
   const { filtersPriceLoadingStatus, priceFilter } = useAppSelector(
-    (state: RootState) => state.filters
+    (state) => state.filters
   );
 
   const [filterPrice, setFilterPrice] = useState(priceFilter);

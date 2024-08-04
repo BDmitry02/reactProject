@@ -5,7 +5,7 @@ import { useAppDispatch } from '../../../utils/store/hook';
 import { useTranslation } from 'react-i18next';
 import { useSnackbar } from 'notistack';
 import { LoginFormValidationSchema } from '../../../utils/validationSchemas/LoginFormValidationSchema';
-import { logIn, setUserId } from '../../../utils/store/slices/LoginSlice';
+import { setUserId } from '../../../utils/store/slices/LoginSlice';
 import useHttp from '../../../utils/useHttp/useHttp';
 import { useNavigate } from 'react-router-dom';
 interface LoginFormProps {
@@ -34,7 +34,6 @@ function LoginForm({ setFormType }: LoginFormProps) {
       });
 
       dispatch(setUserId(res.userId));
-      dispatch(logIn());
       navigate('/page/1');
     } catch (error) {
       const typedError = error as { status?: number };

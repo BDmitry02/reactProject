@@ -7,7 +7,6 @@ import { useAppSelector } from '../../utils/store/hook';
 import MenuOutlinedIcon from '@mui/icons-material/MenuOutlined';
 import Theme from '../HeaderComponents/Theme/Theme';
 import { lightTheme } from '../HeaderComponents/Theme/ThemeStyle';
-import { RootState } from '../../utils/store/store';
 import LanguagesList from '../HeaderComponents/LanguagesList/LanguagesList';
 import DrawerList from '../HeaderComponents/DrawerList/DrawerList';
 import SearchPanel from '../HeaderComponents/SearchPanel/SearchPanel';
@@ -15,14 +14,14 @@ import SearchPanel from '../HeaderComponents/SearchPanel/SearchPanel';
 function Header() {
   const [open, setOpen] = useState(false);
 
-  const { isLogged } = useAppSelector((state: RootState) => state.login);
+  const { userId } = useAppSelector((state) => state.login);
 
   const toggleDrawer = (newOpen: boolean) => () => {
     setOpen(newOpen);
   };
 
   const HeaderMenu = () => {
-    if (isLogged) {
+    if (userId) {
       return (
         <>
           <StyledBurgerButton onClick={toggleDrawer(true)}>
@@ -41,7 +40,7 @@ function Header() {
   return (
     <StyledHeader>
       <HeaderMenu />
-      {isLogged ? <SearchPanel /> : null}
+      {userId ? <SearchPanel /> : null}
       <StyledRightSideDiv>
         <Theme />
         <LanguagesList />

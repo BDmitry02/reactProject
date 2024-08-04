@@ -2,8 +2,6 @@ import styled from 'styled-components';
 import { useAppSelector } from '../../../../utils/store/hook';
 import { useTranslation } from 'react-i18next';
 
-import { RootState } from '../../../../utils/store/store';
-
 interface CategoryFilterProps {
   filterCategory: string;
   setFilterCategory: (category: string) => void;
@@ -12,12 +10,10 @@ interface CategoryFilterProps {
 function CategoryFilter(props: CategoryFilterProps) {
   const { t } = useTranslation();
   const { filterCategory, setFilterCategory } = props;
-  const { categoryFilter } = useAppSelector(
-    (state: RootState) => state.filters
-  );
+  const { categoryFilter } = useAppSelector((state) => state.filters);
 
   const { filtersCategoriesLoadingStatus } = useAppSelector(
-    (state: RootState) => state.filters
+    (state) => state.filters
   );
 
   if (filtersCategoriesLoadingStatus === 'success') {

@@ -5,16 +5,15 @@ import { useEffect, useMemo } from 'react';
 
 import Header from '../../components/Header/Header';
 import Footer from '../../components/Footer/Footer';
-import { RootState } from '../../utils/store/store';
 import { fetchSingleProduct } from '../../utils/store/slices/productsSlice';
 import SingleItemContent from '../../components/SingleItemPageComponents/SingleItemContent';
 
 function ItemPage() {
-  const { _id } = useParams<string>();
+  const { _id } = useParams();
   const dispatch = useAppDispatch();
 
   const { visibleItems, singleProductLoadingStatus } = useAppSelector(
-    (state: RootState) => state.products
+    (state) => state.products
   );
 
   useEffect(() => {

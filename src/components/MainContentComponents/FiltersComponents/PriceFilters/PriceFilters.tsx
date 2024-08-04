@@ -2,7 +2,6 @@ import styled from 'styled-components';
 import { useAppSelector } from '../../../../utils/store/hook';
 import { useTranslation } from 'react-i18next';
 import { ChangeEvent } from 'react';
-import { RootState } from '../../../../utils/store/store';
 
 type PriceFilter = {
   min: number;
@@ -21,7 +20,7 @@ function PriceFilter(props: PriceFilterProps) {
   const { setFilterPrice, filterPrice, isPriceValid, setIsValidPrice } = props;
 
   const { filtersPriceLoadingStatus, priceFilter } = useAppSelector(
-    (state: RootState) => state.filters
+    (state) => state.filters
   );
 
   const PriceFilterChanged = (e: ChangeEvent<HTMLInputElement>) => {

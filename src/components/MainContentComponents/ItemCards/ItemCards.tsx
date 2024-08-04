@@ -5,24 +5,26 @@ import { useAppDispatch, useAppSelector } from '../../../utils/store/hook';
 import { fetchProducts } from '../../../utils/store/slices/productsSlice';
 import ItemSingleCard from '../ItemSingleCard/ItemSingleCard';
 import { SkeletonLoader } from '../Skeleton/Skeleton';
-import { RootState } from '../../../utils/store/store';
 import { fetchFav } from '../../../utils/store/slices/LoginSlice';
 
 function ItemCards() {
   const { productsLoadingStatus, visibleItems } = useAppSelector(
-    (state: RootState) => state.products
+    (state) => state.products
   );
-  const { userId } = useAppSelector((state: RootState) => state.login);
+  const { userId } = useAppSelector((state) => state.login);
   const dispatch = useAppDispatch();
 
   useEffect(() => {
     if (productsLoadingStatus === 'idle') {
       dispatch(fetchProducts());
-      if (userId) {
-        dispatch(fetchFav(userId));
-      }
     }
-  }, [dispatch, productsLoadingStatus, userId]);
+  }, [dispatch, productsLoadingStatus]);
+
+  useEffect(() => {
+    if (userId) {
+      dispatch(fetchFav(userId));
+    }
+  }, [userId, dispatch]);
 
   const setContent = useMemo(() => {
     if (productsLoadingStatus === 'loading') {

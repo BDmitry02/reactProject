@@ -3,7 +3,6 @@ import { useCallback } from 'react';
 import { Helmet, HelmetProvider } from 'react-helmet-async';
 import { useAppSelector } from '../../utils/store/hook';
 
-import { RootState } from '../../utils/store/store';
 import LoginPageForm from '../../components/LoginPageForm/LoginPageForm';
 import Header from '../../components/Header/Header';
 import Footer from '../../components/Footer/Footer';
@@ -12,10 +11,10 @@ import PageList from '../../components/MainContentComponents/PageList/PageList';
 import Filters from '../../components/MainContentComponents/FiltersComponents/Filters/Filters';
 
 function MainPage() {
-  const isLogged = useAppSelector((state: RootState) => state.login.isLogged);
+  const { userId } = useAppSelector((state) => state.login);
 
   const MainContent = useCallback(() => {
-    if (isLogged) {
+    if (userId) {
       return (
         <>
           <StyledMainWrapper>
@@ -32,7 +31,7 @@ function MainPage() {
     } else {
       return <LoginPageForm />;
     }
-  }, [isLogged]);
+  }, [userId]);
 
   return (
     <HelmetProvider>

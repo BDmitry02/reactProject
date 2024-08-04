@@ -11,7 +11,6 @@ import {
 } from '../../../utils/store/slices/LoginSlice';
 
 import { addNewFav, removeFav } from '../../../utils/store/slices/LoginSlice';
-import { RootState } from '../../../utils/store/store';
 
 interface FavoriteProps {
   id: string;
@@ -21,7 +20,7 @@ const Favorite = ({ id }: FavoriteProps) => {
   const dispatch = useAppDispatch();
   const { enqueueSnackbar } = useSnackbar();
 
-  const { favorites } = useAppSelector((state: RootState) => state.login);
+  const { favorites } = useAppSelector((state) => state.login);
 
   const toggleFav = async (e: React.MouseEvent) => {
     e.preventDefault();

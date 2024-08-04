@@ -7,7 +7,7 @@ import { RegisterValidationSchema } from '../../../utils/validationSchemas/Regis
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import CommonTextInput from '../CommonTextInput';
 import { useAppDispatch } from '../../../utils/store/hook';
-import { logIn, setUserId } from '../../../utils/store/slices/LoginSlice';
+import { setUserId } from '../../../utils/store/slices/LoginSlice';
 import useHttp from '../../../utils/useHttp/useHttp';
 
 interface LoginFormProps {
@@ -40,7 +40,6 @@ function RegisterForm({ setFormType }: LoginFormProps) {
       });
 
       dispatch(setUserId(res.userId));
-      dispatch(logIn());
       navigate('/page/1');
     } catch (error) {
       console.log(error);

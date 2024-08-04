@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useAppDispatch, useAppSelector } from '../../../utils/store/hook';
 import styled from 'styled-components';
-import { RootState } from '../../../utils/store/store';
 import { getSearchedItem } from '../../../utils/store/slices/productsSlice';
 import SearchItemCard from '../SearchItemCard/SearchItemCard';
 import {
@@ -19,9 +18,7 @@ function SearchPanel() {
   const [search, setSearch] = useState('');
   const [isSearchActive, setIsSearchActive] = useState(false);
 
-  const { searchedProducts } = useAppSelector(
-    (state: RootState) => state.products
-  );
+  const { searchedProducts } = useAppSelector((state) => state.products);
 
   const handleChange = (e: { target: { value: string } }) => {
     if (!isSearchActive) {

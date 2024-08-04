@@ -7,16 +7,15 @@ import {
   resetFilters,
 } from '../../../utils/store/slices/productsSlice';
 import { Link } from 'react-router-dom';
-import { RootState } from '../../../utils/store/store';
 import { useLocation } from 'react-router-dom';
 
 function PageList() {
   const location = useLocation();
-  const [previousPath, setPreviousPath] = useState<string>('');
+  const [previousPath, setPreviousPath] = useState('');
   const { filteredItems, productsLoadingStatus } = useAppSelector(
-    (state: RootState) => state.products
+    (state) => state.products
   );
-  const { pageNumber } = useParams<{ pageNumber?: string }>();
+  const { pageNumber } = useParams();
   const dispatch = useAppDispatch();
 
   const pageNum = pageNumber ? parseInt(pageNumber, 10) : 1;

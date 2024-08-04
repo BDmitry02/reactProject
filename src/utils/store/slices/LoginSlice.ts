@@ -4,7 +4,6 @@ import useHttp from '../../useHttp/useHttp';
 type LoginState = {
   favLoadingStatus: string;
   favProdLoadingStatus: string;
-  isLogged: string | boolean;
   userId: string;
   favorites: string[];
 };
@@ -12,7 +11,6 @@ type LoginState = {
 const initialState: LoginState = {
   favLoadingStatus: 'idle',
   favProdLoadingStatus: 'idle',
-  isLogged: localStorage.getItem('isLogged') === 'true' || false,
   userId: localStorage.getItem('userId') || '',
   favorites: [],
 };
@@ -68,13 +66,8 @@ const loginSlice = createSlice({
   name: 'login',
   initialState,
   reducers: {
-    logIn: (state) => {
-      state.isLogged = true;
-      localStorage.setItem('isLogged', 'true');
-    },
     logOut: (state) => {
-      state.isLogged = false;
-      localStorage.setItem('isLogged', 'false');
+      state.userId = '';
       localStorage.setItem('userId', '');
     },
     setUserId: (state, action) => {
@@ -113,4 +106,4 @@ const loginSlice = createSlice({
 const { actions, reducer } = loginSlice;
 
 export default reducer;
-export const { logIn, logOut, setUserId, addNewFav, removeFav } = actions;
+export const { logOut, setUserId, addNewFav, removeFav } = actions;

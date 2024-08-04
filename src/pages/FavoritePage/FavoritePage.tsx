@@ -10,20 +10,18 @@ import { fetchFav } from '../../utils/store/slices/LoginSlice';
 import Header from '../../components/Header/Header';
 import Footer from '../../components/Footer/Footer';
 import { SkeletonLoader } from '../../components/MainContentComponents/Skeleton/Skeleton';
-import { RootState } from '../../utils/store/store';
 import { getFavoriteItems } from '../../utils/store/slices/productsSlice';
 import { fetchProducts } from '../../utils/store/slices/productsSlice';
 
 const FavoritePage = React.memo(() => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
-  const { userId, favLoadingStatus } = useAppSelector(
-    (state: RootState) => state.login
+  const { userId, favLoadingStatus, favorites } = useAppSelector(
+    (state) => state.login
   );
-  const { favorites } = useAppSelector((state: RootState) => state.login);
 
   const { visibleItems, productsLoadingStatus } = useAppSelector(
-    (state: RootState) => state.products
+    (state) => state.products
   );
   useEffect(() => {
     if (productsLoadingStatus != 'loading') {

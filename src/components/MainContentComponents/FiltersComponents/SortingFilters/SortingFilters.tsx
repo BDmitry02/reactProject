@@ -21,7 +21,7 @@ function SortingFilters({ sortBy, setSortBy }: SortingFiltersProps) {
   const dispatch = useAppDispatch();
 
   const changeSorting = (event: SelectChangeEvent) => {
-    setSortBy(event.target.value as string);
+    setSortBy(event.target.value);
   };
 
   useEffect(() => {

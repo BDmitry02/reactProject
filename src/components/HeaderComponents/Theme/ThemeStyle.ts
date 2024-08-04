@@ -1,14 +1,3 @@
-// export interface ThemeType {
-//   headerAndFooterColor: string;
-//   backgroundColor: string;
-//   textColor: string;
-
-//   createAccountText: string;
-//   createAccountHoverColor: string;
-
-//   submitFormButtonBorder: string;
-// }
-
 export const lightTheme = {
   headerAndFooterColor: '#edd5e8',
   backgroundColor: '#CBC0D3',
