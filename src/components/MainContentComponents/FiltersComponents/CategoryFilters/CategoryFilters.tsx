@@ -10,9 +10,7 @@ interface CategoryFilterProps {
 function CategoryFilter(props: CategoryFilterProps) {
   const { t } = useTranslation();
   const { filterCategory, setFilterCategory } = props;
-  const { categoryFilter } = useAppSelector((state) => state.filters);
-
-  const { filtersCategoriesLoadingStatus } = useAppSelector(
+  const { categoryFilter, filtersCategoriesLoadingStatus } = useAppSelector(
     (state) => state.filters
   );
 

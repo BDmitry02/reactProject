@@ -6,8 +6,7 @@ interface MyTextInputProps {
   name: string;
   label: string;
   type: string;
-  autoComplete?: string;
-  'aria-describedby'?: string;
+  autoComplete: string;
 }
 
 function CommonTextInput({ ...props }: MyTextInputProps) {

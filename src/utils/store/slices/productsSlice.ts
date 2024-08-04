@@ -25,8 +25,9 @@ type ProductState = EntityState<ProductItem, string> & {
   filteredItems: ProductItem[];
   searchedProducts: ProductItem[];
   itemsToShow: number;
-  lastIndex: number;
   currentPage: number;
+  favToShow: number;
+  allItemsLoaded: boolean;
 };
 
 const productsAdapter = createEntityAdapter<ProductItem, string>({
@@ -40,8 +41,9 @@ const initialState: ProductState = productsAdapter.getInitialState({
   filteredItems: [],
   searchedProducts: [],
   itemsToShow: 20,
-  lastIndex: 0,
   currentPage: 1,
+  favToShow: 8,
+  allItemsLoaded: false,
 });
 
 export const fetchProducts = createAsyncThunk<
@@ -84,16 +86,30 @@ const productsSlice = createSlice({
       state.visibleItems = itemsArray.slice(firstIndex, lastIndex);
     },
     getFavoriteItems: (state, action: PayloadAction<string[]>) => {
+      const itemsToShow = state.favToShow;
       const ids = action.payload;
-      const itemsArray = Object.values(state.entities) as ProductItem[];
-      state.visibleItems = itemsArray.filter((item) => ids.includes(item._id));
+      const itemsArray = Object.values(state.entities);
+
+      const filteredItems = itemsArray
+        .filter((item) => ids.includes(item._id))
+        .slice(0, itemsToShow);
+
+      state.visibleItems = filteredItems;
+      if (filteredItems.length >= ids.length) {
+        state.allItemsLoaded = true;
+      }
+      state.favToShow += 8;
+    },
+    resetFav: (state) => {
+      state.favToShow = 8;
+      state.allItemsLoaded = false;
     },
     getFilteredItems: (
       state,
       action: PayloadAction<{ category: string; min: number; max: number }>
     ) => {
       const { category, min, max } = action.payload;
-      const itemsArray = Object.values(state.entities) as ProductItem[];
+      const itemsArray = Object.values(state.entities);
 
       const normalizedItemsArray = itemsArray.map((item) => ({
         ...item,
@@ -107,16 +123,16 @@ const productsSlice = createSlice({
       });
     },
     resetFilters: (state) => {
-      state.filteredItems = Object.values(state.entities) as ProductItem[];
+      state.filteredItems = Object.values(state.entities);
     },
     getSingleItem: (state, action: PayloadAction<string>) => {
-      const itemsArray = Object.values(state.entities) as ProductItem[];
+      const itemsArray = Object.values(state.entities);
       state.visibleItems = itemsArray.filter(
         (item) => item._id === action.payload
       );
     },
     getSearchedItem: (state, action: PayloadAction<string>) => {
-      const itemsArray = Object.values(state.entities) as ProductItem[];
+      const itemsArray = Object.values(state.entities);
       state.searchedProducts = itemsArray.filter((item) =>
         item.title
           .toLocaleLowerCase()
@@ -191,6 +207,7 @@ export default reducer;
 export const {
   getFilteredItems,
   getPagedItems,
+  resetFav,
   getFavoriteItems,
   resetFilters,
   getSingleItem,

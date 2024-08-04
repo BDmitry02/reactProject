@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import styled from 'styled-components';
 import { useTranslation } from 'react-i18next';
 import { useEffect } from 'react';
@@ -10,7 +10,10 @@ import { fetchFav } from '../../utils/store/slices/LoginSlice';
 import Header from '../../components/Header/Header';
 import Footer from '../../components/Footer/Footer';
 import { SkeletonLoader } from '../../components/MainContentComponents/Skeleton/Skeleton';
-import { getFavoriteItems } from '../../utils/store/slices/productsSlice';
+import {
+  getFavoriteItems,
+  resetFav,
+} from '../../utils/store/slices/productsSlice';
 import { fetchProducts } from '../../utils/store/slices/productsSlice';
 
 const FavoritePage = React.memo(() => {
@@ -20,9 +23,8 @@ const FavoritePage = React.memo(() => {
     (state) => state.login
   );
 
-  const { visibleItems, productsLoadingStatus } = useAppSelector(
-    (state) => state.products
-  );
+  const { visibleItems, productsLoadingStatus, allItemsLoaded } =
+    useAppSelector((state) => state.products);
   useEffect(() => {
     if (productsLoadingStatus != 'loading') {
       if (productsLoadingStatus === 'success') {
@@ -37,9 +39,28 @@ const FavoritePage = React.memo(() => {
 
   useEffect(() => {
     if (favLoadingStatus === 'success') {
+      dispatch(resetFav());
       dispatch(getFavoriteItems(favorites));
     }
   }, [favLoadingStatus, favorites, dispatch]);
+
+  const handleScroll = useCallback(() => {
+    const scrollTop = window.scrollY;
+    const scrollHeight = document.documentElement.scrollHeight;
+    const clientHeight = document.documentElement.clientHeight;
+    if (!allItemsLoaded) {
+      if (scrollTop + clientHeight >= scrollHeight - 5) {
+        dispatch(getFavoriteItems(favorites));
+      }
+    }
+  }, [dispatch, favorites, allItemsLoaded]);
+
+  useEffect(() => {
+    window.addEventListener('scroll', handleScroll);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, [handleScroll]);
 
   const setContent = useMemo(() => {
     if (favLoadingStatus === 'loading' || productsLoadingStatus === 'loading') {

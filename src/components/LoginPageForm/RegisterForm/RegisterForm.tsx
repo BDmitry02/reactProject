@@ -74,6 +74,7 @@ function RegisterForm({ setFormType }: LoginFormProps) {
             <CommonTextInput
               label={t('nameLabel')}
               aria-describedby="outlined-required"
+              aria-required="true"
               name="name"
               type="text"
               autoComplete="given-name"
@@ -81,6 +82,7 @@ function RegisterForm({ setFormType }: LoginFormProps) {
             <CommonTextInput
               label={t('surnameLabel')}
               aria-describedby="outlined-required"
+              aria-required="true"
               name="surname"
               type="text"
               autoComplete="family-name"
@@ -88,6 +90,7 @@ function RegisterForm({ setFormType }: LoginFormProps) {
             <CommonTextInput
               label="Email"
               aria-describedby="outlined-required"
+              aria-required="true"
               name="email"
               type="email"
               autoComplete="email"
@@ -95,6 +98,7 @@ function RegisterForm({ setFormType }: LoginFormProps) {
             <CommonTextInput
               label={t('passwordLabel')}
               aria-describedby="outlined-password-input"
+              aria-required="true"
               name="password"
               type="password"
               autoComplete="new-password"
@@ -102,6 +106,7 @@ function RegisterForm({ setFormType }: LoginFormProps) {
             <CommonTextInput
               label={t('passwordConfirmationLabel')}
               aria-describedby="outlined-password-input"
+              aria-required="true"
               name="confirmPassword"
               type="password"
               autoComplete="new-password"

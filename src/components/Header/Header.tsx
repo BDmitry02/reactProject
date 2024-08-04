@@ -25,7 +25,7 @@ function Header() {
       return (
         <>
           <StyledBurgerButton onClick={toggleDrawer(true)}>
-            <StyledMenuOutlinedIcon fontSize="large" />
+            <StyledMenuOutlinedIcon fontSize="large" aria-label="open menu" />
           </StyledBurgerButton>
           <StyledMenuContainer open={open} onClose={toggleDrawer(false)}>
             <DrawerList toggleDrawer={toggleDrawer} />

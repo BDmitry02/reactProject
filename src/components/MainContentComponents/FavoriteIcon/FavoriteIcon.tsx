@@ -50,7 +50,7 @@ const Favorite = ({ id }: FavoriteProps) => {
   return (
     <StyledFavButton onClick={toggleFav}>
       {favorites.includes(id) ? (
-        <StyledFavIcon />
+        <StyledFavIcon aria-label="add/remove to/from favorite items" />
       ) : (
         <StyledFavoriteBorderIcon />
       )}

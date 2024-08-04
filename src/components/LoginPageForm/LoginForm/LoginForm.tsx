@@ -59,6 +59,7 @@ function LoginForm({ setFormType }: LoginFormProps) {
         <CommonTextInput
           label="Email"
           aria-describedby="outlined-required"
+          aria-required="true"
           name="email"
           type="email"
           autoComplete="email"
@@ -66,6 +67,7 @@ function LoginForm({ setFormType }: LoginFormProps) {
         <CommonTextInput
           label={t('passwordLabel')}
           aria-describedby="outlined-password-input"
+          aria-required="true"
           name="password"
           type="password"
           autoComplete="current-password"

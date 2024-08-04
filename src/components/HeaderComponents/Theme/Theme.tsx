@@ -11,7 +11,13 @@ function Theme() {
     dispatch(activeThemeChanged(newTheme));
   };
 
-  return <ThemeSwitch onClick={toggleTheme} checked={theme === 'dark'} />;
+  return (
+    <ThemeSwitch
+      onClick={toggleTheme}
+      checked={theme === 'dark'}
+      aria-label="change the theme"
+    />
+  );
 }
 
 export default Theme;
